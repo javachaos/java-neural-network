@@ -1,6 +1,6 @@
 package com.neuralnetwork.opencl.node;
 
-import com.neuralnetwork.shared.nodes.ILink;
+import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.nodes.INode;
 
 /**
@@ -9,13 +9,11 @@ import com.neuralnetwork.shared.nodes.INode;
  * @author fredladeroute
  *
  */
-public class OpenCLNode implements INode {
+public abstract class OpenCLNode implements INode {
 
-    public ILink addLink(INode inode, double weight) {
-        return null;
-    }
+    public abstract ILink addLink(INode inode, double weight);
 
-    public ILink addLink(INode inode) {
+    public ILink addLink(INode... inode) {
         
         return null;
     }
