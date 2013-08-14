@@ -10,5 +10,6 @@
     <module>
     opencl
     </module>
+    <module>shared</module>
   </modules>
 </project>

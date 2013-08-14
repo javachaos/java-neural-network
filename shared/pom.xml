@@ -5,14 +5,5 @@
     <artifactId>neuralnetwork</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>opencl</artifactId>
-  <name>OpenCL Module</name>
-  <description>Project containing OpenCL code.</description>
-  <dependencies>
-  	<dependency>
-  		<groupId>com.neuralnetwork</groupId>
-  		<artifactId>shared</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
+  <artifactId>shared</artifactId>
 </project>
