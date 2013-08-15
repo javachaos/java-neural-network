@@ -11,6 +11,7 @@
     opencl
     </module>
     <module>shared</module>
+    <module>core</module>
   </modules>
   
   <build>
