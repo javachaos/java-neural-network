@@ -46,10 +46,12 @@ public class NullLink implements ILink {
     
     /**
      * Sets the head of this null link.
+     * 
      * @param ihead
+     *      the head to set must not be null.
      */
-    public final void setHead(INode ihead) {
-        if(ihead == null) {
+    public final void setHead(final INode ihead) {
+        if (ihead == null) {
             throw new NullPointerException("Error cannot set null head INode.");
         } else {
             this.head = ihead;
@@ -69,11 +71,11 @@ public class NullLink implements ILink {
     /**
      * Set the tail of this ILink.
      * 
-     * @param tail
+     * @param itail
      *      the tail to be set
      */
-    public final void setTail(INode itail) {
-        if(itail == null) {
+    public final void setTail(final INode itail) {
+        if (itail == null) {
             throw new NullPointerException("Error cannot set null tail INode.");
         } else {
             this.tail = itail;
@@ -92,16 +94,27 @@ public class NullLink implements ILink {
     }
 
     /**
-     * Update the weight to zero.
+     * Update the weight to zero disregards any input.
+     * 
+     * @param value
+     *      the value to set, will not be used.
+     *      
+     * @param sign
+     *      the update direction true for positive false for negative
+     *      it has no effect on this implementation of updateWeight().
      */
-    public final void updateWeight(double value, boolean sign) { 
+    public final void updateWeight(final double value, final boolean sign) { 
         this.weight = 0;
     }
 
     /**
      * Update the weight to zero.
+     * 
+     * @param weightValue
+     *      the weight value to set, has no effect on this
+     *      particular setWeight() implementation.
      */
-    public final void setWeight(double weightValue) {
+    public final void setWeight(final double weightValue) {
         this.weight = 0;
     }
 

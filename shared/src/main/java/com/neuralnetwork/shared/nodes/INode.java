@@ -26,7 +26,7 @@ public interface INode {
     
     /**
      * Adds a link from this node to inode
-     * with a random weight value in range [0-1]
+     * with a random weight (uniformly distributed) value in range [0-1]
      * and return the ILink.
      * 
      * @param inode
@@ -39,15 +39,15 @@ public interface INode {
     /**
      * Get a ILink by the id of the other INode.
      * 
-     * @param id 
+     * @param linkId 
      *      the id of the node to get the link of.
      *      
      * @return the ILink NullLink if the link is null.
      */
-    ILink getLink(int id);
+    ILink getLink(int linkId);
     
     /**
-     * Get a ILink by the id of the other INode.
+     * Get ILinks by the id of the other INode ids.
      * 
      * @param ids 
      *      the ids of the nodes to get the links of.
@@ -55,5 +55,13 @@ public interface INode {
      * @return the ILink.
      */
     ILink[] getLinks(int... ids);
+    
+    /**
+     * Return the id of this INode.
+     * 
+     * @return
+     *      the id of this INode
+     */
+    int getId();
 
 }

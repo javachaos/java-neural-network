@@ -1,5 +1,12 @@
 package com.neuralnetwork.shared.exceptions;
 
+/**
+ * OutOfBoundsException runtime exception thrown when
+ * an input value is found to be out of bounds.
+ *  
+ * @author fredladeroute
+ *
+ */
 public class OutOfBoundsException extends RuntimeException {
 
     /**
@@ -13,7 +20,7 @@ public class OutOfBoundsException extends RuntimeException {
      * @param msg
      *      the message to display to the user.
      */
-    public OutOfBoundsException(String msg) {
+    public OutOfBoundsException(final String msg) {
         super(msg);
     }
 

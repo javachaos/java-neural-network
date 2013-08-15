@@ -1,6 +1,5 @@
 package com.neuralnetwork.shared.links;
 
-import com.neuralnetwork.shared.exceptions.OutOfBoundsException;
 import com.neuralnetwork.shared.nodes.INode;
 
 /**
@@ -32,22 +31,17 @@ public interface ILink {
      *  
      * @param ihead
      *      the INode to set as head for this link
-     *      
-     * @throws NullPointerException
-     *      if the head parameter is null
+     * 
      */
-    void setHead(INode ihead) throws NullPointerException;
+    void setHead(INode ihead);
     
     /**
      * Set the tail INode of this ILink.
      *  
      * @param itail
      *      the INode to set as tail for this link
-     *      
-     * @throws NullPointerException
-     *      if the tail parameter is null
      */
-    void setTail(INode itail) throws NullPointerException;
+    void setTail(INode itail);
     
     
     /**
@@ -79,10 +73,8 @@ public interface ILink {
      * Change the weight of this ILink to weightValue.
      * 
      * @param weightValue
-     *      the value of the new weight for this link.
-     * 
-     * @throws OutOfBoundsException
-     *      if the weight value is out of bounds of [0-1]
+     *      the value of the new weight for this link,
+     *      must be withing [0-1]
      */
     void setWeight(double weightValue);
 

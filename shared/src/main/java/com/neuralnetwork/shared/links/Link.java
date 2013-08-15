@@ -36,64 +36,76 @@ public class Link implements ILink {
      * @param itail
      *      the tail of this link.
      *      
-     * @param weight
+     * @param linkWeight
      *      the weight of this link [0-1].
      */
-    public Link(INode ihead, INode itail, double linkWeight) {
+    public Link(
+            final INode ihead, 
+            final INode itail, 
+            final double linkWeight) {
+        
         this.head = ihead;
         this.tail = itail;
         this.weight = linkWeight;
     }
-    
-    public INode getHead() {
+
+    @Override
+    public final INode getHead() {
         return head;
     }
 
-    public INode getTail() {
+    @Override
+    public final INode getTail() {
         return tail;
     }
 
-    public double getWeight() {
+    @Override
+    public final double getWeight() {
         return weight;
     }
-
-    public final void setHead(INode ihead) throws NullPointerException {
-        if(ihead == null) {
+    
+    @Override
+    public final void setHead(final INode ihead) {
+        if (ihead == null) {
             throw new NullPointerException("Error cannot set null head INode.");
         } else {
             this.head = ihead;
         }
     }
 
-    public void setTail(INode itail) throws NullPointerException {
-        if(itail == null) {
+    @Override
+    public final void setTail(final INode itail) {
+        if (itail == null) {
             throw new NullPointerException("Error cannot set null tail INode.");
         } else {
             this.tail = itail;
         }
     }
 
-    public void updateWeight(double value, boolean sign) {
-        if(sign) {
+    @Override
+    public final void updateWeight(final double value, final boolean sign) {
+        if (sign) {
             weight += value;
         } else {
             weight -= value;
         }
         
-        if(weight > 1) {
+        if (weight > 1) {
             weight = 1;
         }
-        if(weight < 0) {
+        if (weight < 0) {
             weight = 0;
         }
         
     }
 
-    public void setWeight(double weightValue) {
-        if(weightValue < 1 && weightValue > 0) {
+    @Override
+    public final void setWeight(final double weightValue) {
+        if (weightValue < 1 && weightValue > 0) {
             this.weight = weightValue;
         } else {
-            throw new OutOfBoundsException("Error weight value must be within the bounds [0-1].");
+            throw new OutOfBoundsException(
+                    "Error weight value must be within the bounds [0-1].");
         }
     }
 
