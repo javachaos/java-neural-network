@@ -1,8 +1,8 @@
 package com.neuralnetwork.opencl.node;
 
 import com.neuralnetwork.shared.links.ILink;
-import com.neuralnetwork.shared.nodes.INode;
-import com.neuralnetwork.shared.nodes.Node;
+import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.nodes.Neuron;
 
 /**
  * OpenCL node.
@@ -10,7 +10,7 @@ import com.neuralnetwork.shared.nodes.Node;
  * @author fredladeroute
  *
  */
-public class OpenCLNode extends Node implements INode {
+public class OpenCLNode extends Neuron<Double> implements INeuron<Double> {
 
     /**
      * Construct a new OpenCL Node.
@@ -22,9 +22,11 @@ public class OpenCLNode extends Node implements INode {
         super(nodeId);
     }
 
-    public ILink addLink(INode... inode) {
+    public ILink addLink(INeuron... inode) {
         
         return null;
     }
+
+
 
 }

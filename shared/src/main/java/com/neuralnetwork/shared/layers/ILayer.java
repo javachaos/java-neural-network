@@ -1,7 +1,7 @@
 package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.links.ILink;
-import com.neuralnetwork.shared.nodes.INode;
+import com.neuralnetwork.shared.nodes.INeuron;
 
 /**
  * Represents a Layer class.
@@ -28,6 +28,6 @@ public interface ILayer extends ILink {
      * @return
      *      the INode at index idx
      */
-    INode getNode(int idx);
+    INeuron getNode(int idx);
     
 }

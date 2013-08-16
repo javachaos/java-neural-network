@@ -1,31 +1,33 @@
 package com.neuralnetwork.shared.links;
 
-import com.neuralnetwork.shared.exceptions.OutOfBoundsException;
-import com.neuralnetwork.shared.nodes.INode;
+import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.values.IValue;
 
 /**
  * A basic link which connects two INodes.
  * 
  * @author fredladeroute
  *
+ *@param <T>
+ *      the type of this Link
  */
-public class Link implements ILink {
+public class Link<T extends Number> implements ILink<T> {
 
     /**
      * The head of this link.
      */
-    private INode head;
+    private INeuron head;
     
     /**
      * The tail of this link.
      */
-    private INode tail;
+    private INeuron tail;
 
     /**
      * The weight of this link
      * initialized to 0.
      */
-    private double weight = 0.0;
+    private IValue<T> weight;
     
     /**
      * Construct a new link with head, tail and weight.
@@ -40,9 +42,9 @@ public class Link implements ILink {
      *      the weight of this link [0-1].
      */
     public Link(
-            final INode ihead, 
-            final INode itail, 
-            final double linkWeight) {
+            final INeuron ihead, 
+            final INeuron itail, 
+            final IValue<T> linkWeight) {
         
         this.head = ihead;
         this.tail = itail;
@@ -50,22 +52,22 @@ public class Link implements ILink {
     }
 
     @Override
-    public final INode getHead() {
+    public final INeuron getHead() {
         return head;
     }
 
     @Override
-    public final INode getTail() {
+    public final INeuron getTail() {
         return tail;
     }
 
     @Override
-    public final double getWeight() {
+    public final IValue<T> getWeight() {
         return weight;
     }
     
     @Override
-    public final void setHead(final INode ihead) {
+    public final void setHead(final INeuron ihead) {
         if (ihead == null) {
             throw new NullPointerException("Error cannot set null head INode.");
         } else {
@@ -74,7 +76,7 @@ public class Link implements ILink {
     }
 
     @Override
-    public final void setTail(final INode itail) {
+    public final void setTail(final INeuron itail) {
         if (itail == null) {
             throw new NullPointerException("Error cannot set null tail INode.");
         } else {
@@ -83,30 +85,13 @@ public class Link implements ILink {
     }
 
     @Override
-    public final void updateWeight(final double value, final boolean sign) {
-        if (sign) {
-            weight += value;
-        } else {
-            weight -= value;
-        }
-        
-        if (weight > 1) {
-            weight = 1;
-        }
-        if (weight < 0) {
-            weight = 0;
-        }
-        
+    public final void updateWeight(final IValue<T> value) {
+        this.weight.updateValue(value);
     }
 
     @Override
-    public final void setWeight(final double weightValue) {
-        if (weightValue < 1 && weightValue > 0) {
-            this.weight = weightValue;
-        } else {
-            throw new OutOfBoundsException(
-                    "Error weight value must be within the bounds [0-1].");
-        }
+    public final void setWeight(final IValue<T> weightValue) {
+        this.weight = weightValue;
     }
 
 }

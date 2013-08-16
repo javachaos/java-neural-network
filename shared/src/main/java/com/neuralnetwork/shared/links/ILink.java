@@ -1,14 +1,17 @@
 package com.neuralnetwork.shared.links;
 
-import com.neuralnetwork.shared.nodes.INode;
+import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.values.IValue;
 
 /**
  * Represents the link between to INode classes.
  * 
  * @author fredladeroute
  *
+ *@param <T>
+ *      the type of ILink
  */
-public interface ILink {
+public interface ILink<T extends Number> {
     
     /**
      * Get the head of the link.
@@ -16,7 +19,7 @@ public interface ILink {
      * @return 
      *      the head of the link.
      */
-    INode getHead();
+    INeuron<T> getHead();
     
     /**
      * Get the tail of the link.
@@ -24,7 +27,7 @@ public interface ILink {
      * @return 
      *      the tail of the link.
      */
-    INode getTail();
+    INeuron<T> getTail();
     
     /**
      * Set the head INode of this ILink.
@@ -33,7 +36,7 @@ public interface ILink {
      *      the INode to set as head for this link
      * 
      */
-    void setHead(INode ihead);
+    void setHead(INeuron<T> ihead);
     
     /**
      * Set the tail INode of this ILink.
@@ -41,7 +44,7 @@ public interface ILink {
      * @param itail
      *      the INode to set as tail for this link
      */
-    void setTail(INode itail);
+    void setTail(INeuron<T> itail);
     
     
     /**
@@ -51,31 +54,24 @@ public interface ILink {
      * @return 
      *      the weight of this link.
      */
-    double getWeight();
+    IValue<T> getWeight();
     
     /**
-     * Update the weight of this link in
-     * either positive or negative direction based
-     * on the sign boolean, (true for positive false for
-     * negative) by value. If the value pushes the weight beyond the
+     * Update the weight of this link. If the value pushes the weight beyond the
      * bounds of [0-1] the weight will be clamped to either 0 or 1.
      * 
      * @param value
      *      the amount to update the weight by.
      * 
-     * @param sign
-     *      the direction in which to update the weight
-     *      true for positive false for negative
      */
-    void updateWeight(double value, boolean sign);
+    void updateWeight(IValue<T> value);
     
     /**
      * Change the weight of this ILink to weightValue.
      * 
      * @param weightValue
-     *      the value of the new weight for this link,
-     *      must be withing [0-1]
+     *      the value of the new weight for this link.
      */
-    void setWeight(double weightValue);
+    void setWeight(IValue<T> weightValue);
 
 }
