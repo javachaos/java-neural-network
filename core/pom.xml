@@ -8,4 +8,11 @@
   <artifactId>core</artifactId>
   <name>Core</name>
   <description>The core of the neural network software.</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.neuralnetwork</groupId>
+  		<artifactId>shared</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
