@@ -54,7 +54,7 @@ public interface ILink<T extends Number> {
      * @return 
      *      the weight of this link.
      */
-    IValue<T> getWeight();
+    IValue<?> getWeight();
     
     /**
      * Update the weight of this link. If the value pushes the weight beyond the
@@ -64,7 +64,7 @@ public interface ILink<T extends Number> {
      *      the amount to update the weight by.
      * 
      */
-    void updateWeight(IValue<T> value);
+    void updateWeight(IValue<Number> value);
     
     /**
      * Change the weight of this ILink to weightValue.
@@ -72,6 +72,6 @@ public interface ILink<T extends Number> {
      * @param weightValue
      *      the value of the new weight for this link.
      */
-    void setWeight(IValue<T> weightValue);
+    void setWeight(IValue<Number> weightValue);
 
 }

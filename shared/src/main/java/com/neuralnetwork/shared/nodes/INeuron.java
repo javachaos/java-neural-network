@@ -26,7 +26,7 @@ public interface INeuron<T extends Number> {
      * 
      * @return a new ILink.
      */
-    ILink<T> addInputLink(INeuron<T> inode, IValue<T> weight);
+    ILink<T> addInputLink(INeuron<T> inode, IValue<?> weight);
     
     /**
      * Adds a link from this node to inode
@@ -72,7 +72,7 @@ public interface INeuron<T extends Number> {
      * 
      * @return a new ILink.
      */
-    ILink<T> addOutputLink(INeuron<T> inode, IValue<T> weight);
+    ILink<T> addOutputLink(INeuron<T> inode, IValue<?> weight);
     
     /**
      * Adds a link from this node to inode

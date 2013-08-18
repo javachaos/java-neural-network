@@ -67,14 +67,14 @@ public abstract class Neuron<T extends Number> implements INeuron<T> {
     
     @Override
     public final ILink<T> addInputLink(
-            final INeuron<T> inode, final IValue<T> weight) {
+            final INeuron<T> inode, final IValue<?> weight) {
         this.inputLinks.add(++numInputLinks, new Link<T>(this, inode, weight));
         return inputLinks.get(numInputLinks);
     }
 
     @Override
     public final ILink<T> addInputLink(final INeuron<T> inode) {
-        return addInputLink(inode, new RandomValue<T>());
+        return addInputLink(inode, new RandomValue());
     }
 
     @Override
@@ -111,14 +111,14 @@ public abstract class Neuron<T extends Number> implements INeuron<T> {
 
     @Override
     public final ILink<T> addOutputLink(
-            final INeuron<T> inode, final IValue<T> weight) {
+            final INeuron<T> inode, final IValue<?> weight) {
         this.outputLinks.add(++numOutputLinks, new Link<T>(this, inode, weight));
         return outputLinks.get(numOutputLinks);
     }
 
     @Override
     public final ILink<T> addOutputLink(final INeuron<T> inode) {
-        return addOutputLink(inode, new RandomValue<T>());
+        return addOutputLink(inode, new RandomValue());
     }
 
     @Override

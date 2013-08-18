@@ -7,9 +7,12 @@ import com.neuralnetwork.shared.nodes.INeuron;
  * Represents a Layer class.
  * 
  * @author fredladeroute
+ * 
+ * @param <T>
+ *      the type of layer this is
  *
  */
-public interface ILayer extends ILink {
+public interface ILayer<T extends Number> extends ILink<T> {
 
     /**
      * Get the number of INodes in this layer.
@@ -28,6 +31,6 @@ public interface ILayer extends ILink {
      * @return
      *      the INode at index idx
      */
-    INeuron getNode(int idx);
+    INeuron<T> getNode(int idx);
     
 }

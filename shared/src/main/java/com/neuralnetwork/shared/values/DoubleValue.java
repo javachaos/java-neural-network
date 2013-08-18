@@ -7,7 +7,7 @@ package com.neuralnetwork.shared.values;
  *
  */
 public class DoubleValue extends GenericValue<Double> implements IValue<Double> {
-
+    
     /**
      * Constructor for a double value,
      * initialized with value 0.
@@ -44,8 +44,8 @@ public class DoubleValue extends GenericValue<Double> implements IValue<Double> 
     }
 
     @Override
-    public final void updateValue(final IValue<Double> v) {
-        this.setValue(getValue() + v.getValue());
+    public final void updateValue(final IValue<Number> v) {
+        this.setValue(this.getValue() + v.getValue().doubleValue());
     }
 
 }

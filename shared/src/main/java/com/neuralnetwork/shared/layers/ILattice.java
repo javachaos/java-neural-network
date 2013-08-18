@@ -8,8 +8,10 @@ import com.neuralnetwork.shared.nodes.INeuron;
  * 
  * @author fredladeroute
  *
+ *@param <T>
+ *      the type of lattice this is
  */
-public interface ILattice {
+public interface ILattice<T extends Number> {
 
     /**
      * Return the layer at index idx.
@@ -20,7 +22,7 @@ public interface ILattice {
      * @return
      *      the ILayer at layer idx
      */
-    ILayer getLayer(int idx);
+    ILayer<T> getLayer(int idx);
     
     /**
      * Get an INode from the ILattice.
@@ -34,7 +36,7 @@ public interface ILattice {
      * @return
      *      the INode at (x,y) in this ILattices
      */
-    INeuron getNode(int x, int y);
+    INeuron<T> getNode(int x, int y);
     
     /**
      * Returns the width of this ILattice.

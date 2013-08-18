@@ -9,7 +9,7 @@ package com.neuralnetwork.shared.values;
  *      the type of IValue this is
  */
 public interface IValue<T extends Number> {
-
+    
     /**
      * Set the value of this IValue.
      * 
@@ -33,7 +33,7 @@ public interface IValue<T extends Number> {
      * @param value
      *      the amount to add or subtract from this value
      */
-    void updateValue(IValue<T> value);
+    void updateValue(IValue<Number> value);
     
     /**
      * Set the sign of this value.

@@ -4,31 +4,21 @@ package com.neuralnetwork.shared.values;
 /**
  * A random value.
  * @author fredladeroute
- * 
- * @param <T>
- *      the type of random value to get
  *
  */
-public class RandomValue<T extends Number> extends GenericValue<T> {
+public class RandomValue extends GenericValue<Double> implements IValue<Double> {
 
     /**
      * The value of type T of this random value.
      */
-    private Number value;
+    private Double value;
     
     /**
      * Construct a new random value.
      * from [0,1].
      */
-    @SuppressWarnings("unchecked")
     public RandomValue() {
         this.value = Math.random();
-        this.setValue((T) value);
-    }
-
-    @Override
-    public final void updateValue(final IValue<T> v) {
-        this.setValue(v.getValue());
     }
 
     @Override
@@ -37,5 +27,17 @@ public class RandomValue<T extends Number> extends GenericValue<T> {
     }
 
     @Override
-    public void setSign(final boolean sign) { }
+    public final void setSign(final boolean sign) { 
+        if (!sign && value < 0) {
+            this.setValue(getValue() * -1.0);
+        } else if (sign && value > 0) {
+            this.setValue(getValue() * -1.0);
+        }
+    }
+
+    @Override
+    public final void updateValue(final IValue<Number> v) {
+        this.setValue(getValue() + v.getValue().doubleValue());
+    }
+    
 }

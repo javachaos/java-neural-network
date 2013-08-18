@@ -16,18 +16,18 @@ public class Link<T extends Number> implements ILink<T> {
     /**
      * The head of this link.
      */
-    private INeuron head;
+    private INeuron<T> head;
     
     /**
      * The tail of this link.
      */
-    private INeuron tail;
+    private INeuron<T> tail;
 
     /**
      * The weight of this link
      * initialized to 0.
      */
-    private IValue<T> weight;
+    private IValue<?> weight;
     
     /**
      * Construct a new link with head, tail and weight.
@@ -42,9 +42,9 @@ public class Link<T extends Number> implements ILink<T> {
      *      the weight of this link [0-1].
      */
     public Link(
-            final INeuron ihead, 
-            final INeuron itail, 
-            final IValue<T> linkWeight) {
+            final INeuron<T> ihead, 
+            final INeuron<T> itail, 
+            final IValue<?> linkWeight) {
         
         this.head = ihead;
         this.tail = itail;
@@ -52,22 +52,22 @@ public class Link<T extends Number> implements ILink<T> {
     }
 
     @Override
-    public final INeuron getHead() {
+    public final INeuron<T> getHead() {
         return head;
     }
 
     @Override
-    public final INeuron getTail() {
+    public final INeuron<T> getTail() {
         return tail;
     }
 
     @Override
-    public final IValue<T> getWeight() {
+    public final IValue<?> getWeight() {
         return weight;
     }
     
     @Override
-    public final void setHead(final INeuron ihead) {
+    public final void setHead(final INeuron<T> ihead) {
         if (ihead == null) {
             throw new NullPointerException("Error cannot set null head INode.");
         } else {
@@ -76,7 +76,7 @@ public class Link<T extends Number> implements ILink<T> {
     }
 
     @Override
-    public final void setTail(final INeuron itail) {
+    public final void setTail(final INeuron<T> itail) {
         if (itail == null) {
             throw new NullPointerException("Error cannot set null tail INode.");
         } else {
@@ -85,12 +85,12 @@ public class Link<T extends Number> implements ILink<T> {
     }
 
     @Override
-    public final void updateWeight(final IValue<T> value) {
+    public final void updateWeight(final IValue<Number> value) {
         this.weight.updateValue(value);
     }
 
     @Override
-    public final void setWeight(final IValue<T> weightValue) {
+    public final void setWeight(final IValue<Number> weightValue) {
         this.weight = weightValue;
     }
 

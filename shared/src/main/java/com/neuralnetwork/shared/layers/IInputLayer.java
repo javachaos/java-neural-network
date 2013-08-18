@@ -1,13 +1,16 @@
 package com.neuralnetwork.shared.layers;
 
+import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.values.IValue;
 
 /**
  * Represents an InputLayer class.
  * @author fredladeroute
  *
+ *@param <T>
+ *      the type of input layer this is
  */
-public interface IInputLayer extends ILayer {
+public interface IInputLayer<T extends Number> extends ILayer<T> {
 
     /**
      * Add a value to this IInputLayer.
@@ -18,7 +21,7 @@ public interface IInputLayer extends ILayer {
      * @param index
      *      which INode to insert the IValue at
      */
-    void addValue(IValue<? extends Number> v, int index);
+    void addValue(IValue<T> v, int index);
     
     /**
      * Checks if each IInputNode in this IInputLayer
@@ -33,6 +36,9 @@ public interface IInputLayer extends ILayer {
     /**
      * Propagate the values from this IInputLayer to the
      * next ILayer.
+     * 
+     * @param nnctx
+     *      neural net context parameter
      */
-    void propagate(INeuralNetContext nnctx);
+    void propagate(INeuralNetContext<T> nnctx);
 }
