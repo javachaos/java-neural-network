@@ -8,12 +8,6 @@
  * Contributors:
  *      Fred Laderoute - initial API and implementation
  *******************************************************************************/
-/*
- * SOMTrainer.java
- *
- * Created on December 13, 2002, 2:37 PM
- */
-
 package com.neuralnetwork.shared.training;
 
 import java.util.Vector;
