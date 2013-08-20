@@ -19,7 +19,7 @@ import com.neuralnetwork.shared.nodes.Neuron;
  * @author fredladeroute
  *
  */
-public class OpenCLNode extends Neuron<Double> implements INeuron<Double> {
+public class OpenCLNode extends Neuron implements INeuron {
 
     /**
      * Construct a new OpenCL Node.
@@ -27,7 +27,7 @@ public class OpenCLNode extends Neuron<Double> implements INeuron<Double> {
      * @param nodeId
      *      the id of this node.
      */
-    public OpenCLNode(int nodeId) {
+    public OpenCLNode(final int nodeId) {
         super(nodeId);
     }
 }

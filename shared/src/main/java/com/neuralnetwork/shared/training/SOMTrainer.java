@@ -12,6 +12,9 @@ package com.neuralnetwork.shared.training;
 
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.neuralnetwork.shared.nodes.SOMLattice;
 import com.neuralnetwork.shared.nodes.SOMLayer;
 import com.neuralnetwork.shared.nodes.SOMNeuron;
@@ -26,14 +29,19 @@ import com.neuralnetwork.shared.nodes.SOMNeuron;
 public class SOMTrainer implements Runnable {
     
     /**
+     * Logger instance.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SOMTrainer.class);
+    
+    /**
      * Initial learning rate.
      */
-	private static final double INITIAL_LEARNING_RATE = 0.07;
+	private double initialLearningRate;
 	
 	/**
 	 * The number of iterations to perform.
 	 */
-	private static final int	NUM_ITERATIONS = 500;
+	private int	numIterations;
 	
 	/**
 	 * The radius of the lattice.
@@ -72,8 +80,16 @@ public class SOMTrainer implements Runnable {
 	
 	/**
 	 * Create a new SOMTrainer object.
+	 * 
+	 * @param learnRate
+	 *         defines the initial learning rate (expected [0,1])
+	 *         
+	 * @param iterations
+	 *         the number of iterations to train for
 	 */
-	public SOMTrainer() {
+	public SOMTrainer(final double learnRate, final int iterations) {
+	    this.initialLearningRate = learnRate;
+	    this.numIterations = iterations;
 		running = false;
 	}
 	
@@ -136,21 +152,25 @@ public class SOMTrainer implements Runnable {
 	
 	@Override
     public final void run() {
+
+        LOGGER.debug("Training started.");
 		int latticeWidth = lattice.getWidth();
 		int latticeHeight = lattice.getHeight();
 		int xstart, ystart, xend, yend;
 		double dist, dFalloff;
 		// These two values are used in the training algorithm
 		latticeRadius = Math.max(latticeWidth, latticeHeight) / 2;
-		timeConstant = NUM_ITERATIONS / Math.log(latticeRadius);
+		timeConstant = numIterations / Math.log(latticeRadius);
 		
 		int iteration = 0;
 		double nbhRadius;
 		SOMNeuron bmu = null, temp = null;
 		SOMLayer curInput = null;
-		double learningRate = INITIAL_LEARNING_RATE;
+		double learningRate = initialLearningRate;
 		
-		while (iteration < NUM_ITERATIONS && running) {
+		while (iteration < numIterations && running) {
+
+	        LOGGER.debug("Training, iteration: " + iteration);
 			nbhRadius = getNeighborhoodRadius(iteration);
 			// For each of the input vectors, look for the best matching
 			// unit, then adjust the weights for the BMU's neighborhood
@@ -191,8 +211,8 @@ public class SOMTrainer implements Runnable {
 				}
 			}
 			iteration++;
-			learningRate = INITIAL_LEARNING_RATE 
-			        * Math.exp(-(double) iteration / NUM_ITERATIONS);
+			learningRate = initialLearningRate 
+			        * Math.exp(-(double) iteration / numIterations);
 		}
 		running = false;
 	}

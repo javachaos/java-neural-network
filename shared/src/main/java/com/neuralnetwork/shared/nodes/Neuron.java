@@ -23,20 +23,18 @@ import com.neuralnetwork.shared.values.RandomValue;
  * 
  * @author fredladeroute
  *
- *@param <T>
- *      the type of this Neuron.
  */
-public abstract class Neuron<T extends Number> implements INeuron<T> {
+public abstract class Neuron implements INeuron {
 
     /**
      * Array of all input links connected to this Neuron.
      */
-    private List<ILink<T>> inputLinks;
+    private List<ILink> inputLinks;
     
     /**
      * Array of all ouput links connected to this Neuron.
      */
-    private List<ILink<T>> outputLinks;
+    private List<ILink> outputLinks;
     
     /**
      * Current number of input links attached to this Neuron.
@@ -76,31 +74,31 @@ public abstract class Neuron<T extends Number> implements INeuron<T> {
     }
     
     @Override
-    public final ILink<T> addInputLink(
-            final INeuron<T> inode, final IValue<?> weight) {
-        this.inputLinks.add(++numInputLinks, new Link<T>(this, inode, weight));
+    public final ILink addInputLink(
+            final INeuron inode, final IValue<?> weight) {
+        this.inputLinks.add(++numInputLinks, new Link(this, inode, weight));
         return inputLinks.get(numInputLinks);
     }
 
     @Override
-    public final ILink<T> addInputLink(final INeuron<T> inode) {
+    public final ILink addInputLink(final INeuron inode) {
         return addInputLink(inode, new RandomValue());
     }
 
     @Override
-    public final ILink<T> getInputLink(final int linkId) {
+    public final ILink getInputLink(final int linkId) {
         return inputLinks.get(linkId);
     }
 
     @Override
-    public final ILink<T>[] getInputLinks(final int... ids) {
-        ArrayList<ILink<T>> temp = new ArrayList<ILink<T>>();
+    public final ILink[] getInputLinks(final int... ids) {
+        ArrayList<ILink> temp = new ArrayList<ILink>();
         
         for (int j : ids) {
             temp.add(getInputLink(j));
         }
         
-        ILink<T>[] t = null;
+        ILink[] t = null;
         return temp.toArray(t);
     }
     
@@ -110,41 +108,41 @@ public abstract class Neuron<T extends Number> implements INeuron<T> {
     }
     
     @Override
-    public final INeuron<T> getNextParent() {
+    public final INeuron getNextParent() {
         return getInputLink(++idParentCounter).getTail();
     }
     
     @Override
-    public final INeuron<T> getNextChild() {
+    public final INeuron getNextChild() {
         return getOutputLink(++idChildCounter).getTail();
     }
 
     @Override
-    public final ILink<T> addOutputLink(
-            final INeuron<T> inode, final IValue<?> weight) {
-        this.outputLinks.add(++numOutputLinks, new Link<T>(this, inode, weight));
+    public final ILink addOutputLink(
+            final INeuron inode, final IValue<?> weight) {
+        this.outputLinks.add(++numOutputLinks, new Link(this, inode, weight));
         return outputLinks.get(numOutputLinks);
     }
 
     @Override
-    public final ILink<T> addOutputLink(final INeuron<T> inode) {
+    public final ILink addOutputLink(final INeuron inode) {
         return addOutputLink(inode, new RandomValue());
     }
 
     @Override
-    public final ILink<T> getOutputLink(final int linkId) {
+    public final ILink getOutputLink(final int linkId) {
         return outputLinks.get(linkId);
     }
 
     @Override
-    public final ILink<T>[] getOutputLinks(final int... ids) {
-        ArrayList<ILink<T>> temp = new ArrayList<ILink<T>>();
+    public final ILink[] getOutputLinks(final int... ids) {
+        ArrayList<ILink> temp = new ArrayList<ILink>();
         
         for (int j : ids) {
             temp.add(getOutputLink(j));
         }
         
-        ILink<T>[] t = null;
+        ILink[] t = null;
         return temp.toArray(t);
     }
 

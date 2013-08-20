@@ -29,7 +29,7 @@ public final class NeuralNetBuilder {
     /**
      * Network instance.
      */
-    private INetwork<?> network;
+    private INetwork network;
     
     /**
      * The number of inputs for this network.
@@ -85,7 +85,7 @@ public final class NeuralNetBuilder {
      * 
      * @return
      */
-    public static INetwork<?> build(IValue<?> value) {
+    public static INetwork build(IValue<?> value) {
         //return new INetwork();
         return null;
     }

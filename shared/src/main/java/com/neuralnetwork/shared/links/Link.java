@@ -18,20 +18,18 @@ import com.neuralnetwork.shared.values.IValue;
  * 
  * @author fredladeroute
  *
- *@param <T>
- *      the type of this Link
  */
-public class Link<T extends Number> implements ILink<T> {
+public class Link implements ILink {
 
     /**
      * The head of this link.
      */
-    private INeuron<T> head;
+    private INeuron head;
     
     /**
      * The tail of this link.
      */
-    private INeuron<T> tail;
+    private INeuron tail;
 
     /**
      * The weight of this link
@@ -52,8 +50,8 @@ public class Link<T extends Number> implements ILink<T> {
      *      the weight of this link [0-1].
      */
     public Link(
-            final INeuron<T> ihead, 
-            final INeuron<T> itail, 
+            final INeuron ihead, 
+            final INeuron itail, 
             final IValue<?> linkWeight) {
         
         this.head = ihead;
@@ -62,12 +60,12 @@ public class Link<T extends Number> implements ILink<T> {
     }
 
     @Override
-    public final INeuron<T> getHead() {
+    public final INeuron getHead() {
         return head;
     }
 
     @Override
-    public final INeuron<T> getTail() {
+    public final INeuron getTail() {
         return tail;
     }
 
@@ -77,7 +75,7 @@ public class Link<T extends Number> implements ILink<T> {
     }
     
     @Override
-    public final void setHead(final INeuron<T> ihead) {
+    public final void setHead(final INeuron ihead) {
         if (ihead == null) {
             throw new NullPointerException("Error cannot set null head INode.");
         } else {
@@ -86,7 +84,7 @@ public class Link<T extends Number> implements ILink<T> {
     }
 
     @Override
-    public final void setTail(final INeuron<T> itail) {
+    public final void setTail(final INeuron itail) {
         if (itail == null) {
             throw new NullPointerException("Error cannot set null tail INode.");
         } else {

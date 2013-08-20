@@ -10,7 +10,10 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.network;
 
+import java.util.Vector;
+
 import com.neuralnetwork.shared.layers.ILattice;
+import com.neuralnetwork.shared.layers.ILayer;
 import com.neuralnetwork.shared.training.TrainingSet;
 import com.neuralnetwork.shared.values.ErrorValue;
 
@@ -19,11 +22,9 @@ import com.neuralnetwork.shared.values.ErrorValue;
  * 
  * @author fredladeroute
  * 
- * @param <T>
- *      the type of network
  *
  */
-public interface INetwork<T extends Number> extends ILattice<T> {
+public interface INetwork extends ILattice {
     
     /**
      * Run inputs through the network.
@@ -34,13 +35,25 @@ public interface INetwork<T extends Number> extends ILattice<T> {
      * @return
      *      the output values of the neural net
      */
-    Number[] runInputs(Number[] inputLayer);
+    Vector<Double> runInputs(Vector<Double> inputLayer);
     
     /**
      * Reset the network effectively,
      * changes all weight values to a random value between [0,1].
      */
     void reset();
+    
+    /**
+     * Add a layer to the network at the bottom
+     * of the network.
+     * 
+     * @param l
+     *      the layer to be added to the network
+     * 
+     * @param t
+     *      the layer type t to add
+     */
+    void addLayer(ILayer l, LayerType t);
     
     /**
      * Trains this network on one vector.
@@ -51,7 +64,7 @@ public interface INetwork<T extends Number> extends ILattice<T> {
      * @return
      *      the Mean squared error value
      */
-    ErrorValue train(Number[] trainingVector);
+    ErrorValue train(Vector<Double> trainingVector);
     
     /**
      * Train the network on the TrainingSet until the desired error is reached

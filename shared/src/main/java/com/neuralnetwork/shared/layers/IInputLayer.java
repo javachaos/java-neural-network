@@ -17,10 +17,8 @@ import com.neuralnetwork.shared.values.IValue;
  * Represents an InputLayer class.
  * @author fredladeroute
  *
- *@param <T>
- *      the type of input layer this is
  */
-public interface IInputLayer<T extends Number> extends ILayer<T> {
+public interface IInputLayer extends ILayer {
 
     /**
      * Add a value to this IInputLayer.
@@ -31,7 +29,7 @@ public interface IInputLayer<T extends Number> extends ILayer<T> {
      * @param index
      *      which INode to insert the IValue at
      */
-    void addValue(IValue<T> v, int index);
+    void addValue(IValue<?> v, int index);
     
     /**
      * Checks if each IInputNode in this IInputLayer
@@ -50,5 +48,5 @@ public interface IInputLayer<T extends Number> extends ILayer<T> {
      * @param nnctx
      *      neural net context parameter
      */
-    void propagate(INeuralNetContext<T> nnctx);
+    void propagate(INeuralNetContext nnctx);
 }

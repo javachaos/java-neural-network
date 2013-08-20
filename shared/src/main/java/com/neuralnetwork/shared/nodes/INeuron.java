@@ -17,12 +17,10 @@ import com.neuralnetwork.shared.values.IValue;
  * INode interface for the Nodes of the network.
  * 
  * @author fredladeroute
- * 
- * @param <T>
- *      the type of this neuron
+ *
  *
  */
-public interface INeuron<T extends Number> {
+public interface INeuron {
     
     /**
      * Adds a link from this node to inode
@@ -36,7 +34,7 @@ public interface INeuron<T extends Number> {
      * 
      * @return a new ILink.
      */
-    ILink<T> addInputLink(INeuron<T> inode, IValue<?> weight);
+    ILink addInputLink(INeuron inode, IValue<?> weight);
     
     /**
      * Adds a link from this node to inode
@@ -48,7 +46,7 @@ public interface INeuron<T extends Number> {
      * 
      * @return a new ILink.
      */
-    ILink<T> addInputLink(INeuron<T> inode);
+    ILink addInputLink(INeuron inode);
     
     /**
      * Get a ILink by the id of the other INode.
@@ -58,7 +56,7 @@ public interface INeuron<T extends Number> {
      *      
      * @return the ILink
      */
-    ILink<T> getInputLink(int linkId);
+    ILink getInputLink(int linkId);
     
     /**
      * Get ILinks by the id of the other INode ids.
@@ -68,7 +66,7 @@ public interface INeuron<T extends Number> {
      *      
      * @return the ILink.
      */
-    ILink<T>[] getInputLinks(int... ids);
+    ILink[] getInputLinks(int... ids);
     
     /**
      * Adds a link from this node to inode
@@ -82,7 +80,7 @@ public interface INeuron<T extends Number> {
      * 
      * @return a new ILink.
      */
-    ILink<T> addOutputLink(INeuron<T> inode, IValue<?> weight);
+    ILink addOutputLink(INeuron inode, IValue<?> weight);
     
     /**
      * Adds a link from this node to inode
@@ -94,7 +92,7 @@ public interface INeuron<T extends Number> {
      * 
      * @return a new ILink.
      */
-    ILink<T> addOutputLink(INeuron<T> inode);
+    ILink addOutputLink(INeuron inode);
     
     /**
      * Get a ILink by the id of the other INode.
@@ -104,7 +102,7 @@ public interface INeuron<T extends Number> {
      *      
      * @return the ILink
      */
-    ILink<T> getOutputLink(int linkId);
+    ILink getOutputLink(int linkId);
     
     /**
      * Get ILinks by the id of the other INode ids.
@@ -114,7 +112,7 @@ public interface INeuron<T extends Number> {
      *      
      * @return the ILink.
      */
-    ILink<T>[] getOutputLinks(int... ids);
+    ILink[] getOutputLinks(int... ids);
     
     /**
      * Return the id of this INode.
@@ -131,7 +129,7 @@ public interface INeuron<T extends Number> {
      *      the next child INode 
      *      and increment the child id counter.
      */
-    INeuron<T> getNextChild();
+    INeuron getNextChild();
 
     /**
      * Return the next parent INode.
@@ -140,6 +138,6 @@ public interface INeuron<T extends Number> {
      *      the next parent INode 
      *      and increment the parent id counter
      */
-    INeuron<T> getNextParent();
+    INeuron getNextParent();
 
 }

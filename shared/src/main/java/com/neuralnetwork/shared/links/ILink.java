@@ -18,10 +18,8 @@ import com.neuralnetwork.shared.values.IValue;
  * 
  * @author fredladeroute
  *
- *@param <T>
- *      the type of ILink
  */
-public interface ILink<T extends Number> {
+public interface ILink {
     
     /**
      * Get the head of the link.
@@ -29,7 +27,7 @@ public interface ILink<T extends Number> {
      * @return 
      *      the head of the link.
      */
-    INeuron<T> getHead();
+    INeuron getHead();
     
     /**
      * Get the tail of the link.
@@ -37,7 +35,7 @@ public interface ILink<T extends Number> {
      * @return 
      *      the tail of the link.
      */
-    INeuron<T> getTail();
+    INeuron getTail();
     
     /**
      * Set the head INode of this ILink.
@@ -46,7 +44,7 @@ public interface ILink<T extends Number> {
      *      the INode to set as head for this link
      * 
      */
-    void setHead(INeuron<T> ihead);
+    void setHead(INeuron ihead);
     
     /**
      * Set the tail INode of this ILink.
@@ -54,7 +52,7 @@ public interface ILink<T extends Number> {
      * @param itail
      *      the INode to set as tail for this link
      */
-    void setTail(INeuron<T> itail);
+    void setTail(INeuron itail);
     
     
     /**

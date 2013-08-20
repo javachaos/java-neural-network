@@ -18,10 +18,8 @@ import com.neuralnetwork.shared.nodes.INeuron;
  * 
  * @author fredladeroute
  * 
- * @param <T>
- *      the type of context this is
  */
-public interface INeuralNetContext<T extends Number> {
+public interface INeuralNetContext {
     
     /**
      * Get the tail given the head INode.
@@ -31,7 +29,7 @@ public interface INeuralNetContext<T extends Number> {
      * @return
      *      the tail of the given head INode
      */
-    INeuron<T> getTail(INeuron<T> head);
+    INeuron getTail(INeuron head);
     
     /**
      * Get the ILink between head and tail
@@ -46,6 +44,6 @@ public interface INeuralNetContext<T extends Number> {
      * @return
      *      the ILink between INodes head and tail
      */
-    ILink<T> getLink(INeuron<T> head, INeuron<T> tail);
+    ILink getLink(INeuron head, INeuron tail);
 
 }

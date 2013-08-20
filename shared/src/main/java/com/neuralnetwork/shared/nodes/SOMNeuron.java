@@ -13,6 +13,8 @@ package com.neuralnetwork.shared.nodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.neuralnetwork.shared.network.INetwork;
+
 /**
  * Represents a SOM Neuron.
  * 
@@ -30,6 +32,11 @@ public class SOMNeuron implements ISOMNeuron {
      * The weights for this Neuron.
      */
     private SOMLayer weights;
+    
+    /**
+     * Neural network associated with this SOM Neuron.
+     */
+    private INetwork neuralNetwork;
     
     /**
      * The x and y co ordinates of this Neuron within the Lattice.
@@ -134,5 +141,12 @@ public class SOMNeuron implements ISOMNeuron {
             wt += distanceFalloff * learningRate * (vw - wt);
             weights.setElementAt(new Double(wt), i);
         }
+    }
+
+    /**
+     * @return the neuralNetwork
+     */
+    public final INetwork getNeuralnetwork() {
+        return neuralNetwork;
     }
 }
