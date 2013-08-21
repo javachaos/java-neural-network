@@ -11,6 +11,7 @@
 package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
+import com.neuralnetwork.shared.nodes.IInputNeuron;
 import com.neuralnetwork.shared.values.IValue;
 
 /**
@@ -18,7 +19,7 @@ import com.neuralnetwork.shared.values.IValue;
  * @author fredladeroute
  *
  */
-public interface IInputLayer extends ILayer {
+public interface IInputLayer extends ILayer<IInputNeuron> {
 
     /**
      * Add a value to this IInputLayer.

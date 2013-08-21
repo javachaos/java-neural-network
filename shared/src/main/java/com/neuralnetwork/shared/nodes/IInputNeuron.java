@@ -8,7 +8,7 @@ import com.neuralnetwork.shared.values.IValue;
  * @author fredladeroute
  *
  */
-public interface IInputNeuron {
+public interface IInputNeuron extends INeuron {
 
     /**
      * Sets the input value to the neuron.

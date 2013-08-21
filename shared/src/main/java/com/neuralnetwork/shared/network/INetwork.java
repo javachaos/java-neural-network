@@ -12,8 +12,11 @@ package com.neuralnetwork.shared.network;
 
 import java.util.Vector;
 
-import com.neuralnetwork.shared.layers.ILattice;
+import com.neuralnetwork.shared.layers.IHiddenLayer;
+import com.neuralnetwork.shared.layers.IInputLayer;
 import com.neuralnetwork.shared.layers.ILayer;
+import com.neuralnetwork.shared.layers.IOutputLayer;
+import com.neuralnetwork.shared.nodes.INeuron;
 import com.neuralnetwork.shared.training.TrainingSet;
 import com.neuralnetwork.shared.values.ErrorValue;
 
@@ -24,7 +27,7 @@ import com.neuralnetwork.shared.values.ErrorValue;
  * 
  *
  */
-public interface INetwork extends ILattice {
+public interface INetwork {
     
     /**
      * Run inputs through the network.
@@ -44,16 +47,25 @@ public interface INetwork extends ILattice {
     void reset();
     
     /**
-     * Add a layer to the network at the bottom
+     * Adds a hidden layer to the network at the bottom
      * of the network.
      * 
      * @param l
      *      the layer to be added to the network
-     * 
-     * @param t
-     *      the layer type t to add
      */
-    void addLayer(ILayer l, LayerType t);
+    void addHiddenLayer(IHiddenLayer l);
+    
+    /**
+     * Get the hidden layer at height i of the network,
+     * where the first hidden layer is 0 and the last hidden
+     * layer is getHeight() - 1.
+     * 
+     * @param i
+     *      the index to the hidden layer to get
+     * @return
+     *      the IHiddenLayer at index i
+     */
+    IHiddenLayer getHiddenLayer(int i);
     
     /**
      * Trains this network on one vector.
@@ -81,5 +93,90 @@ public interface INetwork extends ILattice {
      *      the latest mean squared error of the network
      */
     ErrorValue train(TrainingSet trainingSet, ErrorValue expectedError);
+    
+    /**
+     * Get the output layer of this network.
+     * 
+     * @return
+     *      the output layer of this network
+     */
+    IOutputLayer getOutputLayer();
+    
+    /**
+     * Set the output layer for this network.
+     * 
+     * @param l
+     *      the output layer to be set
+     */
+    void setOutputLayer(IOutputLayer l);
+    
+    /**
+     * Return the layer at index idx.
+     * 
+     * @param idx
+     *      the index to the layer idx
+     *      
+     * @return
+     *      the ILayer at layer idx
+     */
+    ILayer<INeuron> getLayer(int idx);
+    
+    /**
+     * Get an INode from the ILattice.
+     * 
+     * @param x
+     *      the x co-ordinate of the INode
+     *      
+     * @param y
+     *      the y co-ordinate of the INode
+     *      
+     * @return
+     *      the INode at (x,y) in this ILattices
+     */
+    INeuron getNode(int x, int y);
+
+    /**
+     * Get the height of the network.
+     * 
+     * @return
+     *      the height of this network
+     */
+    int getHeight();
+    
+    /**
+     * Get a neuron from this networks output layer.
+     * 
+     * @param x
+     *      the position of the neuron to get
+     * @return
+     *      the INeuron at position x
+     */
+    INeuron getOutputNeuron(int x);
+    
+    /**
+     * Get a neuron from this networks input layer.
+     * 
+     * @param x
+     *      the position of the neuron in the input layer to get
+     * @return
+     *      the neuron at position x in the input layer
+     */
+    INeuron getInputNeuron(int x);
+    
+    /**
+     * Get the input layer to this network.
+     * 
+     * @return 
+     *      the inputLayer
+     */
+    IInputLayer getInputLayer();
+    
+    /**
+     * Set the input layer of this network.
+     * 
+     * @param l
+     *      the inputLayer to set
+     */
+    void setInputLayer(final IInputLayer l);
 
 }
