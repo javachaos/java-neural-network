@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.neuralnetwork</groupId>
     <artifactId>neuralnetwork</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
   </parent>
   <artifactId>opencl</artifactId>
   <name>OpenCL Module</name>
@@ -12,71 +12,12 @@
   	<dependency>
   		<groupId>com.neuralnetwork</groupId>
   		<artifactId>shared</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
+  		<version>0.0.1</version>
   	</dependency>
-    <dependency>
-      <groupId>com.nativelibs4java</groupId>
-      <artifactId>javacl</artifactId>
-      <version>1.0.0-RC3</version>
-    </dependency>
-    <dependency>
-	    <groupId>com.nativelibs4java</groupId>
-	    <artifactId>maven-javacl-plugin</artifactId>
-	    <version>1.0.0-RC3</version>
+	<dependency>
+	    <groupId>org.jocl</groupId>
+	    <artifactId>jocl</artifactId>
+	    <version>0.1.9</version>
 	</dependency>
-  </dependencies>
-  
-    <build>
-    <plugins>
-      <plugin>
-        <groupId>com.nativelibs4java</groupId>
-        <artifactId>maven-javacl-plugin</artifactId>
-        <version>1.0.0-RC3</version>
-        <executions>
-        <execution>
-          <phase>generate-sources</phase>
-          <goals>
-            <goal>compile</goal>
-          </goals>
-        </execution>
-        </executions>
-      </plugin>
-    </plugins>
-    <pluginManagement>
-    	<plugins>
-    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-    		<plugin>
-    			<groupId>org.eclipse.m2e</groupId>
-    			<artifactId>lifecycle-mapping</artifactId>
-    			<version>1.0.0</version>
-    			<configuration>
-    				<lifecycleMappingMetadata>
-    					<pluginExecutions>
-    						<pluginExecution>
-    							<pluginExecutionFilter>
-    								<groupId>
-    									com.nativelibs4java
-    								</groupId>
-    								<artifactId>
-    									maven-javacl-plugin
-    								</artifactId>
-    								<versionRange>
-    									[1.0.0-RC3,)
-    								</versionRange>
-    								<goals>
-    									<goal>compile</goal>
-    								</goals>
-    							</pluginExecutionFilter>
-    							<action>
-    								<ignore></ignore>
-    							</action>
-    						</pluginExecution>
-    					</pluginExecutions>
-    				</lifecycleMappingMetadata>
-    			</configuration>
-    		</plugin>
-    	</plugins>
-    </pluginManagement>
-    </build>
-  
+  </dependencies>  
 </project>

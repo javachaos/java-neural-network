@@ -1,5 +1,6 @@
 package com.neuralnetwork.shared.network;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -80,7 +81,14 @@ public class Network implements INetwork {
 
     @Override
     public final void reset() {
-        //TODO Implement method.
+        Iterator<ILayer> i = layers.iterator();
+        while (i.hasNext()) {
+            ILayer l = i.next();
+            Iterator<INeuron> j = l.iterator();
+            while (j.hasNext()) {
+                j.next().reset();
+            }
+        }
     }
 
     @Override

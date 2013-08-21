@@ -54,7 +54,7 @@ public class DoubleValue extends GenericValue<Double> implements IValue<Double> 
     }
 
     @Override
-    public final void updateValue(final IValue<Number> v) {
+    public final void updateValue(final IValue<?> v) {
         this.setValue(this.getValue() + v.getValue().doubleValue());
     }
 

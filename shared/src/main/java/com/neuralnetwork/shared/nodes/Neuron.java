@@ -13,6 +13,8 @@ package com.neuralnetwork.shared.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.neuralnetwork.shared.functions.IActivationFunction;
+import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.links.Link;
 import com.neuralnetwork.shared.values.IValue;
@@ -24,8 +26,15 @@ import com.neuralnetwork.shared.values.RandomValue;
  * @author fredladeroute
  *
  */
-public abstract class Neuron implements INeuron {
-
+public class Neuron implements INeuron {
+    
+    /**
+     * The activation function for this INeuron.
+     * 
+     * Default: SigmoidFunction
+     */
+    private IActivationFunction function = new SigmoidFunction();
+    
     /**
      * Array of all input links connected to this Neuron.
      */
@@ -68,9 +77,23 @@ public abstract class Neuron implements INeuron {
      * 
      * @param nodeId
      *      the id of this Neuron
+     *      
+     *  Node IDs:
+     *  
+     *  0 = Normal Neuron
+     *  1 = Input Neuron
+     *  2 = Output Neuron
+     *  
      */
     public Neuron(final int nodeId) {
         this.id = nodeId;
+    }
+    
+    /**
+     * Construct a new Neuron.
+     */
+    public Neuron() {
+        this.id = 0;
     }
     
     @Override
@@ -144,6 +167,23 @@ public abstract class Neuron implements INeuron {
         
         ILink[] t = null;
         return temp.toArray(t);
+    }
+
+    @Override
+    public final void reset() {
+        for (ILink i : outputLinks) {
+            i.setWeight(new RandomValue());
+        }
+    }
+
+    @Override
+    public final void setActivationFunction(final IActivationFunction f) {
+        this.function = f;
+    }
+
+    @Override
+    public final IActivationFunction getActivationFunction() {
+        return function;
     }
 
 }

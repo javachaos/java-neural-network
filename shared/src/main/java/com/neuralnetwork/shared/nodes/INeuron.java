@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.nodes;
 
+import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.values.IValue;
 
@@ -139,5 +140,28 @@ public interface INeuron {
      *      and increment the parent id counter
      */
     INeuron getNextParent();
+
+    /**
+     * Reset the weights of all OUTPUT weight values to
+     * a uniform randomly distributed value between [0,1].
+     */
+    void reset();
+    
+    /**
+     * Sets the activation function which this neuron
+     * will use.
+     * 
+     * @param f
+     *      the IActivationFunction to use
+     */
+    void setActivationFunction(IActivationFunction f);
+    
+    /**
+     * Get the activation function for this INeuron.
+     * 
+     * @return
+     *      the IActivationFunction of this INeuron
+     */
+    IActivationFunction getActivationFunction();
 
 }

@@ -18,7 +18,7 @@ import com.neuralnetwork.shared.nodes.INeuron;
  * @author fredladeroute
  *
  */
-public interface ILayer {
+public interface ILayer extends Iterable<INeuron> {
     
     /**
      * Get a node from this layer.

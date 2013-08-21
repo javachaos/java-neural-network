@@ -46,7 +46,7 @@ public class RandomValue extends GenericValue<Double> implements IValue<Double> 
     }
 
     @Override
-    public final void updateValue(final IValue<Number> v) {
+    public final void updateValue(final IValue<?> v) {
         this.setValue(getValue() + v.getValue().doubleValue());
     }
     

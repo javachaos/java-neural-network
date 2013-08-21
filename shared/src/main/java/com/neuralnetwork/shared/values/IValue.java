@@ -43,7 +43,7 @@ public interface IValue<T extends Number> {
      * @param value
      *      the amount to add or subtract from this value
      */
-    void updateValue(IValue<Number> value);
+    void updateValue(IValue<?> value);
     
     /**
      * Set the sign of this value.
@@ -62,4 +62,5 @@ public interface IValue<T extends Number> {
      *      positive and false is negative.
      */
     boolean getSign();
+
 }

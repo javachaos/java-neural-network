@@ -14,7 +14,7 @@ import com.neuralnetwork.shared.nodes.INeuron;
 import com.neuralnetwork.shared.values.IValue;
 
 /**
- * A basic link which connects two INodes.
+ * A basic link which connects two INeurons.
  * 
  * @author fredladeroute
  *
@@ -30,6 +30,14 @@ public class Link implements ILink {
      * The tail of this link.
      */
     private INeuron tail;
+    
+    /**
+     * The number of times this link is
+     * updated. During training if the age of a link
+     * is less than 3 for 100 training samples the
+     * link dies.
+     */
+    private double age;
 
     /**
      * The weight of this link
@@ -93,13 +101,20 @@ public class Link implements ILink {
     }
 
     @Override
-    public final void updateWeight(final IValue<Number> value) {
+    public final void updateWeight(final IValue<?> value) {
+        age++;
         this.weight.updateValue(value);
     }
 
     @Override
-    public final void setWeight(final IValue<Number> weightValue) {
+    public final void setWeight(final IValue<?> weightValue) {
+        age = 0;
         this.weight = weightValue;
+    }
+
+    @Override
+    public final double getAge() {
+        return age;
     }
 
 }

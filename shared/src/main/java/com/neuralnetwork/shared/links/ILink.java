@@ -72,7 +72,7 @@ public interface ILink {
      *      the amount to update the weight by.
      * 
      */
-    void updateWeight(IValue<Number> value);
+    void updateWeight(IValue<?> value);
     
     /**
      * Change the weight of this ILink to weightValue.
@@ -80,6 +80,20 @@ public interface ILink {
      * @param weightValue
      *      the value of the new weight for this link.
      */
-    void setWeight(IValue<Number> weightValue);
+    void setWeight(IValue<?> weightValue);
+    
+    /**
+     * Returns the age of this link.
+     * 
+     * <pre>
+     * age - The number of times this link is
+     *      updated. During training if the age of a link
+     *      is less than 3 for 100 training samples the
+     *      link dies.
+     * </pre>
+     * @return 
+     *      the age of this link
+     */
+    double getAge();
 
 }
