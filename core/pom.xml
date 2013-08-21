@@ -5,19 +5,14 @@
     <artifactId>neuralnetwork</artifactId>
     <version>0.0.1</version>
   </parent>
-  <artifactId>opencl</artifactId>
-  <name>OpenCL Module</name>
-  <description>Project containing OpenCL code.</description>
+  <artifactId>core</artifactId>
+  <name>Core</name>
+  <description>The core of the neural network software.</description>
   <dependencies>
   	<dependency>
   		<groupId>com.neuralnetwork</groupId>
   		<artifactId>shared</artifactId>
   		<version>0.0.1</version>
   	</dependency>
-	<dependency>
-	    <groupId>org.jocl</groupId>
-	    <artifactId>jocl</artifactId>
-	    <version>0.1.9</version>
-	</dependency>
-  </dependencies>  
+  </dependencies>
 </project>
