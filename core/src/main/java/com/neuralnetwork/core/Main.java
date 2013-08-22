@@ -1,11 +1,7 @@
 package com.neuralnetwork.core;
 
-import java.util.Vector;
-
-import com.neuralnetwork.shared.nodes.SOMLattice;
-import com.neuralnetwork.shared.nodes.SOMLayer;
-import com.neuralnetwork.shared.training.SOMTrainer;
-import com.neuralnetwork.shared.util.ErrorFunctions;
+import com.neuralnetwork.shared.layers.HiddenLayer;
+import com.neuralnetwork.shared.util.NeuralNetBuilder;
 
 /**
  * Main class.
@@ -15,7 +11,10 @@ import com.neuralnetwork.shared.util.ErrorFunctions;
  */
 public final class Main {
     
-    private static int SIZE_N = 100;
+    /**
+     * Size of input and output layer.
+     */
+    private static final int SIZE_N = 3;
     
     /**
      * Unused ctor.
@@ -29,16 +28,9 @@ public final class Main {
      *      command line args
      */
     public static void main(final String[] args) {
-        Vector<SOMLayer> data = new Vector<SOMLayer>();
-        
-        SOMLayer input = new SOMLayer();
-        SOMLattice lattice = new SOMLattice(SIZE_N, SIZE_N, SIZE_N);
-        
-        SOMTrainer trainer = new SOMTrainer(0.07, 500);
-        trainer.setTraining(lattice, data);
-        trainer.start();
-        
-        lattice.getBMU(input).getNeuralnetwork().runInputs(input);
-        
+        NeuralNetBuilder builder = new NeuralNetBuilder(SIZE_N, SIZE_N);
+        builder.addHiddenLayer(new HiddenLayer(2));
+        builder.addHiddenLayer(new HiddenLayer(1));
+        builder.build();
     }
 }

@@ -33,16 +33,6 @@ public interface IInputLayer extends ILayer<IInputNeuron>, IBuildable {
     void addValue(IValue<?> v, int index);
     
     /**
-     * Checks if each IInputNode in this IInputLayer
-     * is occupied by an IValue.
-     * 
-     * @return
-     *      true if all INodes in this IInputLayer are
-     *      occupied
-     */
-    boolean isLayerFull();
-    
-    /**
      * Propagate the values from this IInputLayer to the
      * next ILayer.
      * 

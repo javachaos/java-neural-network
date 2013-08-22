@@ -16,6 +16,7 @@ import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.layers.IInputLayer;
 import com.neuralnetwork.shared.layers.ILayer;
 import com.neuralnetwork.shared.layers.IOutputLayer;
+import com.neuralnetwork.shared.nodes.IHiddenNeuron;
 import com.neuralnetwork.shared.nodes.INeuron;
 import com.neuralnetwork.shared.training.TrainingSet;
 import com.neuralnetwork.shared.values.ErrorValue;
@@ -126,7 +127,7 @@ public interface INetwork {
      * @see #getInputLayer()
      */
     @Deprecated
-    ILayer<INeuron> getLayer(int idx);
+    ILayer<IHiddenNeuron> getLayer(int idx);
     
     /**
      * Get an INode from the ILattice.

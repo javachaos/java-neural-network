@@ -57,5 +57,10 @@ public class DoubleValue extends GenericValue<Double> implements IValue<Double> 
     public final void updateValue(final IValue<?> v) {
         this.setValue(this.getValue() + v.getValue().doubleValue());
     }
+    
+    @Override
+    public final String toString() {
+        return "" + getValue().doubleValue();
+    }
 
 }

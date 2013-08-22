@@ -112,6 +112,8 @@ public interface INeuron {
      *      the node to connect to.
      * 
      * @return a new ILink.
+     * 
+     * @see #addOutputLink(INeuron, IValue)
      */
     ILink addOutputLink(INeuron inode);
     

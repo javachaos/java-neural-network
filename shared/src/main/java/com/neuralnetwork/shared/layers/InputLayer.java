@@ -49,18 +49,13 @@ public final class InputLayer extends Layer<IInputNeuron> implements IInputLayer
     }
 
     @Override
-    public boolean isLayerFull() {
-        return super.size() == getWidth();
-    }
-
-    @Override
     public void propagate(final INeuralNetContext nnctx) {
         // TODO Implement
     }
 
     @Override
     public void build() {
-        while (!isLayerFull()) {
+        while (size() != getWidth()) {
             add(new InputNeuron());
         }
     }

@@ -46,4 +46,9 @@ public class ZeroValue extends GenericValue<Double> implements IValue<Double> {
         //unused.
     }
 
+
+    @Override
+    public final String toString() {
+        return "0";
+    }
 }

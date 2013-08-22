@@ -26,5 +26,10 @@ public class InputNeuron extends AbstractInputNeuron {
     public InputNeuron() {
         super();
     }
+    
+    @Override
+    public final String toString() {
+        return "IN(" + getValue() + ") ";
+    }
 
 }

@@ -9,4 +9,8 @@ package com.neuralnetwork.shared.nodes;
  */
 public final class OutputNeuron extends AbstractOutputNeuron {
 
+    @Override
+    public String toString() {
+        return "ON(" + getValue() + ") ";
+    }
 }

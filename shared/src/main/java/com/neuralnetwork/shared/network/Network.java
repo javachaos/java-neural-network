@@ -12,7 +12,10 @@ import com.neuralnetwork.shared.layers.ILayer;
 import com.neuralnetwork.shared.layers.IOutputLayer;
 import com.neuralnetwork.shared.layers.InputLayer;
 import com.neuralnetwork.shared.layers.OutputLayer;
+import com.neuralnetwork.shared.nodes.IHiddenNeuron;
+import com.neuralnetwork.shared.nodes.IInputNeuron;
 import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.nodes.IOutputNeuron;
 import com.neuralnetwork.shared.training.TrainingSet;
 import com.neuralnetwork.shared.util.Connections;
 import com.neuralnetwork.shared.values.ErrorValue;
@@ -97,6 +100,8 @@ public final class Network implements INetwork {
      *      the number of outputs from the network
      */
     public Network(final int numIn, final int numOut) {
+        this.numInputs = numIn;
+        this.numOutputs = numOut;
         this.inputLayer = new InputLayer(numInputs);
         this.outputLayer = new OutputLayer(numOutputs);
         this.layers = new Vector<IHiddenLayer>();
@@ -140,8 +145,8 @@ public final class Network implements INetwork {
         LOGGER.debug("Resetting the network.");
         Iterator<IHiddenLayer> i = layers.iterator();
         while (i.hasNext()) {
-            ILayer<INeuron> l = i.next();
-            Iterator<INeuron> j = l.iterator();
+            ILayer<IHiddenNeuron> l = i.next();
+            Iterator<IHiddenNeuron> j = l.iterator();
             while (j.hasNext()) {
                 j.next().reset();
             }
@@ -193,7 +198,7 @@ public final class Network implements INetwork {
     
     @Override
     @Deprecated
-    public ILayer<INeuron> getLayer(final int idx) {
+    public ILayer<IHiddenNeuron> getLayer(final int idx) {
         return layers.get(idx);
     }
 
@@ -215,6 +220,37 @@ public final class Network implements INetwork {
         }
         
         Connections.create(outputLayer, layers.get(layers.size() - 1));
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        Iterator<IInputNeuron> inputIter = inputLayer.iterator();
+        
+        while (inputIter.hasNext()) {
+            sb.append(inputIter.next().toString());
+        }
+        
+        sb.append("\n");
+        
+        Iterator<IHiddenLayer> hiddenIter = layers.iterator();
+        while (hiddenIter.hasNext()) {
+            Iterator<IHiddenNeuron> hnIter = hiddenIter.next().iterator();
+            while (hnIter.hasNext()) {
+                sb.append(hnIter.next());
+            }
+            sb.append("\n");
+        }
+        
+        Iterator<IOutputNeuron> outputIter = outputLayer.iterator();
+        
+        while (outputIter.hasNext()) {
+            sb.append(outputIter.next().toString());
+        }
+
+        sb.append("\n");
+        return sb.toString();
     }
     
 }

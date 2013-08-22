@@ -10,6 +10,9 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.network.INetwork;
 import com.neuralnetwork.shared.network.Network;
@@ -23,9 +26,10 @@ import com.neuralnetwork.shared.network.Network;
 public final class NeuralNetBuilder {
     
     /**
-     * The builder instance.
+     * Logger instance.
      */
-    private static NeuralNetBuilder netBuilder = null;
+    private static final Logger LOGGER = 
+            LoggerFactory.getLogger(NeuralNetBuilder.class);
     
     /**
      * Network instance.
@@ -41,26 +45,8 @@ public final class NeuralNetBuilder {
      * @param numOutputs
      *      the number of outputs to the neural network to build
      */
-    private NeuralNetBuilder(final int numInputs, final int numOutputs) {
+    public NeuralNetBuilder(final int numInputs, final int numOutputs) {
         network = new Network(numInputs, numOutputs);
-    }
-    
-    /**
-     * Create a new basic neural network structure.
-     * 
-     * @param numInputs
-     *      the number of inputs the network should have
-     *  
-     * @param numOutputs
-     *      the number of outputs the network should have
-     * 
-     * @return
-     *      a basic NeuralNetBuilder instance to allow for chaining
-     */
-    public static NeuralNetBuilder createNew(
-            final int numInputs, final int numOutputs) {
-        netBuilder = new NeuralNetBuilder(numInputs, numOutputs);
-        return netBuilder;
     }
     
     /**
@@ -72,9 +58,10 @@ public final class NeuralNetBuilder {
      * @return
      *      the neural net builder instance.
      */
-    public static NeuralNetBuilder addHiddenLayer(final IHiddenLayer l) {
-        netBuilder.network.addHiddenLayer(l);
-        return netBuilder;
+    public NeuralNetBuilder addHiddenLayer(final IHiddenLayer l) {
+        network.addHiddenLayer(l);
+        LOGGER.info("New hidden layer added to network.");
+        return this;
     }
     
     /**
@@ -83,9 +70,10 @@ public final class NeuralNetBuilder {
      * @return
      *      a reference to the built neural network.
      */
-    public static INetwork build() {
-        netBuilder.network.build();
-        return netBuilder.network;
+    public INetwork build() {
+        network.build();
+        LOGGER.info(network.toString());
+        return network;
     }
 
 }

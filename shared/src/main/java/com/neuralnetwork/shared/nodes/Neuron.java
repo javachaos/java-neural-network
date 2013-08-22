@@ -11,7 +11,7 @@
 package com.neuralnetwork.shared.nodes;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
@@ -26,7 +26,7 @@ import com.neuralnetwork.shared.values.RandomValue;
  * @author fredladeroute
  *
  */
-public class Neuron implements INeuron {
+public abstract class Neuron implements INeuron {
     
     /**
      * The value for this neuron.
@@ -43,12 +43,12 @@ public class Neuron implements INeuron {
     /**
      * Array of all input links connected to this Neuron.
      */
-    private List<ILink> inputLinks;
+    private Vector<ILink> inputLinks;
     
     /**
      * Array of all ouput links connected to this Neuron.
      */
-    private List<ILink> outputLinks;
+    private Vector<ILink> outputLinks;
     
     /**
      * Current number of input links attached to this Neuron.
@@ -94,6 +94,8 @@ public class Neuron implements INeuron {
     public Neuron(final int nodeId) {
         this.id = nodeId;
         this.value = new RandomValue();
+        inputLinks = new Vector<ILink>();
+        outputLinks = new Vector<ILink>();
     }
     
     /**
@@ -103,6 +105,8 @@ public class Neuron implements INeuron {
     public Neuron() {
         this.id = 0;
         this.value = new RandomValue();
+        inputLinks = new Vector<ILink>();
+        outputLinks = new Vector<ILink>();
     }
     
     @Override
