@@ -113,12 +113,19 @@ public interface INetwork {
     /**
      * Return the layer at index idx.
      * 
+     * Depricated as of {@date}
+     * 
      * @param idx
      *      the index to the layer idx
      *      
      * @return
      *      the ILayer at layer idx
+     * 
+     * @see #getHiddenLayer(int)
+     * @see #getOutputLayer()
+     * @see #getInputLayer()
      */
+    @Deprecated
     ILayer<INeuron> getLayer(int idx);
     
     /**
@@ -178,5 +185,13 @@ public interface INetwork {
      *      the inputLayer to set
      */
     void setInputLayer(final IInputLayer l);
+    
+    /**
+     * Build the neural network.
+     * 
+     * 1. Construct all Neurons in each layer.
+     * 2. Construct all the links connecting all layers
+     */
+    void build();
 
 }

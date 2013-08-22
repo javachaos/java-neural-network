@@ -5,6 +5,7 @@ import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.nodes.BiasNeuron;
 import com.neuralnetwork.shared.nodes.IInputNeuron;
 import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.nodes.Neuron;
 
 /**
  * Represents a hidden neural network layer.
@@ -45,7 +46,13 @@ public final class HiddenLayer extends Layer<INeuron> implements IHiddenLayer {
     @Override
     public void propagate(final INeuralNetContext nnctx) {
         // TODO implement
-        
+    }
+
+    @Override
+    public void build() {
+        while (size() != getWidth()) {
+            add(new Neuron());
+        }
     }
 
 }

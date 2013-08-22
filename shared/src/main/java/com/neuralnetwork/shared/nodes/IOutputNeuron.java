@@ -8,4 +8,11 @@ package com.neuralnetwork.shared.nodes;
  */
 public interface IOutputNeuron extends INeuron {
 
+    /**
+     * Get the output value of this IOutputNeuron.
+     * 
+     * @return
+     *      the output value from the network as a double
+     */
+    double getOutputValue();
 }

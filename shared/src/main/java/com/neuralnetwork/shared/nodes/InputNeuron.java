@@ -26,4 +26,5 @@ public class InputNeuron extends AbstractInputNeuron {
     public InputNeuron() {
         super();
     }
+
 }

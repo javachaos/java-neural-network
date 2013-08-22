@@ -24,6 +24,22 @@ import com.neuralnetwork.shared.values.IValue;
 public interface INeuron {
     
     /**
+     * Get the value that this neuron holds.
+     * 
+     * @return
+     *      the value that this neuron holds
+     */
+    IValue<?> getValue();
+    
+    /**
+     * Set the value that this neuron will hold.
+     * 
+     * @param v
+     *      the value to set for this neuron
+     */
+    void setValue(IValue<?> v);
+    
+    /**
      * Adds a link from this node to inode
      * with weight weight and return the ILink.
      * 
@@ -72,6 +88,10 @@ public interface INeuron {
     /**
      * Adds a link from this node to inode
      * with weight weight and return the ILink.
+     * 
+     * Also adds the input link for the inode neuron.
+     * Thus created a full 2 way connection between
+     * this neuron and inode.
      * 
      * @param inode 
      *      the node to connect to.

@@ -8,7 +8,7 @@ import com.neuralnetwork.shared.nodes.INeuron;
  * @author fredladeroute
  *
  */
-public interface IHiddenLayer extends ILayer<INeuron> {
+public interface IHiddenLayer extends ILayer<INeuron>, IBuildable {
     
     /**
      * Propagate the values from this IHiddenLayer to the

@@ -8,6 +8,5 @@ import com.neuralnetwork.shared.nodes.IOutputNeuron;
  * @author fredladeroute
  *
  */
-public interface IOutputLayer extends ILayer<IOutputNeuron> {
-
+public interface IOutputLayer extends ILayer<IOutputNeuron>, IBuildable {
 }

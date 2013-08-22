@@ -2,6 +2,7 @@ package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.nodes.IOutputNeuron;
+import com.neuralnetwork.shared.nodes.OutputNeuron;
 
 /**
  * Represents an output layer of a network.
@@ -25,6 +26,13 @@ public class OutputLayer extends Layer<IOutputNeuron> implements IOutputLayer {
     public OutputLayer(final int w) {
         super(w);
         super.setLayerType(LayerType.OUTPUT);
+    }
+
+    @Override
+    public final void build() {
+        while (getWidth() != size()) {
+            add(new OutputNeuron());
+        }
     }
 
 }

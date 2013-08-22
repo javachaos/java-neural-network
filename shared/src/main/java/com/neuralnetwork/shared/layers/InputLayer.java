@@ -58,4 +58,11 @@ public final class InputLayer extends Layer<IInputNeuron> implements IInputLayer
         // TODO Implement
     }
 
+    @Override
+    public void build() {
+        while (!isLayerFull()) {
+            add(new InputNeuron());
+        }
+    }
+
 }

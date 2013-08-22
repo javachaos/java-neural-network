@@ -10,8 +10,9 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.util;
 
+import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.network.INetwork;
-import com.neuralnetwork.shared.values.IValue;
+import com.neuralnetwork.shared.network.Network;
 
 /**
  * Class to build neural network data structures.
@@ -32,16 +33,6 @@ public final class NeuralNetBuilder {
     private INetwork network;
     
     /**
-     * The number of inputs for this network.
-     */
-    private int nInputs;
-    
-    /**
-     * The number of outputs for this network.
-     */
-    private int nOutputs;
-    
-    /**
      * Neural net constructor.
      * 
      * @param numInputs
@@ -51,8 +42,7 @@ public final class NeuralNetBuilder {
      *      the number of outputs to the neural network to build
      */
     private NeuralNetBuilder(final int numInputs, final int numOutputs) {
-        this.nInputs = numInputs;
-        this.nOutputs = numOutputs;
+        network = new Network(numInputs, numOutputs);
     }
     
     /**
@@ -74,20 +64,28 @@ public final class NeuralNetBuilder {
     }
     
     /**
+     * Add a hidden layer to the network.
+     * 
+     * @param l
+     *      the hidden layer to be added to the network
      * 
      * @return
+     *      the neural net builder instance.
      */
-    public static NeuralNetBuilder addNode() {
+    public static NeuralNetBuilder addHiddenLayer(final IHiddenLayer l) {
+        netBuilder.network.addHiddenLayer(l);
         return netBuilder;
     }
     
     /**
+     * Build the neural network.
      * 
      * @return
+     *      a reference to the built neural network.
      */
-    public static INetwork build(IValue<?> value) {
-        //return new INetwork();
-        return null;
+    public static INetwork build() {
+        netBuilder.network.build();
+        return netBuilder.network;
     }
 
 }

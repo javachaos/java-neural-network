@@ -29,6 +29,11 @@ import com.neuralnetwork.shared.values.RandomValue;
 public class Neuron implements INeuron {
     
     /**
+     * The value for this neuron.
+     */
+    private IValue<?> value;
+    
+    /**
      * The activation function for this INeuron.
      * 
      * Default: SigmoidFunction
@@ -74,26 +79,30 @@ public class Neuron implements INeuron {
     
     /**
      * Construct a new Neuron.
+     * With it's value set randomly.
      * 
      * @param nodeId
      *      the id of this Neuron
      *      
      *  Node IDs:
      *  
-     *  0 = Normal Neuron
+     *  0 = Normal Neuron (hidden layer neuron)
      *  1 = Input Neuron
      *  2 = Output Neuron
      *  
      */
     public Neuron(final int nodeId) {
         this.id = nodeId;
+        this.value = new RandomValue();
     }
     
     /**
      * Construct a new Neuron.
+     * With it's value set randomly.
      */
     public Neuron() {
         this.id = 0;
+        this.value = new RandomValue();
     }
     
     @Override
@@ -144,6 +153,7 @@ public class Neuron implements INeuron {
     public final ILink addOutputLink(
             final INeuron inode, final IValue<?> weight) {
         this.outputLinks.add(++numOutputLinks, new Link(this, inode, weight));
+        inode.addInputLink(this);
         return outputLinks.get(numOutputLinks);
     }
 
@@ -184,6 +194,16 @@ public class Neuron implements INeuron {
     @Override
     public final IActivationFunction getActivationFunction() {
         return function;
+    }
+
+    @Override
+    public final IValue<?> getValue() {
+        return value;
+    }
+
+    @Override
+    public final void setValue(final IValue<?> v) {
+        this.value = v;
     }
 
 }

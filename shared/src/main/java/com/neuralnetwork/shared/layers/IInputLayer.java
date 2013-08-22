@@ -19,7 +19,7 @@ import com.neuralnetwork.shared.values.IValue;
  * @author fredladeroute
  *
  */
-public interface IInputLayer extends ILayer<IInputNeuron> {
+public interface IInputLayer extends ILayer<IInputNeuron>, IBuildable {
 
     /**
      * Add a value to this IInputLayer.
@@ -50,4 +50,9 @@ public interface IInputLayer extends ILayer<IInputNeuron> {
      *      neural net context parameter
      */
     void propagate(INeuralNetContext nnctx);
+
+    /**
+     * Build the input layer using INeurons.
+     */
+    void build();
 }
