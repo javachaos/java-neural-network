@@ -22,7 +22,7 @@ public abstract class AbstractInputNeuron extends Neuron implements IInputNeuron
      * 
      */
     protected AbstractInputNeuron() {
-        super(1);
+        super(NeuronType.INPUT);
         this.value = new ZeroValue();
     }
     
@@ -33,7 +33,7 @@ public abstract class AbstractInputNeuron extends Neuron implements IInputNeuron
      *      the initial value of the neuron
      */
     protected AbstractInputNeuron(final IValue<?> v) {
-        super(1);
+        super(NeuronType.INPUT);
         this.value = v;
     }
     
