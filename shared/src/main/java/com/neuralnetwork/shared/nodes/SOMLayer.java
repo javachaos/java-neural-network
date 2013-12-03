@@ -39,9 +39,19 @@ public class SOMLayer extends Vector<Double> implements ISOMLayer {
    public SOMLayer() {
    }
    
+   /**
+    * Create a new instance of a SOM Layer
+    * with initial size of size.
+    * @param size
+    * 		the initial size of the SOM Layer.
+    */
+   public SOMLayer(final int size) {
+	   super(size);
+   }
+   
    @Override
    public final double dist(final SOMLayer layer) {
-       if (layer.size() != size()) {
+       if (layer.size() != super.size()) {
            LOGGER.warn("Cannot compute distance, vector lengths are not the equal.");
            return Integer.MIN_VALUE;
        }

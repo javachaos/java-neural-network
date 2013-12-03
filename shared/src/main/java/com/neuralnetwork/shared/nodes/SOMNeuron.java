@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.network.INetwork;
+import com.neuralnetwork.shared.network.Network;
 
 /**
  * Represents a SOM Neuron.
@@ -43,6 +44,10 @@ public class SOMNeuron implements ISOMNeuron {
      */
     private int xPos, yPos;
     
+    public SOMNeuron() {
+        neuralNetwork = new Network();
+    }
+    
     /**
      * Creates a new SOM Neuron.
      * 
@@ -50,6 +55,7 @@ public class SOMNeuron implements ISOMNeuron {
      *      the number of weights attached to this neuron
      */
     public SOMNeuron(final int numWeights) {
+    	this();
         weights = new SOMLayer();
         for (int x = 0; x < numWeights; x++) {
             weights.addElement(new Double(Math.random()));
@@ -69,6 +75,7 @@ public class SOMNeuron implements ISOMNeuron {
      *      the y co-ordinate of this neuron within the lattice
      */
     public SOMNeuron(final int numWeights, final int x, final int y) {
+    	this();
         weights = new SOMLayer();
         for (int i = 0; i < numWeights; i++) {
             weights.addElement(new Double(Math.random()));

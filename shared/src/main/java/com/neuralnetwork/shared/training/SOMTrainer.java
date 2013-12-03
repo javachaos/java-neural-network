@@ -216,6 +216,24 @@ public class SOMTrainer implements Runnable {
 		}
 		running = false;
 	}
+	
+	/**
+	 * Get the trained lattice.
+	 * @return
+	 * 		the trained SOM Lattice.
+	 */
+	public SOMLattice getLattice() {
+		return lattice;
+	}
+	
+	/**
+	 * Returns true if the trainer is running.
+	 * @return
+	 * 		true if the trainer is running.
+	 */
+	public boolean isRunning() {
+		return running;
+	}
 
 	/**
 	 * Stop training.
