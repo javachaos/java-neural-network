@@ -18,7 +18,7 @@ public abstract class AbstractInputNeuron
      * 
      */
     protected AbstractInputNeuron() {
-        super(NeuronType.HIDDEN);
+        super(NeuronType.INPUT);
         this.setValue(new ZeroValue());
     }
     
@@ -29,7 +29,7 @@ public abstract class AbstractInputNeuron
      *      the initial value of the neuron
      */
     protected AbstractInputNeuron(final IValue<?> v) {
-        super(NeuronType.HIDDEN);
+        super(NeuronType.INPUT);
         this.setValue(v);
     }
      

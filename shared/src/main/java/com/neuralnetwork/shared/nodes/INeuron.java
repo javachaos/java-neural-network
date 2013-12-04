@@ -15,7 +15,7 @@ import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.values.IValue;
 
 /**
- * INode interface for the Nodes of the network.
+ * INeuron interface for the Nodes of the network.
  * 
  * @author fredladeroute
  *
@@ -40,10 +40,10 @@ public interface INeuron {
     void setValue(IValue<?> v);
     
     /**
-     * Adds a link from this node to inode
+     * Adds a link from this node to ineuron
      * with weight weight and return the ILink.
      * 
-     * @param inode 
+     * @param ineuron 
      *      the node to connect to.
      *      
      * @param weight 
@@ -51,22 +51,22 @@ public interface INeuron {
      * 
      * @return a new ILink.
      */
-    ILink addInputLink(INeuron inode, IValue<?> weight);
+    ILink addInputLink(INeuron ineuron, IValue<?> weight);
     
     /**
-     * Adds a link from this node to inode
+     * Adds a link from this node to ineuron
      * with a random weight (uniformly distributed) value in range [0-1]
      * and return the ILink.
      * 
-     * @param inode
+     * @param ineuron
      *      the node to connect to.
      * 
      * @return a new ILink.
      */
-    ILink addInputLink(INeuron inode);
+    ILink addInputLink(INeuron ineuron);
     
     /**
-     * Get a ILink by the id of the other INode.
+     * Get a ILink by the id of the other INeuron.
      * 
      * @param linkId 
      *      the id of the node to get the link of.
@@ -76,7 +76,7 @@ public interface INeuron {
     ILink getInputLink(int linkId);
     
     /**
-     * Get ILinks by the id of the other INode ids.
+     * Get ILinks by the id of the other INeuron ids.
      * 
      * @param ids 
      *      the ids of the nodes to get the links of.
@@ -86,14 +86,14 @@ public interface INeuron {
     ILink[] getInputLinks(int... ids);
     
     /**
-     * Adds a link from this node to inode
+     * Adds a link from this node to ineuron
      * with weight weight and return the ILink.
      * 
-     * Also adds the input link for the inode neuron.
+     * Also adds the input link for the ineuron neuron.
      * Thus created a full 2 way connection between
-     * this neuron and inode.
+     * this neuron and ineuron.
      * 
-     * @param inode 
+     * @param ineuron 
      *      the node to connect to.
      *      
      * @param weight 
@@ -101,24 +101,24 @@ public interface INeuron {
      * 
      * @return a new ILink.
      */
-    ILink addOutputLink(INeuron inode, IValue<?> weight);
+    ILink addOutputLink(INeuron ineuron, IValue<?> weight);
     
     /**
-     * Adds a link from this node to inode
+     * Adds a link from this node to ineuron
      * with a random weight (uniformly distributed) value in range [0-1]
      * and return the ILink.
      * 
-     * @param inode
+     * @param ineuron
      *      the node to connect to.
      * 
      * @return a new ILink.
      * 
      * @see #addOutputLink(INeuron, IValue)
      */
-    ILink addOutputLink(INeuron inode);
+    ILink addOutputLink(INeuron ineuron);
     
     /**
-     * Get a ILink by the id of the other INode.
+     * Get a ILink by the id of the other INeuron.
      * 
      * @param linkId 
      *      the id of the node to get the link of.
@@ -128,7 +128,7 @@ public interface INeuron {
     ILink getOutputLink(int linkId);
     
     /**
-     * Get ILinks by the id of the other INode ids.
+     * Get ILinks by the id of the other INeuron ids.
      * 
      * @param ids 
      *      the ids of the nodes to get the links of.
@@ -138,27 +138,27 @@ public interface INeuron {
     ILink[] getOutputLinks(int... ids);
     
     /**
-     * Return the id of this INode.
+     * Return the type of this INeuron.
      * 
      * @return
-     *      the id of this INode
+     *      the id of this INeuron
      */
-    NeuronType getId();
+    NeuronType getType();
     
     /**
-     * Return the next child INode.
+     * Return the next child INeuron.
      * 
      * @return
-     *      the next child INode 
+     *      the next child INeuron
      *      and increment the child id counter.
      */
     INeuron getNextChild();
 
     /**
-     * Return the next parent INode.
+     * Return the next parent INeuron.
      * 
      * @return
-     *      the next parent INode 
+     *      the next parent INeuron 
      *      and increment the parent id counter
      */
     INeuron getNextParent();

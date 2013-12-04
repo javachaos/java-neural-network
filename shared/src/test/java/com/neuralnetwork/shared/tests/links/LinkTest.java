@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.neuralnetwork.shared.exceptions.NeuronLinkException;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.links.Link;
 import com.neuralnetwork.shared.nodes.HiddenNeuron;
@@ -34,6 +35,21 @@ public class LinkTest {
 		INeuron n = new HiddenNeuron();
 		ILink l = new Link(n, n, new OneValue());
 		assertNotNull(l);
+		
+		try {
+			new Link(null, n, new OneValue());
+		} catch (NeuronLinkException e) {
+			assertEquals(e.getMessage(), "Head link was null.");
+		}
+		
+		try {
+			new Link(n, null, new OneValue());
+		} catch (NeuronLinkException e) {
+			assertEquals(e.getMessage(), "Tail link was null.");
+		}
+		
+		l = new Link(n, n, null);
+		assertEquals(l.getWeight(), new ZeroValue());
 	}
 
 	/**
@@ -84,6 +100,12 @@ public class LinkTest {
 		ILink l = new Link(h, t, new OneValue());
 		l.setHead(t);
 		assertEquals(l.getHead(), t);
+		
+		try {
+			l.setHead(null);
+		} catch (NeuronLinkException e) {
+			assertEquals(e.getMessage(), "Error cannot set null head.");
+		}
 	}
 
 	/**
@@ -98,6 +120,12 @@ public class LinkTest {
 		ILink l = new Link(h, t, new OneValue());
 		l.setTail(h);
 		assertEquals(l.getTail(), h);
+		
+		try {
+			l.setTail(null);
+		} catch (NeuronLinkException e) {
+			assertEquals(e.getMessage(), "Error cannot set null tail.");
+		}
 	}
 
 	/**

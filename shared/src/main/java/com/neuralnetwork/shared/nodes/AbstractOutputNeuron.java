@@ -12,7 +12,7 @@ public class AbstractOutputNeuron extends Neuron implements IOutputNeuron {
      * Construct a new Abstract output neuron.
      */
     public AbstractOutputNeuron() {
-        super();
+        super(NeuronType.OUTPUT);
     }
 
     @Override

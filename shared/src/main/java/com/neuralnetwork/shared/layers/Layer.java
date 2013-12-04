@@ -3,6 +3,7 @@ package com.neuralnetwork.shared.layers;
 import java.util.Vector;
 
 import com.neuralnetwork.shared.network.LayerType;
+import com.neuralnetwork.shared.nodes.INeuron;
 
 /**
  * Represents a Layer of INeurons.
@@ -11,7 +12,7 @@ import com.neuralnetwork.shared.network.LayerType;
  *@param <T>
  *      the type of Layer this is
  */
-public abstract class Layer<T> extends Vector<T> implements ILayer<T> {
+public abstract class Layer<T extends INeuron> extends Vector<T> implements ILayer<T> {
 
     /**
      * Generated Serial Version UID.
@@ -34,7 +35,7 @@ public abstract class Layer<T> extends Vector<T> implements ILayer<T> {
      * @param w
      *      the width of the Layer to be created
      */
-    public Layer(final int w) {
+	public Layer(final int w) {
         super(w);
         this.width = w;
     }

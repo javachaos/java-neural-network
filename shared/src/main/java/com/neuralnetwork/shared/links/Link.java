@@ -64,8 +64,10 @@ public class Link implements ILink {
             final INeuron itail, 
             final IValue<?> linkWeight) {
 
-        if (ihead == null || itail == null) {
-        	throw new NeuronLinkException("Tail or head link was null.");
+        if (ihead == null) {
+        	throw new NeuronLinkException("Head link was null.");
+        } else if (itail == null) {
+        	throw new NeuronLinkException("Tail link was null.");
         }
 
         this.weight = linkWeight;
@@ -96,7 +98,7 @@ public class Link implements ILink {
     @Override
     public final void setHead(final INeuron ihead) {
         if (ihead == null) {
-            throw new NeuronLinkException("Error cannot set null head INode.");
+            throw new NeuronLinkException("Error cannot set null head.");
         } else {
             this.head = ihead;
         }
@@ -105,7 +107,7 @@ public class Link implements ILink {
     @Override
     public final void setTail(final INeuron itail) {
         if (itail == null) {
-            throw new NeuronLinkException("Error cannot set null tail INode.");
+            throw new NeuronLinkException("Error cannot set null tail.");
         } else {
             this.tail = itail;
         }

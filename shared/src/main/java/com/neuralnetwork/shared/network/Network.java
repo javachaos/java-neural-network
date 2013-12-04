@@ -6,6 +6,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.neuralnetwork.shared.layers.HiddenLayer;
 import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.layers.IInputLayer;
 import com.neuralnetwork.shared.layers.ILayer;
@@ -16,6 +17,8 @@ import com.neuralnetwork.shared.nodes.IHiddenNeuron;
 import com.neuralnetwork.shared.nodes.IInputNeuron;
 import com.neuralnetwork.shared.nodes.INeuron;
 import com.neuralnetwork.shared.nodes.IOutputNeuron;
+import com.neuralnetwork.shared.nodes.InputNeuron;
+import com.neuralnetwork.shared.nodes.OutputNeuron;
 import com.neuralnetwork.shared.training.TrainingStack;
 import com.neuralnetwork.shared.util.Connections;
 import com.neuralnetwork.shared.values.ErrorValue;
@@ -66,6 +69,11 @@ public final class Network implements INetwork {
      * Number of hidden layers in the network.
      */
     private int numHidden;
+
+    /**
+     * The size of each respective hidden layer in this network.
+     */
+	private int[] layerSizes;
     
     /**
      * Construct a 2d neural network.
@@ -78,18 +86,35 @@ public final class Network implements INetwork {
      *      
      * @param numHide
      *      the number of hidden layers in the network
+     *      
+     * @param sizes
+     * 		the sizes of each hidden layer respectively.
      */
-    public Network(final int numIn, final int numOut, final int numHide) {
+    public Network(final int numIn, final int numOut, final int numHide, final int[] sizes) {
         this.numInputs = numIn;
         this.numOutputs = numOut;
         this.numHidden = numHide;
+        this.height = numHide + 2;
+        this.layerSizes = sizes;
         this.inputLayer = new InputLayer(numInputs);
         this.outputLayer = new OutputLayer(numOutputs);
         this.layers = new Vector<IHiddenLayer>(numHidden);
+        
+        if (numHide < 0) {
+        	throw new IllegalArgumentException(
+        			"Error cannot have negative amount of hidden layers.");
+        } else if (numIn < 0) {
+        	throw new IllegalArgumentException(
+        			"Error cannot have negative amount of input layers.");
+        } else if (numOut < 0) {
+        	throw new IllegalArgumentException(
+        			"Error cannot have negative amount of output layers.");
+        }
     }
     
     /**
      * Construct a 2d neural network.
+     * Note: No hidden layers are created.
      * 
      * @param numIn
      *      the number of inputs to the network
@@ -106,25 +131,27 @@ public final class Network implements INetwork {
     }
     
     @Override
-    public INeuron getNode(final int x, final int y) {
+    public INeuron getNeuron(final int x, final int y) {
         
-        if (y == 0) {
+        if (x >= 0 && y == 0) {
             return getInputNeuron(x);
-        } else if (y == getHeight()) {
+        } else if (x >= 0 && y > 0 && y < getHeight() - 1) {
+            return layers.get(y - 1).getNeuron(x);
+        } else if (x >= 0 && y > 0 && y == getHeight() - 1){
             return getOutputNeuron(x);
-        } else {
-            return layers.get(y).getNeuron(x);
         }
+        
+        return null;
     }
 
     @Override
-    public INeuron getOutputNeuron(final int x) {
-        return getOutputLayer().getNeuron(x);
+    public IOutputNeuron getOutputNeuron(final int x) {
+        return (OutputNeuron) getOutputLayer().getNeuron(x);
     }
 
     @Override
-    public INeuron getInputNeuron(final int x) {
-        return getInputLayer().getNeuron(x);
+    public IInputNeuron getInputNeuron(final int x) {
+        return (InputNeuron) getInputLayer().getNeuron(x);
     }
 
     @Override
@@ -192,15 +219,16 @@ public final class Network implements INetwork {
     public void setInputLayer(final IInputLayer l) {
         this.inputLayer = l;
     }
-    
-    @Override
-    @Deprecated
-    public ILayer<IHiddenNeuron> getLayer(final int idx) {
-        return layers.get(idx);
-    }
 
     @Override
     public void build() {
+    	
+    	for (int i = 0; i < numHidden; i++) {
+    		IHiddenLayer h;
+    		layers.add(h = new HiddenLayer(layerSizes[i]));
+    		h.build();
+    	}
+    	
         inputLayer.build();
         Iterator<IHiddenLayer> i = layers.iterator();
         while (i.hasNext()) {
@@ -208,22 +236,26 @@ public final class Network implements INetwork {
         }
         outputLayer.build();
         
-        //Connect input layer to first hidden layer.
-        Connections.create(inputLayer, layers.get(0));
-        
-        //Connect each hidden layer to its child hidden layer.
-        if (layers.size() >= 2) {
-            i = layers.iterator();
-            while (i.hasNext()) {
-                IHiddenLayer layer = i.next();
-                if (i.hasNext()) {
-                    Connections.create(layer, i.next());
-                }
-            }
+        if (!layers.isEmpty()) {
+	        //Connect input layer to first hidden layer.
+	        Connections.create(inputLayer, layers.get(0));
+	        
+	        //Connect each hidden layer to its child hidden layer.
+	        if (layers.size() >= 2) {
+	            i = layers.iterator();
+	            while (i.hasNext()) {
+	                IHiddenLayer layer = i.next();
+	                if (i.hasNext()) {
+	                    Connections.create(layer, i.next());
+	                }
+	            }
+	        }
+	        
+	        //Connect the output layer to the last hidden layer.
+	        Connections.create(outputLayer, layers.get(layers.size() - 1));
+        } else {
+        	Connections.create(inputLayer, outputLayer);
         }
-        
-        //Connect the output layer to the last hidden layer.
-        Connections.create(outputLayer, layers.get(layers.size() - 1));
     }
     
     @Override

@@ -133,7 +133,7 @@ public abstract class Neuron implements INeuron {
     }
     
     @Override
-    public final NeuronType getId() {
+    public final NeuronType getType() {
         return type;
     }
     

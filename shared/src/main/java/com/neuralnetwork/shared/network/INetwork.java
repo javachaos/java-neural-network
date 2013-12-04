@@ -14,10 +14,10 @@ import java.util.Vector;
 
 import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.layers.IInputLayer;
-import com.neuralnetwork.shared.layers.ILayer;
 import com.neuralnetwork.shared.layers.IOutputLayer;
-import com.neuralnetwork.shared.nodes.IHiddenNeuron;
+import com.neuralnetwork.shared.nodes.IInputNeuron;
 import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.nodes.IOutputNeuron;
 import com.neuralnetwork.shared.training.TrainingStack;
 import com.neuralnetwork.shared.values.ErrorValue;
 
@@ -112,36 +112,20 @@ public interface INetwork {
     void setOutputLayer(IOutputLayer l);
     
     /**
-     * Return the layer at index idx.
-     * 
-     * Depricated as of {@date}
-     * 
-     * @param idx
-     *      the index to the layer idx
-     *      
-     * @return
-     *      the ILayer at layer idx
-     * 
-     * @see #getHiddenLayer(int)
-     * @see #getOutputLayer()
-     * @see #getInputLayer()
-     */
-    @Deprecated
-    ILayer<IHiddenNeuron> getLayer(int idx);
-    
-    /**
-     * Get an INode from the ILattice.
+     * Get an INeuron from the INetwork.
      * 
      * @param x
-     *      the x co-ordinate of the INode
+     *      the x co-ordinate of the INetwork
      *      
      * @param y
-     *      the y co-ordinate of the INode
+     *      the y co-ordinate of the INetwork
      *      
      * @return
-     *      the INode at (x,y) in this ILattices
+     *      the INeuron at (x,y) in this INetwork
+     *      where x is the position of the neuron at layer y
+     *      in the INetwork.
      */
-    INeuron getNode(int x, int y);
+    INeuron getNeuron(int x, int y);
 
     /**
      * Get the height of the network.
@@ -159,7 +143,7 @@ public interface INetwork {
      * @return
      *      the INeuron at position x
      */
-    INeuron getOutputNeuron(int x);
+    IOutputNeuron getOutputNeuron(int x);
     
     /**
      * Get a neuron from this networks input layer.
@@ -169,7 +153,7 @@ public interface INetwork {
      * @return
      *      the neuron at position x in the input layer
      */
-    INeuron getInputNeuron(int x);
+    IInputNeuron getInputNeuron(int x);
     
     /**
      * Get the input layer to this network.
