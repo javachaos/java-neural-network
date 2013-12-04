@@ -94,6 +94,6 @@ public interface ILink {
      * @return 
      *      the age of this link
      */
-    double getAge();
+    int getAge();
 
 }

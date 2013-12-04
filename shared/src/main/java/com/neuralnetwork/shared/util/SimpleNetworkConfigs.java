@@ -20,8 +20,8 @@ public final class SimpleNetworkConfigs {
     }
     
     /**
-     * Simple network config 5 inputs, 5 outputs, 3 hidden.
+     * Simple network config 5 inputs, 4 hidden, 3 hidden, 4 hidden, 5 outputs.
      */
-    public static final NetworkConfig CONFIG_5_5_3 = 
+    public static final NetworkConfig CONFIG_5_4_3_4_5 =
             new NetworkConfig(5, 5, new int[]{4, 3, 4});
 }

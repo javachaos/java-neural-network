@@ -23,9 +23,8 @@ public class DoubleValue extends GenericValue<Double> implements IValue<Double> 
      * initialized with value 0.
      */
     public DoubleValue() {
-        super();
-        this.setSign(POSITIVE);
         this.setValue(0.0);
+        this.setSign(POSITIVE);
     }
     
     /**
@@ -36,9 +35,12 @@ public class DoubleValue extends GenericValue<Double> implements IValue<Double> 
      *      the initial value for this DoubleValue
      */
     public DoubleValue(final double initialValue) {
-        super();
-        this.setSign(POSITIVE);
         this.setValue(initialValue);
+        if (initialValue < 0) {
+        	this.setSign(NEGATIVE);
+        } else {
+        	this.setSign(POSITIVE);
+        }
     }
 
     @Override

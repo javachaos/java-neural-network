@@ -10,8 +10,10 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.links;
 
+import com.neuralnetwork.shared.exceptions.NeuronLinkException;
 import com.neuralnetwork.shared.nodes.INeuron;
 import com.neuralnetwork.shared.values.IValue;
+import com.neuralnetwork.shared.values.ZeroValue;
 
 /**
  * A basic link which connects two INeurons.
@@ -37,7 +39,7 @@ public class Link implements ILink {
      * is less than 3 for 100 training samples the
      * link dies.
      */
-    private double age;
+    private int age;
 
     /**
      * The weight of this link
@@ -61,10 +63,19 @@ public class Link implements ILink {
             final INeuron ihead, 
             final INeuron itail, 
             final IValue<?> linkWeight) {
+
+        if (ihead == null || itail == null) {
+        	throw new NeuronLinkException("Tail or head link was null.");
+        }
+
+        this.weight = linkWeight;
+        
+        if (this.weight == null) {
+        	this.weight = new ZeroValue();
+        }
         
         this.head = ihead;
         this.tail = itail;
-        this.weight = linkWeight;
     }
 
     @Override
@@ -85,7 +96,7 @@ public class Link implements ILink {
     @Override
     public final void setHead(final INeuron ihead) {
         if (ihead == null) {
-            throw new NullPointerException("Error cannot set null head INode.");
+            throw new NeuronLinkException("Error cannot set null head INode.");
         } else {
             this.head = ihead;
         }
@@ -94,7 +105,7 @@ public class Link implements ILink {
     @Override
     public final void setTail(final INeuron itail) {
         if (itail == null) {
-            throw new NullPointerException("Error cannot set null tail INode.");
+            throw new NeuronLinkException("Error cannot set null tail INode.");
         } else {
             this.tail = itail;
         }
@@ -113,7 +124,7 @@ public class Link implements ILink {
     }
 
     @Override
-    public final double getAge() {
+    public final int getAge() {
         return age;
     }
 

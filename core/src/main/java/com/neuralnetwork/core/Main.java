@@ -98,7 +98,7 @@ public final class Main {
         builder.build();
         
         NeuralNetBuilder b = 
-                new NeuralNetBuilder(SimpleNetworkConfigs.CONFIG_5_5_3);
+                new NeuralNetBuilder(SimpleNetworkConfigs.CONFIG_5_4_3_4_5);
         b.build();
     }
 }

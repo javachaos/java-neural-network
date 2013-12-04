@@ -32,7 +32,7 @@ public abstract class GenericValue<T extends Number> implements IValue<T> {
      * The value of this generic value.
      */
     private T value;
-    
+
     @Override
     public final void setValue(final T t) {
         this.value = t;
@@ -61,9 +61,6 @@ public abstract class GenericValue<T extends Number> implements IValue<T> {
             return true;
         } 
         if (obj == null) {
-            return false;
-        } 
-        if (getClass() != obj.getClass()) {
             return false;
         }
         GenericValue<?> other = (GenericValue<?>) obj;
