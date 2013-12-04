@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.network.INetwork;
-import com.neuralnetwork.shared.network.Network;
 
 /**
  * Represents a SOM Neuron.
