@@ -7,7 +7,7 @@ package com.neuralnetwork.shared.util;
  * @author fred
  *
  */
-public final class NetworkConfig {
+public class NetworkConfig {
     
     /**
      * Number of inputs for the desired network.
@@ -34,27 +34,43 @@ public final class NetworkConfig {
     private int[] layerSizes;
 
     /**
+     * NetworkConfig constructor.
+     * 
+     * @param inputs
+     *      number of inputs for the network
+     *      
+     * @param outputs
+     *      number of outputs for the network
+     *      
+     * @param sizes
+     *      list of integers describing the number of
+     *      neurons per hidden layer of the network
+     */
+    public NetworkConfig(final int inputs, 
+        final int outputs, final int[] sizes) {
+        
+        if (inputs < 0
+        ||  outputs < 0) {
+            throw new IllegalArgumentException("Error bad configuration.");
+        } 
+        this.numInputs = inputs;
+        this.numOuputs = outputs;
+        this.numHiddenLayers = sizes.length;
+        this.layerSizes = sizes;
+    }
+    
+    /**
      * @return 
      *      the number of inputs
      */
-    public int
-        getNumInputs() {
+    public final int getNumInputs() {
         return numInputs;
-    }
-
-    /**
-     * @param inputs 
-     *      the numInputs to set
-     */
-    public void setNumInputs(final int inputs) {
-        this.numInputs = inputs;
     }
 
     /**
      * @return the layerSizes
      */
-    public int[]
-        getLayerSizes() {
+    public final int[] getLayerSizes() {
         return layerSizes;
     }
 
@@ -63,41 +79,22 @@ public final class NetworkConfig {
      *      list of integers describing the number of
      *      neurons per hidden layer of the network
      */
-    public void
-        setLayerSizes(final int[] sizes) {
+    public final void setLayerSizes(final int[] sizes) {
         this.layerSizes = sizes;
     }
 
     /**
      * @return the numHiddenLayers
      */
-    public int
-        getNumHiddenLayers() {
+    public final int getNumHiddenLayers() {
         return numHiddenLayers;
-    }
-
-    /**
-     * @param layers 
-     *      the numHiddenLayers to set
-     */
-    public void setNumHiddenLayers(final int layers) {
-        this.numHiddenLayers = layers;
     }
 
     /**
      * @return the numOuputs
      */
-    public int
-        getNumOuputs() {
+    public final int getNumOuputs() {
         return numOuputs;
-    }
-
-    /**
-     * @param outputs
-     *      the numOuputs to set
-     */
-    public void setNumOuputs(final int outputs) {
-        this.numOuputs = outputs;
     }
     
 }

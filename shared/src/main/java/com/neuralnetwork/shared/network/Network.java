@@ -215,7 +215,10 @@ public final class Network implements INetwork {
         if (layers.size() >= 2) {
             i = layers.iterator();
             while (i.hasNext()) {
-                Connections.create(i.next(), i.next());
+                IHiddenLayer layer1 = i.next();
+                if (i.hasNext()) {
+                    Connections.create(layer1, i.next());
+                }
             }
         }
         

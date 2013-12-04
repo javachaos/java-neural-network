@@ -9,6 +9,7 @@ import com.neuralnetwork.shared.nodes.SOMLattice;
 import com.neuralnetwork.shared.nodes.SOMLayer;
 import com.neuralnetwork.shared.training.SOMTrainer;
 import com.neuralnetwork.shared.util.NeuralNetBuilder;
+import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
 
 /**
  * Main class.
@@ -95,5 +96,9 @@ public final class Main {
         builder.addHiddenLayer(new HiddenLayer(2));
         builder.addHiddenLayer(new HiddenLayer(1));
         builder.build();
+        
+        NeuralNetBuilder b = 
+                new NeuralNetBuilder(SimpleNetworkConfigs.CONFIG_5_5_3);
+        b.build();
     }
 }
