@@ -10,8 +10,7 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.training;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Stack;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,24 +23,24 @@ import com.neuralnetwork.shared.util.Pair;
  * @author fredladeroute
  *
  */
-public class TrainingSet {
+public class TrainingStack {
 
     /**
      * Logger instance.
      */
     public static final Logger LOGGER = 
-            LoggerFactory.getLogger(TrainingSet.class);
+            LoggerFactory.getLogger(TrainingStack.class);
     
     /**
      * The raw data values.
      */
-    private Set<Pair<Double[], Double[]>> data;
+    private Stack<Pair<Double[], Double[]>> data;
     
     /**
      * Construct a training set.
      */
-    public TrainingSet() {
-        data = new HashSet<Pair<Double[], Double[]>>();
+    public TrainingStack() {
+        data = new Stack<Pair<Double[], Double[]>>();
     }
     
     /**
@@ -62,5 +61,37 @@ public class TrainingSet {
         } else {
             LOGGER.error("Cannot add null training samples.");
         }
+    }
+    
+    /**
+     * Get the next training sample and remove it from the set.
+     * 
+     * @return
+     *      the next training sample, null if set is empty
+     */
+    public final Pair<Double[], Double[]> popSample() {
+        return data.pop();
+    }
+    
+    /**
+     * Get the next training sample and remove it from the set.
+     * 
+     * @return
+     *      the next training sample, null if set is empty
+     */
+    public final Pair<Double[], Double[]> peekSample() {
+        return data.peek();
+    }
+    
+    /**
+     * Return the set of training samples from this training set. Were the 
+     * first item in each pair of the set is the raw new data
+     * and the second item is the expected data.
+     * 
+     * @return
+     *      the data from this training set.
+     */
+    public final Stack<Pair<Double[], Double[]>> getData() {
+        return data;        
     }
 }

@@ -18,7 +18,7 @@ import com.neuralnetwork.shared.layers.ILayer;
 import com.neuralnetwork.shared.layers.IOutputLayer;
 import com.neuralnetwork.shared.nodes.IHiddenNeuron;
 import com.neuralnetwork.shared.nodes.INeuron;
-import com.neuralnetwork.shared.training.TrainingSet;
+import com.neuralnetwork.shared.training.TrainingStack;
 import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
@@ -93,7 +93,7 @@ public interface INetwork {
      * @return
      *      the latest mean squared error of the network
      */
-    ErrorValue train(TrainingSet trainingSet, ErrorValue expectedError);
+    ErrorValue train(TrainingStack trainingSet, ErrorValue expectedError);
     
     /**
      * Get the output layer of this network.

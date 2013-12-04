@@ -16,7 +16,7 @@ import com.neuralnetwork.shared.nodes.IHiddenNeuron;
 import com.neuralnetwork.shared.nodes.IInputNeuron;
 import com.neuralnetwork.shared.nodes.INeuron;
 import com.neuralnetwork.shared.nodes.IOutputNeuron;
-import com.neuralnetwork.shared.training.TrainingSet;
+import com.neuralnetwork.shared.training.TrainingStack;
 import com.neuralnetwork.shared.util.Connections;
 import com.neuralnetwork.shared.values.ErrorValue;
 
@@ -160,7 +160,7 @@ public final class Network implements INetwork {
     }
 
     @Override
-    public ErrorValue train(final TrainingSet trainingSet,
+    public ErrorValue train(final TrainingStack trainingSet,
             final ErrorValue expectedError) {
         // TODO Implement method.
         return null;
