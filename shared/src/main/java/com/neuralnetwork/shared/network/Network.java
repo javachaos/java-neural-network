@@ -69,7 +69,6 @@ public final class Network implements INetwork {
     
     /**
      * Construct a 2d neural network.
-     * Defined by its width and height.
      * 
      * @param numIn
      *      the number of inputs to the network
@@ -91,7 +90,6 @@ public final class Network implements INetwork {
     
     /**
      * Construct a 2d neural network.
-     * Defined by its width and height.
      * 
      * @param numIn
      *      the number of inputs to the network
@@ -162,7 +160,6 @@ public final class Network implements INetwork {
     @Override
     public ErrorValue train(final TrainingStack trainingSet,
             final ErrorValue expectedError) {
-        // TODO Implement method.
         return null;
     }
 
@@ -210,18 +207,22 @@ public final class Network implements INetwork {
             i.next().build();
         }
         outputLayer.build();
+        
+        //Connect input layer to first hidden layer.
         Connections.create(inputLayer, layers.get(0));
         
+        //Connect each hidden layer to its child hidden layer.
         if (layers.size() >= 2) {
             i = layers.iterator();
             while (i.hasNext()) {
-                IHiddenLayer layer1 = i.next();
+                IHiddenLayer layer = i.next();
                 if (i.hasNext()) {
-                    Connections.create(layer1, i.next());
+                    Connections.create(layer, i.next());
                 }
             }
         }
         
+        //Connect the output layer to the last hidden layer.
         Connections.create(outputLayer, layers.get(layers.size() - 1));
     }
     
