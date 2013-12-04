@@ -1,7 +1,11 @@
 package com.neuralnetwork.shared.layers;
 
+import com.neuralnetwork.shared.network.INeuralNetContext;
+import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.nodes.BiasNeuron;
 import com.neuralnetwork.shared.nodes.IInputNeuron;
+import com.neuralnetwork.shared.nodes.InputNeuron;
+import com.neuralnetwork.shared.values.IValue;
 
 /**
  * Represents an Input layer to the network.
@@ -9,7 +13,7 @@ import com.neuralnetwork.shared.nodes.IInputNeuron;
  * @author fredladeroute
  *
  */
-public class InputLayer extends Layer {
+public final class InputLayer extends Layer<IInputNeuron> implements IInputLayer {
 
     /**
      * Generated Serial Version UID. 
@@ -29,13 +33,31 @@ public class InputLayer extends Layer {
      */
     public InputLayer(final int w) {
         super(w);
+        super.setLayerType(LayerType.INPUT);
     }
     
     /**
      * @return the biasNeuron
      */
-    public final IInputNeuron getBiasNeuron() {
+    public IInputNeuron getBiasNeuron() {
         return biasNeuron;
+    }
+
+    @Override
+    public void addValue(final IValue<?> v, final int index) {
+        super.set(index, new InputNeuron(v));
+    }
+
+    @Override
+    public void propagate(final INeuralNetContext nnctx) {
+        // TODO Implement
+    }
+
+    @Override
+    public void build() {
+        while (size() != getWidth()) {
+            add(new InputNeuron());
+        }
     }
 
 }

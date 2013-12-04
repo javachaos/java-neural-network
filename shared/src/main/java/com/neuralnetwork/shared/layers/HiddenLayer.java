@@ -1,6 +1,10 @@
 package com.neuralnetwork.shared.layers;
 
+import com.neuralnetwork.shared.network.INeuralNetContext;
+import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.nodes.BiasNeuron;
+import com.neuralnetwork.shared.nodes.HiddenNeuron;
+import com.neuralnetwork.shared.nodes.IHiddenNeuron;
 import com.neuralnetwork.shared.nodes.IInputNeuron;
 
 /**
@@ -9,7 +13,7 @@ import com.neuralnetwork.shared.nodes.IInputNeuron;
  * @author fredladeroute
  *
  */
-public class HiddenLayer extends Layer {
+public final class HiddenLayer extends Layer<IHiddenNeuron> implements IHiddenLayer {
 
     /**
      * Generated Serial Version UID.
@@ -29,13 +33,26 @@ public class HiddenLayer extends Layer {
      */
     public HiddenLayer(final int w) {
         super(w);
+        super.setLayerType(LayerType.HIDDEN);
     }
 
     /**
      * @return the biasNeuron
      */
-    public final IInputNeuron getBiasNeuron() {
+    public IInputNeuron getBiasNeuron() {
         return biasNeuron;
+    }
+
+    @Override
+    public void propagate(final INeuralNetContext nnctx) {
+        // TODO implement
+    }
+
+    @Override
+    public void build() {
+        while (size() != getWidth()) {
+            add(new HiddenNeuron());
+        }
     }
 
 }

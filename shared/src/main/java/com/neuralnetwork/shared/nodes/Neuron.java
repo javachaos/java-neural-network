@@ -11,7 +11,7 @@
 package com.neuralnetwork.shared.nodes;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
@@ -26,7 +26,12 @@ import com.neuralnetwork.shared.values.RandomValue;
  * @author fredladeroute
  *
  */
-public class Neuron implements INeuron {
+public abstract class Neuron implements INeuron {
+    
+    /**
+     * The value for this neuron.
+     */
+    private IValue<?> value;
     
     /**
      * The activation function for this INeuron.
@@ -38,12 +43,12 @@ public class Neuron implements INeuron {
     /**
      * Array of all input links connected to this Neuron.
      */
-    private List<ILink> inputLinks;
+    private Vector<ILink> inputLinks;
     
     /**
      * Array of all ouput links connected to this Neuron.
      */
-    private List<ILink> outputLinks;
+    private Vector<ILink> outputLinks;
     
     /**
      * Current number of input links attached to this Neuron.
@@ -74,6 +79,7 @@ public class Neuron implements INeuron {
     
     /**
      * Construct a new Neuron.
+     * With it's value set randomly.
      * 
      * @param nodeId
      *      the type of this Neuron
@@ -81,13 +87,20 @@ public class Neuron implements INeuron {
      */
     public Neuron(final NeuronType nodeId) {
         this.type = nodeId;
+        this.value = new RandomValue();
+        inputLinks = new Vector<ILink>();
+        outputLinks = new Vector<ILink>();
     }
     
     /**
      * Construct a new hidden Neuron.
+     * With it's value set randomly.
      */
     public Neuron() {
         this.type = NeuronType.HIDDEN;
+        this.value = new RandomValue();
+        inputLinks = new Vector<ILink>();
+        outputLinks = new Vector<ILink>();
     }
     
     @Override
@@ -138,6 +151,7 @@ public class Neuron implements INeuron {
     public final ILink addOutputLink(
             final INeuron inode, final IValue<?> weight) {
         this.outputLinks.add(++numOutputLinks, new Link(this, inode, weight));
+        inode.addInputLink(this);
         return outputLinks.get(numOutputLinks);
     }
 
@@ -178,6 +192,16 @@ public class Neuron implements INeuron {
     @Override
     public final IActivationFunction getActivationFunction() {
         return function;
+    }
+
+    @Override
+    public final IValue<?> getValue() {
+        return value;
+    }
+
+    @Override
+    public final void setValue(final IValue<?> v) {
+        this.value = v;
     }
 
 }

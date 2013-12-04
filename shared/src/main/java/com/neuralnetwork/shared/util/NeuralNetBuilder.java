@@ -10,8 +10,12 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.network.INetwork;
-import com.neuralnetwork.shared.values.IValue;
+import com.neuralnetwork.shared.network.Network;
 
 /**
  * Class to build neural network data structures.
@@ -22,24 +26,15 @@ import com.neuralnetwork.shared.values.IValue;
 public final class NeuralNetBuilder {
     
     /**
-     * The builder instance.
+     * Logger instance.
      */
-    private static NeuralNetBuilder netBuilder = null;
+    private static final Logger LOGGER = 
+            LoggerFactory.getLogger(NeuralNetBuilder.class);
     
     /**
      * Network instance.
      */
     private INetwork network;
-    
-    /**
-     * The number of inputs for this network.
-     */
-    private int nInputs;
-    
-    /**
-     * The number of outputs for this network.
-     */
-    private int nOutputs;
     
     /**
      * Neural net constructor.
@@ -50,46 +45,36 @@ public final class NeuralNetBuilder {
      * @param numOutputs
      *      the number of outputs to the neural network to build
      */
-    private NeuralNetBuilder(final int numInputs, final int numOutputs) {
-        this.setNumInputs(numInputs);
-        this.nOutputs = numOutputs;
+
+    public NeuralNetBuilder(final int numInputs, final int numOutputs) {
+        network = new Network(numInputs, numOutputs);
     }
     
     /**
-     * Create a new basic neural network structure.
+     * Add a hidden layer to the network.
      * 
-     * @param numInputs
-     *      the number of inputs the network should have
-     *  
-     * @param numOutputs
-     *      the number of outputs the network should have
+     * @param l
+     *      the hidden layer to be added to the network
      * 
      * @return
-     *      a basic NeuralNetBuilder instance to allow for chaining
+     *      the neural net builder instance.
      */
-    public static NeuralNetBuilder createNew(
-            final int numInputs, final int numOutputs) {
-        netBuilder = new NeuralNetBuilder(numInputs, numOutputs);
-        return netBuilder;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public static NeuralNetBuilder addNode() {
-        return netBuilder;
+    public NeuralNetBuilder addHiddenLayer(final IHiddenLayer l) {
+        network.addHiddenLayer(l);
+        LOGGER.info("New hidden layer added to network.");
+        return this;
     }
     
     /**
      * Build the neural network.
      * 
      * @return
-     *      a new network.
+     *      a reference to the built neural network.
      */
-    public static INetwork build(final IValue<?> value) {
-        //return new INetwork();
-        return null;
+    public INetwork build() {
+        network.build();
+        LOGGER.info(network.toString());
+        return network;
     }
 
     /**
@@ -99,24 +84,6 @@ public final class NeuralNetBuilder {
      */
     public INetwork getNetwork() {
         return network;
-    }
-
-    /**
-     * Get the number of inputs for the network being built.
-     * @return
-     *      the number of inputs to the network.
-     */
-    public int getNumInputs() {
-        return nInputs;
-    }
-
-    /**
-     * Set the number of inputs for the network to be built.
-     * @param inputs
-     *      the number of inputs to the network.
-     */
-    public void setNumInputs(final int inputs) {
-        this.nInputs = inputs;
     }
 
 }

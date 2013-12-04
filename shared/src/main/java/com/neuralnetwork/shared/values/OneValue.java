@@ -45,5 +45,10 @@ public class OneValue extends GenericValue<Double> implements IValue<Double> {
     public final void updateValue(final IValue<?> v) {
         //unused.
     }
+    
+    @Override
+    public final String toString() {
+        return "1";
+    }
 
 }

@@ -50,4 +50,9 @@ public class RandomValue extends GenericValue<Double> implements IValue<Double> 
         this.setValue(getValue() + v.getValue().doubleValue());
     }
     
+    @Override
+    public final String toString() {
+        return "" + value;
+    }
+    
 }

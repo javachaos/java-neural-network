@@ -13,18 +13,13 @@ public abstract class AbstractInputNeuron
         extends Neuron implements IInputNeuron {
 
     /**
-     * Value of the input neuron.
-     */
-    private IValue<?> value;
-    
-    /**
      * Construct an input neuron with 
      * no initial input value.
      * 
      */
     protected AbstractInputNeuron() {
-        super(NeuronType.INPUT);
-        this.value = new ZeroValue();
+        super(NeuronType.HIDDEN);
+        this.setValue(new ZeroValue());
     }
     
     /**
@@ -34,18 +29,8 @@ public abstract class AbstractInputNeuron
      *      the initial value of the neuron
      */
     protected AbstractInputNeuron(final IValue<?> v) {
-        super(NeuronType.INPUT);
-        this.value = v;
-    }
-    
-    @Override
-    public final void setInputValue(final IValue<?> v) {
-        this.value = v;
-    }
-
-    @Override
-    public final IValue<?> getValue() {
-        return value;
+        super(NeuronType.HIDDEN);
+        this.setValue(v);
     }
      
 

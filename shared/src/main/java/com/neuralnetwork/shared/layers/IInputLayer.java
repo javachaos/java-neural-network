@@ -11,6 +11,7 @@
 package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
+import com.neuralnetwork.shared.nodes.IInputNeuron;
 import com.neuralnetwork.shared.values.IValue;
 
 /**
@@ -18,7 +19,7 @@ import com.neuralnetwork.shared.values.IValue;
  * @author fredladeroute
  *
  */
-public interface IInputLayer extends ILayer {
+public interface IInputLayer extends ILayer<IInputNeuron>, IBuildable {
 
     /**
      * Add a value to this IInputLayer.
@@ -32,16 +33,6 @@ public interface IInputLayer extends ILayer {
     void addValue(IValue<?> v, int index);
     
     /**
-     * Checks if each IInputNode in this IInputLayer
-     * is occupied by an IValue.
-     * 
-     * @return
-     *      true if all INodes in this IInputLayer are
-     *      occupied
-     */
-    boolean isLayerFull();
-    
-    /**
      * Propagate the values from this IInputLayer to the
      * next ILayer.
      * 
@@ -49,4 +40,9 @@ public interface IInputLayer extends ILayer {
      *      neural net context parameter
      */
     void propagate(INeuralNetContext nnctx);
+
+    /**
+     * Build the input layer using INeurons.
+     */
+    void build();
 }

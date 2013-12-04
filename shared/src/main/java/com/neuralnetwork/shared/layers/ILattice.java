@@ -30,7 +30,7 @@ public interface ILattice {
      * @return
      *      the ILayer at layer idx
      */
-    ILayer getLayer(int idx);
+    ILayer<INeuron> getLayer(int idx);
     
     /**
      * Get an INode from the ILattice.

@@ -10,15 +10,17 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.network.LayerType;
 
 /**
  * Represents a Layer class.
  * 
  * @author fredladeroute
  *
+ *@param <T>
+ *      the type of Layer this 
  */
-public interface ILayer extends Iterable<INeuron> {
+public interface ILayer<T> extends Iterable<T> {
     
     /**
      * Get a node from this layer.
@@ -29,6 +31,14 @@ public interface ILayer extends Iterable<INeuron> {
      * @return
      *      the INode at index idx
      */
-    INeuron getNeuron(int idx);
+    T getNeuron(int idx);
+    
+    /**
+     * Returns the layer type of this ILayer.
+     * 
+     * @return
+     *      the layer type of this ILayer
+     */
+    LayerType getLayerType();
     
 }

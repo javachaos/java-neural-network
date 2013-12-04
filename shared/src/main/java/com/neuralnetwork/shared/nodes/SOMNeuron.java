@@ -50,7 +50,11 @@ public class SOMNeuron implements ISOMNeuron {
      * underlying neural network associated with this neuron.
      */
     private SOMNeuron() {
-        neuralNetwork = new Network();
+        //neuralNetwork = new Network();
+        //TODO Fix network creation.
+        // And come up with a way to store network configs
+        // for later use. For example store 
+        // a predefined network config for every neuron.
     }
     
     /**
