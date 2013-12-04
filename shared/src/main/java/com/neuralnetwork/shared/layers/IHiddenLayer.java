@@ -2,6 +2,7 @@ package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.nodes.IHiddenNeuron;
+import com.neuralnetwork.shared.nodes.IInputNeuron;
 
 /**
  * Interface for an IHiddenLayer.
@@ -18,4 +19,11 @@ public interface IHiddenLayer extends ILayer<IHiddenNeuron>, IBuildable {
      *      neural net context parameter
      */
     void propagate(INeuralNetContext nnctx);
+
+    /**
+     * Return a reference to this HiddenLayers BiasNeuron.
+     * @return
+     *      a reference to this HiddenLayers BiasNeuron
+     */
+    IInputNeuron getBiasNeuron();
 }

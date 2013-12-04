@@ -40,6 +40,7 @@ public final class HiddenLayer
     /**
      * @return the biasNeuron
      */
+    @Override
     public IInputNeuron getBiasNeuron() {
         return biasNeuron;
     }
