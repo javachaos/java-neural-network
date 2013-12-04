@@ -45,6 +45,7 @@ public final class NeuralNetBuilder {
      * @param numOutputs
      *      the number of outputs to the neural network to build
      */
+
     public NeuralNetBuilder(final int numInputs, final int numOutputs) {
         network = new Network(numInputs, numOutputs);
     }
@@ -73,6 +74,15 @@ public final class NeuralNetBuilder {
     public INetwork build() {
         network.build();
         LOGGER.info(network.toString());
+        return network;
+    }
+
+    /**
+     * Returns a reference to the network.
+     * @return
+     *      a reference to the neural network.
+     */
+    public INetwork getNetwork() {
         return network;
     }
 

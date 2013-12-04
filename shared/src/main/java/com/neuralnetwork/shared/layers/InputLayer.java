@@ -13,7 +13,8 @@ import com.neuralnetwork.shared.values.IValue;
  * @author fredladeroute
  *
  */
-public final class InputLayer extends Layer<IInputNeuron> implements IInputLayer {
+public final class InputLayer extends Layer<IInputNeuron> 
+        implements IInputLayer {
 
     /**
      * Generated Serial Version UID. 

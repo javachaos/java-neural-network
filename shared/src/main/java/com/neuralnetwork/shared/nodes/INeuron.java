@@ -143,7 +143,7 @@ public interface INeuron {
      * @return
      *      the id of this INode
      */
-    int getId();
+    NeuronType getId();
     
     /**
      * Return the next child INode.

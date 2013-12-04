@@ -12,6 +12,7 @@ package com.neuralnetwork.opencl.node;
 
 import com.neuralnetwork.shared.nodes.INeuron;
 import com.neuralnetwork.shared.nodes.Neuron;
+import com.neuralnetwork.shared.nodes.NeuronType;
 
 /**
  * OpenCL node.
@@ -27,7 +28,7 @@ public class OpenCLNode extends Neuron implements INeuron {
      * @param nodeId
      *      the id of this node.
      */
-    public OpenCLNode(final int nodeId) {
+    public OpenCLNode(final NeuronType nodeId) {
         super(nodeId);
     }
 }

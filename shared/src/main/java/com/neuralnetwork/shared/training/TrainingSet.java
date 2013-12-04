@@ -29,7 +29,8 @@ public class TrainingSet {
     /**
      * Logger instance.
      */
-    public static final Logger LOGGER = LoggerFactory.getLogger(TrainingSet.class);
+    public static final Logger LOGGER = 
+            LoggerFactory.getLogger(TrainingSet.class);
     
     /**
      * The raw data values.

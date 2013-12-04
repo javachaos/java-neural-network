@@ -61,9 +61,9 @@ public abstract class Neuron implements INeuron {
     private int numOutputLinks = -1;
     
     /**
-     * The id of this Neuron.
+     * The type of this Neuron.
      */
-    private int id;
+    private NeuronType type;
 
     /**
      * The counter used in the getNextParent method for
@@ -82,28 +82,22 @@ public abstract class Neuron implements INeuron {
      * With it's value set randomly.
      * 
      * @param nodeId
-     *      the id of this Neuron
-     *      
-     *  Node IDs:
-     *  
-     *  0 = Normal Neuron (hidden layer neuron)
-     *  1 = Input Neuron
-     *  2 = Output Neuron
+     *      the type of this Neuron
      *  
      */
-    public Neuron(final int nodeId) {
-        this.id = nodeId;
+    public Neuron(final NeuronType nodeId) {
+        this.type = nodeId;
         this.value = new RandomValue();
         inputLinks = new Vector<ILink>();
         outputLinks = new Vector<ILink>();
     }
     
     /**
-     * Construct a new Neuron.
+     * Construct a new hidden Neuron.
      * With it's value set randomly.
      */
     public Neuron() {
-        this.id = 0;
+        this.type = NeuronType.HIDDEN;
         this.value = new RandomValue();
         inputLinks = new Vector<ILink>();
         outputLinks = new Vector<ILink>();
@@ -139,8 +133,8 @@ public abstract class Neuron implements INeuron {
     }
     
     @Override
-    public final int getId() {
-        return id;
+    public final NeuronType getId() {
+        return type;
     }
     
     @Override

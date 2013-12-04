@@ -13,7 +13,8 @@ import com.neuralnetwork.shared.nodes.IInputNeuron;
  * @author fredladeroute
  *
  */
-public final class HiddenLayer extends Layer<IHiddenNeuron> implements IHiddenLayer {
+public final class HiddenLayer 
+        extends Layer<IHiddenNeuron> implements IHiddenLayer {
 
     /**
      * Generated Serial Version UID.

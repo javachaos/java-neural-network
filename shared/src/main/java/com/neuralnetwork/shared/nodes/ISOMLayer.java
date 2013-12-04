@@ -26,7 +26,7 @@ public interface ISOMLayer {
      *       the vector to calculate the distance to
      *       
      *  @return
-     *       Integer.MIN_VALUE if the vectors are not identical,
+     *       Integer.MIN_VALUE if the vectors are not the same length,
      *       otherwise returns the square of the distance.
      */
     double dist(SOMLayer v);

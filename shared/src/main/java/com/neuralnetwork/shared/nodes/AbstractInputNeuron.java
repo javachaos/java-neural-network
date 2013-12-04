@@ -9,15 +9,16 @@ import com.neuralnetwork.shared.values.ZeroValue;
  * @author fredladeroute
  *
  */
-public abstract class AbstractInputNeuron extends Neuron implements IInputNeuron {
-    
+public abstract class AbstractInputNeuron 
+        extends Neuron implements IInputNeuron {
+
     /**
      * Construct an input neuron with 
      * no initial input value.
      * 
      */
     protected AbstractInputNeuron() {
-        super(1);
+        super(NeuronType.HIDDEN);
         this.setValue(new ZeroValue());
     }
     
@@ -28,7 +29,7 @@ public abstract class AbstractInputNeuron extends Neuron implements IInputNeuron
      *      the initial value of the neuron
      */
     protected AbstractInputNeuron(final IValue<?> v) {
-        super(1);
+        super(NeuronType.HIDDEN);
         this.setValue(v);
     }
      

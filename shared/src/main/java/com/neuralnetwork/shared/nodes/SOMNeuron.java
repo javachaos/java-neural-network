@@ -26,7 +26,8 @@ public class SOMNeuron implements ISOMNeuron {
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(SOMNeuron.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(SOMNeuron.class);
     
     /**
      * The weights for this Neuron.
@@ -44,12 +45,25 @@ public class SOMNeuron implements ISOMNeuron {
     private int xPos, yPos;
     
     /**
+     * Creates a new SOM Neuron, initializing the 
+     * underlying neural network associated with this neuron.
+     */
+    private SOMNeuron() {
+        //neuralNetwork = new Network();
+        //TODO Fix network creation.
+        // And come up with a way to store network configs
+        // for later use. For example store 
+        // a predefined network config for every neuron.
+    }
+    
+    /**
      * Creates a new SOM Neuron.
      * 
      * @param numWeights
      *      the number of weights attached to this neuron
      */
     public SOMNeuron(final int numWeights) {
+    	this();
         weights = new SOMLayer();
         for (int x = 0; x < numWeights; x++) {
             weights.addElement(new Double(Math.random()));
@@ -69,6 +83,7 @@ public class SOMNeuron implements ISOMNeuron {
      *      the y co-ordinate of this neuron within the lattice
      */
     public SOMNeuron(final int numWeights, final int x, final int y) {
+    	this();
         weights = new SOMLayer();
         for (int i = 0; i < numWeights; i++) {
             weights.addElement(new Double(Math.random()));
@@ -117,7 +132,8 @@ public class SOMNeuron implements ISOMNeuron {
     @Override
     public final double getWeight(final int wIndex) {
         if (wIndex >= weights.size()) {
-            LOGGER.warn("Weight index out of bounds. Returning (index MOD size).");
+            LOGGER.warn("Weight index out of bounds. "
+                    + "Returning (index MOD size).");
             return wIndex % weights.size();
         }
         
