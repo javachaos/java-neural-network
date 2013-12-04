@@ -51,7 +51,7 @@ public final class NeuralNetBuilder {
      *      the number of outputs to the neural network to build
      */
     private NeuralNetBuilder(final int numInputs, final int numOutputs) {
-        this.nInputs = numInputs;
+        this.setNumInputs(numInputs);
         this.nOutputs = numOutputs;
     }
     
@@ -82,12 +82,41 @@ public final class NeuralNetBuilder {
     }
     
     /**
+     * Build the neural network.
      * 
      * @return
+     *      a new network.
      */
-    public static INetwork build(IValue<?> value) {
+    public static INetwork build(final IValue<?> value) {
         //return new INetwork();
         return null;
+    }
+
+    /**
+     * Returns a reference to the network.
+     * @return
+     *      a reference to the neural network.
+     */
+    public INetwork getNetwork() {
+        return network;
+    }
+
+    /**
+     * Get the number of inputs for the network being built.
+     * @return
+     *      the number of inputs to the network.
+     */
+    public int getNumInputs() {
+        return nInputs;
+    }
+
+    /**
+     * Set the number of inputs for the network to be built.
+     * @param inputs
+     *      the number of inputs to the network.
+     */
+    public void setNumInputs(final int inputs) {
+        this.nInputs = inputs;
     }
 
 }

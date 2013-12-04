@@ -52,7 +52,8 @@ public class SOMLayer extends Vector<Double> implements ISOMLayer {
    @Override
    public final double dist(final SOMLayer layer) {
        if (layer.size() != super.size()) {
-           LOGGER.warn("Cannot compute distance, vector lengths are not the equal.");
+           LOGGER.warn("Cannot compute distance, "
+                   + "vector lengths are not the equal.");
            return Integer.MIN_VALUE;
        }
        

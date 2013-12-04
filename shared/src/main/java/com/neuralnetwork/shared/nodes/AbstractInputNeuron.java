@@ -9,7 +9,8 @@ import com.neuralnetwork.shared.values.ZeroValue;
  * @author fredladeroute
  *
  */
-public abstract class AbstractInputNeuron extends Neuron implements IInputNeuron {
+public abstract class AbstractInputNeuron 
+        extends Neuron implements IInputNeuron {
 
     /**
      * Value of the input neuron.

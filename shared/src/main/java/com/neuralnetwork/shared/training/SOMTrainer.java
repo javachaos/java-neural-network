@@ -31,7 +31,8 @@ public class SOMTrainer implements Runnable {
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(SOMTrainer.class);
+    private static final Logger LOGGER = 
+            LoggerFactory.getLogger(SOMTrainer.class);
     
     /**
      * Initial learning rate.
@@ -205,7 +206,8 @@ public class SOMTrainer implements Runnable {
 							dist = bmu.distanceTo(temp);
 							if (dist <= (nbhRadius * nbhRadius)) {
 								dFalloff = getDistanceFalloff(dist, nbhRadius);
-								temp.updateWeights(curInput, learningRate, dFalloff);
+								temp.updateWeights(curInput, 
+								                   learningRate, dFalloff);
 							}
 					}
 				}
@@ -222,7 +224,7 @@ public class SOMTrainer implements Runnable {
 	 * @return
 	 * 		the trained SOM Lattice.
 	 */
-	public SOMLattice getLattice() {
+	public final SOMLattice getLattice() {
 		return lattice;
 	}
 	
@@ -231,7 +233,7 @@ public class SOMTrainer implements Runnable {
 	 * @return
 	 * 		true if the trainer is running.
 	 */
-	public boolean isRunning() {
+	public final boolean isRunning() {
 		return running;
 	}
 

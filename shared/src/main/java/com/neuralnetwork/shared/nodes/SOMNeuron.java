@@ -27,7 +27,8 @@ public class SOMNeuron implements ISOMNeuron {
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(SOMNeuron.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(SOMNeuron.class);
     
     /**
      * The weights for this Neuron.
@@ -44,7 +45,11 @@ public class SOMNeuron implements ISOMNeuron {
      */
     private int xPos, yPos;
     
-    public SOMNeuron() {
+    /**
+     * Creates a new SOM Neuron, initializing the 
+     * underlying neural network associated with this neuron.
+     */
+    private SOMNeuron() {
         neuralNetwork = new Network();
     }
     
@@ -124,7 +129,8 @@ public class SOMNeuron implements ISOMNeuron {
     @Override
     public final double getWeight(final int wIndex) {
         if (wIndex >= weights.size()) {
-            LOGGER.warn("Weight index out of bounds. Returning (index MOD size).");
+            LOGGER.warn("Weight index out of bounds. "
+                    + "Returning (index MOD size).");
             return wIndex % weights.size();
         }
         

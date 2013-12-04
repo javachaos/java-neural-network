@@ -16,8 +16,15 @@ import com.neuralnetwork.shared.training.SOMTrainer;
  */
 public final class Main {
     
-    private static int SIZE_N = 4;
-    private static int NUM_ITER = 50000;
+    /**
+     * Size of the Self organizing map.
+     */
+    private static final int SIZE_N = 4;
+    
+    /**
+     * Number of iterations for training.
+     */
+    private static final int NUM_ITER = 50000;
     
     /**
      * Unused ctor.

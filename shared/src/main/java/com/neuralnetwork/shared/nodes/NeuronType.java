@@ -1,5 +1,11 @@
 package com.neuralnetwork.shared.nodes;
 
+/**
+ * Describes the type of a Neuron.
+ * 
+ * @author fred
+ *
+ */
 public enum NeuronType {
 	
 	/**
