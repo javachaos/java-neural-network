@@ -1,6 +1,7 @@
 package com.neuralnetwork.shared.network;
 
 import java.util.Iterator;
+import java.util.Stack;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -43,7 +44,7 @@ public final class Network implements INetwork {
     /**
      * The hidden layer(s) of this network.
      */
-    private Vector<IHiddenLayer> layers;
+    private Stack<IHiddenLayer> layers;
     
     /**
      * The ouput layer of this network.
@@ -91,16 +92,8 @@ public final class Network implements INetwork {
      * 		the sizes of each hidden layer respectively.
      */
     public Network(final int numIn, final int numOut, final int numHide, final int[] sizes) {
-        this.numInputs = numIn;
-        this.numOutputs = numOut;
-        this.numHidden = numHide;
-        this.height = numHide + 2;
-        this.layerSizes = sizes;
-        this.inputLayer = new InputLayer(numInputs);
-        this.outputLayer = new OutputLayer(numOutputs);
-        this.layers = new Vector<IHiddenLayer>(numHidden);
         
-        if (numHide < 0) {
+    	if (numHide < 0) {
         	throw new IllegalArgumentException(
         			"Error cannot have negative amount of hidden layers.");
         } else if (numIn < 0) {
@@ -110,6 +103,15 @@ public final class Network implements INetwork {
         	throw new IllegalArgumentException(
         			"Error cannot have negative amount of output layers.");
         }
+    	
+        this.numInputs = numIn;
+        this.numOutputs = numOut;
+        this.numHidden = numHide;
+        this.height = numHide + 2;
+        this.layerSizes = sizes;
+        this.inputLayer = new InputLayer(numInputs);
+        this.outputLayer = new OutputLayer(numOutputs);
+        this.layers = new Stack<IHiddenLayer>();
     }
     
     /**
@@ -127,7 +129,7 @@ public final class Network implements INetwork {
         this.numOutputs = numOut;
         this.inputLayer = new InputLayer(numInputs);
         this.outputLayer = new OutputLayer(numOutputs);
-        this.layers = new Vector<IHiddenLayer>();
+        this.layers = new Stack<IHiddenLayer>();
     }
     
     @Override
@@ -202,7 +204,8 @@ public final class Network implements INetwork {
 
     @Override
     public void addHiddenLayer(final IHiddenLayer l) {
-        layers.add(l);
+    	l.build();
+        layers.push(l);
     }
 
     @Override
@@ -222,12 +225,21 @@ public final class Network implements INetwork {
 
     @Override
     public void build() {
+
+		Stack<IHiddenLayer> temp = new Stack<IHiddenLayer>();
+		while (!layers.empty()) {
+			temp.push(layers.pop());
+		}
     	
     	for (int i = 0; i < numHidden; i++) {
-    		IHiddenLayer h;
-    		layers.add(h = new HiddenLayer(layerSizes[i]));
+    		IHiddenLayer h = new HiddenLayer(layerSizes[i]);
     		h.build();
+    		layers.push(h);
     	}
+    	
+		while (!temp.empty()) {
+			layers.push(temp.pop());
+		}
     	
         inputLayer.build();
         Iterator<IHiddenLayer> i = layers.iterator();

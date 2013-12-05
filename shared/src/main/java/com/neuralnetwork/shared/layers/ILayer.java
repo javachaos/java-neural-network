@@ -41,4 +41,12 @@ public interface ILayer<T> extends Iterable<T> {
      */
     LayerType getLayerType();
     
+    /**
+     * Returns the size of this layer.
+     * 
+     * @return
+     * 		the number of neurons in this layer.
+     */
+    int getSize();
+    
 }

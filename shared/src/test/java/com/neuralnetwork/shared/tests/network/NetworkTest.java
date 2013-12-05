@@ -6,12 +6,16 @@ package com.neuralnetwork.shared.tests.network;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.neuralnetwork.shared.layers.HiddenLayer;
+import com.neuralnetwork.shared.layers.IHiddenLayer;
+import com.neuralnetwork.shared.layers.InputLayer;
+import com.neuralnetwork.shared.layers.OutputLayer;
 import com.neuralnetwork.shared.network.INetwork;
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.network.Network;
@@ -34,10 +38,31 @@ public class NetworkTest {
 	 * .shared.network.Network#Network(int, int, int)}.
 	 */
 	@Test
-	public void testNetworkIntIntInt() {
+	public void testNetworkIntIntIntIntArray() {
 		INetwork n = new Network(2, 3, 1, new int[] {3});
 		n.build();
 		assertNotNull(n);
+		
+		try {
+			n = new Network(2, 3, -1, new int[] {3});
+		} catch (IllegalArgumentException e) {
+			assertEquals(e.getMessage(), 
+					"Error cannot have negative amount of hidden layers.");
+		}
+		
+		try {
+			n = new Network(2, -3, 1, new int[] {3});
+		} catch (IllegalArgumentException e) {
+			assertEquals(e.getMessage(), 
+					"Error cannot have negative amount of output layers.");
+		}
+		
+		try {
+			n = new Network(-2, 3, 1, new int[] {3});
+		} catch (IllegalArgumentException e) {
+			assertEquals(e.getMessage(), 
+					"Error cannot have negative amount of input layers.");
+		}
 	}
 
 	/**
@@ -187,7 +212,7 @@ public class NetworkTest {
 	public void testGetOutputLayer() {
 		INetwork n = new Network(5, 5, 3, new int[] {4, 2, 4});
 		n.build();
-		assertEquals(LayerType.OUTPUT, n.getOutputLayer());
+		assertEquals(LayerType.OUTPUT, n.getOutputLayer().getLayerType());
 	}
 
 	/**
@@ -197,7 +222,11 @@ public class NetworkTest {
 	 */
 	@Test
 	public void testSetOutputLayer() {
-		fail("Not yet implemented");
+		INetwork n = new Network(5, 5, 3, new int[] {4, 2, 4});
+		n.setOutputLayer(new OutputLayer(3));
+		n.build();
+		assertEquals(LayerType.OUTPUT, n.getOutputLayer().getLayerType());
+		assertEquals(3, n.getOutputLayer().getSize());
 	}
 
 	/**
@@ -207,7 +236,12 @@ public class NetworkTest {
 	 */
 	@Test
 	public void testAddHiddenLayer() {
-		fail("Not yet implemented");
+		INetwork n = new Network(5, 5, 3, new int[] {4, 2, 4});
+		n.addHiddenLayer(new HiddenLayer(6));
+		n.build();
+		IHiddenLayer h = n.getHiddenLayer(3);
+		assertEquals(LayerType.HIDDEN, h.getLayerType());
+		assertEquals(6, h.getSize());
 	}
 
 	/**
@@ -218,9 +252,9 @@ public class NetworkTest {
 	public void testGetHiddenLayer() {
 		INetwork n = new Network(5, 5, 3, new int[] {4, 2, 4});
 		n.build();
-		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(0));
-		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(1));
-		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(2));
+		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(0).getLayerType());
+		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(1).getLayerType());
+		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(2).getLayerType());
 	}
 
 	/**
@@ -231,7 +265,7 @@ public class NetworkTest {
 	public void testGetInputLayer() {
 		INetwork n = new Network(5, 5, 3, new int[] {4, 2, 4});
 		n.build();
-		assertEquals(LayerType.INPUT, n.getInputLayer());
+		assertEquals(LayerType.INPUT, n.getInputLayer().getLayerType());
 	}
 
 	/**
@@ -242,17 +276,10 @@ public class NetworkTest {
 	@Test
 	public void testSetInputLayer() {
 		INetwork n = new Network(5, 5, 3, new int[] {4, 2, 4});
+		n.setInputLayer(new InputLayer(6));
 		n.build();
-	}
-
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#getLayer(int)}.
-	 */
-	@Test
-	public void testGetLayer() {
-		INetwork n = new Network(5, 5, 3, new int[] {4, 2, 4});
-		n.build();
+		assertEquals(LayerType.INPUT, n.getInputLayer().getLayerType());
+		assertEquals(6, n.getInputLayer().getSize());
 	}
 
 	/**
@@ -263,6 +290,7 @@ public class NetworkTest {
 	public void testBuild() {
 		INetwork n = new Network(5, 5, 3, new int[] {4, 2, 4});
 		n.build();
+		assertNotNull(n);
 	}
 
 	/**
@@ -274,6 +302,7 @@ public class NetworkTest {
 		INetwork n = new Network(5, 5, 3, new int[] {4, 2, 4});
 		n.build();
 		LOGGER.debug(n.toString());
+		assertTrue(n.toString().contains("IN(0.0) IN(0.0) IN(0.0) IN(0.0) IN(0.0)"));
 	}
 
 }

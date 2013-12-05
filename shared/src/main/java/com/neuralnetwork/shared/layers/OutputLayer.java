@@ -35,4 +35,9 @@ public class OutputLayer extends Layer<IOutputNeuron> implements IOutputLayer {
         }
     }
 
+	@Override
+	public int getSize() {
+		return size();
+	}
+
 }

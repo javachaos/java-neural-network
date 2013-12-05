@@ -57,4 +57,9 @@ public final class HiddenLayer
         }
     }
 
+	@Override
+	public int getSize() {
+		return size();
+	}
+
 }

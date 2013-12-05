@@ -61,4 +61,9 @@ public final class InputLayer extends Layer<IInputNeuron>
         }
     }
 
+	@Override
+	public int getSize() {
+		return size();
+	}
+
 }
