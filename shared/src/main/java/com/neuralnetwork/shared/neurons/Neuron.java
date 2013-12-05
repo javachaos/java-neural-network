@@ -18,7 +18,6 @@ import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.links.Link;
 import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.IValue;
 import com.neuralnetwork.shared.values.RandomValue;
 
 /**
@@ -106,7 +105,7 @@ public abstract class Neuron implements INeuron {
     
     @Override
     public final ILink addInputLink(
-            final INeuron inode, final IValue<?> weight) {
+            final INeuron inode, final DoubleValue weight) {
         this.inputLinks.add(++numInputLinks, new Link(this, inode, weight));
         return inputLinks.get(numInputLinks);
     }
@@ -129,7 +128,7 @@ public abstract class Neuron implements INeuron {
             temp.add(getInputLink(j));
         }
         
-        ILink[] t = null;
+        ILink[] t = new ILink[0];
         return temp.toArray(t);
     }
     
@@ -155,7 +154,7 @@ public abstract class Neuron implements INeuron {
 
     @Override
     public final ILink addOutputLink(
-            final INeuron inode, final IValue<?> weight) {
+            final INeuron inode, final DoubleValue weight) {
         this.outputLinks.add(++numOutputLinks, new Link(this, inode, weight));
         inode.addInputLink(this);
         return outputLinks.get(numOutputLinks);
@@ -179,7 +178,7 @@ public abstract class Neuron implements INeuron {
             temp.add(getOutputLink(j));
         }
         
-        ILink[] t = null;
+        ILink[] t = new ILink[0];
         return temp.toArray(t);
     }
 
@@ -260,24 +259,10 @@ public abstract class Neuron implements INeuron {
 		if (idParentCounter != other.idParentCounter) {
 			return false;
 		}
-		if (inputLinks == null) {
-			if (other.inputLinks != null) {
-				return false;
-			}
-		} else if (!inputLinks.equals(other.inputLinks)) {
+		if (!inputLinks.equals(other.inputLinks)) {
 			return false;
 		}
-		if (numInputLinks != other.numInputLinks) {
-			return false;
-		}
-		if (numOutputLinks != other.numOutputLinks) {
-			return false;
-		}
-		if (outputLinks == null) {
-			if (other.outputLinks != null) {
-				return false;
-			}
-		} else if (!outputLinks.equals(other.outputLinks)) {
+		if (!outputLinks.equals(other.outputLinks)) {
 			return false;
 		}
 		if (type != other.type) {

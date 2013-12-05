@@ -52,7 +52,7 @@ public interface INeuron {
      * 
      * @return a new ILink.
      */
-    ILink addInputLink(INeuron ineuron, IValue<?> weight);
+    ILink addInputLink(INeuron ineuron, DoubleValue weight);
     
     /**
      * Adds a link from this node to ineuron
@@ -102,7 +102,7 @@ public interface INeuron {
      * 
      * @return a new ILink.
      */
-    ILink addOutputLink(INeuron ineuron, IValue<?> weight);
+    ILink addOutputLink(INeuron ineuron, DoubleValue weight);
     
     /**
      * Adds a link from this node to ineuron
