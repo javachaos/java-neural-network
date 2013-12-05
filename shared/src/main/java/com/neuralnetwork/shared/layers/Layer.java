@@ -3,7 +3,7 @@ package com.neuralnetwork.shared.layers;
 import java.util.Vector;
 
 import com.neuralnetwork.shared.network.LayerType;
-import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.neurons.INeuron;
 
 /**
  * Represents a Layer of INeurons.

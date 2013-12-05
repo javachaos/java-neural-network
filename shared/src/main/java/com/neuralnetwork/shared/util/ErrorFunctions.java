@@ -1,6 +1,6 @@
 package com.neuralnetwork.shared.util;
 
-import com.neuralnetwork.shared.nodes.SOMLayer;
+import com.neuralnetwork.shared.neurons.SOMLayer;
 
 /**
  * Error functions.

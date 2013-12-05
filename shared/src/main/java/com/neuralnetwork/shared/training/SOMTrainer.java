@@ -15,9 +15,9 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.neuralnetwork.shared.nodes.SOMLattice;
-import com.neuralnetwork.shared.nodes.SOMLayer;
-import com.neuralnetwork.shared.nodes.SOMNeuron;
+import com.neuralnetwork.shared.neurons.SOMLattice;
+import com.neuralnetwork.shared.neurons.SOMLayer;
+import com.neuralnetwork.shared.neurons.SOMNeuron;
 
 /**
  * SOM Trainer responsible for training a SOM

@@ -2,10 +2,10 @@ package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.network.LayerType;
-import com.neuralnetwork.shared.nodes.BiasNeuron;
-import com.neuralnetwork.shared.nodes.IInputNeuron;
-import com.neuralnetwork.shared.nodes.InputNeuron;
-import com.neuralnetwork.shared.values.IValue;
+import com.neuralnetwork.shared.neurons.BiasNeuron;
+import com.neuralnetwork.shared.neurons.IInputNeuron;
+import com.neuralnetwork.shared.neurons.InputNeuron;
+import com.neuralnetwork.shared.values.DoubleValue;
 
 /**
  * Represents an Input layer to the network.
@@ -45,7 +45,7 @@ public final class InputLayer extends Layer<IInputNeuron>
     }
 
     @Override
-    public void addValue(final IValue<?> v, final int index) {
+    public void addValue(final DoubleValue v, final int index) {
         super.set(index, new InputNeuron(v));
     }
 

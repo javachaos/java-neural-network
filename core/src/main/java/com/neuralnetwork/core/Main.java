@@ -4,9 +4,9 @@ import java.util.Random;
 import java.util.Vector;
 
 import com.neuralnetwork.shared.layers.HiddenLayer;
-import com.neuralnetwork.shared.nodes.ISOMNeuron;
-import com.neuralnetwork.shared.nodes.SOMLattice;
-import com.neuralnetwork.shared.nodes.SOMLayer;
+import com.neuralnetwork.shared.neurons.ISOMNeuron;
+import com.neuralnetwork.shared.neurons.SOMLattice;
+import com.neuralnetwork.shared.neurons.SOMLayer;
 import com.neuralnetwork.shared.training.SOMTrainer;
 import com.neuralnetwork.shared.util.NeuralNetBuilder;
 import com.neuralnetwork.shared.util.SimpleNetworkConfigs;

@@ -1,4 +1,4 @@
-package com.neuralnetwork.shared.nodes;
+package com.neuralnetwork.shared.neurons;
 
 /**
  * Defines an abstract output neuron.

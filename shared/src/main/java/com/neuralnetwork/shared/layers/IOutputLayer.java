@@ -1,6 +1,6 @@
 package com.neuralnetwork.shared.layers;
 
-import com.neuralnetwork.shared.nodes.IOutputNeuron;
+import com.neuralnetwork.shared.neurons.IOutputNeuron;
 
 /**
  * Output layer.

@@ -1,6 +1,6 @@
-package com.neuralnetwork.shared.nodes;
+package com.neuralnetwork.shared.neurons;
 
-import com.neuralnetwork.shared.values.IValue;
+import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.ZeroValue;
 
 /**
@@ -28,7 +28,7 @@ public abstract class AbstractInputNeuron
      * @param v
      *      the initial value of the neuron
      */
-    protected AbstractInputNeuron(final IValue<?> v) {
+    protected AbstractInputNeuron(final DoubleValue v) {
         super(NeuronType.INPUT);
         this.setValue(v);
     }

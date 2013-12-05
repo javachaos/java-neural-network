@@ -8,27 +8,26 @@
  * Contributors:
  *      Fred Laderoute - initial API and implementation
  *******************************************************************************/
-package com.neuralnetwork.opencl.node;
-
-import com.neuralnetwork.shared.neurons.INeuron;
-import com.neuralnetwork.shared.neurons.Neuron;
-import com.neuralnetwork.shared.neurons.NeuronType;
+package com.neuralnetwork.shared.neurons;
 
 /**
- * OpenCL node.
+ * Represents a SOM Layer.
  * 
  * @author fredladeroute
  *
  */
-public class OpenCLNode extends Neuron implements INeuron {
+public interface ISOMLayer {
 
-    /**
-     * Construct a new OpenCL Node.
-     * 
-     * @param nodeId
-     *      the id of this node.
+    /** 
+     *  Calculates the euclidean distance between this vector and 
+     *  vector v.
+     *  
+     *  @param v
+     *       the vector to calculate the distance to
+     *       
+     *  @return
+     *       Integer.MIN_VALUE if the vectors are not the same length,
+     *       otherwise returns the square of the distance.
      */
-    public OpenCLNode(final NeuronType nodeId) {
-        super(nodeId);
-    }
+    double dist(SOMLayer v);
 }

@@ -8,27 +8,11 @@
  * Contributors:
  *      Fred Laderoute - initial API and implementation
  *******************************************************************************/
-package com.neuralnetwork.opencl.node;
-
-import com.neuralnetwork.shared.neurons.INeuron;
-import com.neuralnetwork.shared.neurons.Neuron;
-import com.neuralnetwork.shared.neurons.NeuronType;
-
 /**
- * OpenCL node.
  * 
+ */
+/**
  * @author fredladeroute
  *
  */
-public class OpenCLNode extends Neuron implements INeuron {
-
-    /**
-     * Construct a new OpenCL Node.
-     * 
-     * @param nodeId
-     *      the id of this node.
-     */
-    public OpenCLNode(final NeuronType nodeId) {
-        super(nodeId);
-    }
-}
+package com.neuralnetwork.shared.neurons;

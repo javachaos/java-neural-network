@@ -19,7 +19,7 @@ import com.neuralnetwork.shared.layers.OutputLayer;
 import com.neuralnetwork.shared.network.INetwork;
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.network.Network;
-import com.neuralnetwork.shared.nodes.NeuronType;
+import com.neuralnetwork.shared.neurons.NeuronType;
 
 /**
  * @author Fred

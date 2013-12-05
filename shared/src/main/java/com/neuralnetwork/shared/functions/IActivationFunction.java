@@ -23,9 +23,16 @@ public interface IActivationFunction {
      * derivative of the activation function.
      * 
      * @param v
-     *      the input value to the activation function.
+     *      the input value to the activation function
      * @return
      *      the output of the derivative of this activation function
      */
     double derivative(double v);
+    
+    /**
+     * Get the function type.
+     * @return
+     * 		the function type
+     */
+    FunctionType getFunctionType();
 }

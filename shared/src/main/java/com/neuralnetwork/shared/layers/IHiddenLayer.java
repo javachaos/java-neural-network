@@ -1,8 +1,8 @@
 package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
-import com.neuralnetwork.shared.nodes.IHiddenNeuron;
-import com.neuralnetwork.shared.nodes.IInputNeuron;
+import com.neuralnetwork.shared.neurons.IHiddenNeuron;
+import com.neuralnetwork.shared.neurons.IInputNeuron;
 
 /**
  * Interface for an IHiddenLayer.

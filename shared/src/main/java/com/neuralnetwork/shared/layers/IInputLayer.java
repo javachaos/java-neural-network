@@ -11,8 +11,8 @@
 package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
-import com.neuralnetwork.shared.nodes.IInputNeuron;
-import com.neuralnetwork.shared.values.IValue;
+import com.neuralnetwork.shared.neurons.IInputNeuron;
+import com.neuralnetwork.shared.values.DoubleValue;
 
 /**
  * Represents an InputLayer class.
@@ -30,7 +30,7 @@ public interface IInputLayer extends ILayer<IInputNeuron>, IBuildable {
      * @param index
      *      which INode to insert the IValue at
      */
-    void addValue(IValue<?> v, int index);
+    void addValue(DoubleValue v, int index);
     
     /**
      * Propagate the values from this IInputLayer to the

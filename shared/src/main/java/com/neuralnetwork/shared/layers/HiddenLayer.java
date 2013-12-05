@@ -2,10 +2,10 @@ package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.network.LayerType;
-import com.neuralnetwork.shared.nodes.BiasNeuron;
-import com.neuralnetwork.shared.nodes.HiddenNeuron;
-import com.neuralnetwork.shared.nodes.IHiddenNeuron;
-import com.neuralnetwork.shared.nodes.IInputNeuron;
+import com.neuralnetwork.shared.neurons.BiasNeuron;
+import com.neuralnetwork.shared.neurons.HiddenNeuron;
+import com.neuralnetwork.shared.neurons.IHiddenNeuron;
+import com.neuralnetwork.shared.neurons.IInputNeuron;
 
 /**
  * Represents a hidden neural network layer.

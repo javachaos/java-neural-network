@@ -8,10 +8,11 @@
  * Contributors:
  *      Fred Laderoute - initial API and implementation
  *******************************************************************************/
-package com.neuralnetwork.shared.nodes;
+package com.neuralnetwork.shared.neurons;
 
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.links.ILink;
+import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.IValue;
 
 /**
@@ -29,7 +30,7 @@ public interface INeuron {
      * @return
      *      the value that this neuron holds
      */
-    IValue<?> getValue();
+	DoubleValue getValue();
     
     /**
      * Set the value that this neuron will hold.
@@ -37,7 +38,7 @@ public interface INeuron {
      * @param v
      *      the value to set for this neuron
      */
-    void setValue(IValue<?> v);
+    void setValue(DoubleValue v);
     
     /**
      * Adds a link from this node to ineuron
@@ -144,6 +145,15 @@ public interface INeuron {
      *      the id of this INeuron
      */
     NeuronType getType();
+    
+    /**
+     * Sets the type of neuron. In the rare event that one needs
+     * to change the type of a neuron this must be called.
+     * 
+     * @param t
+     * 		the type of the neuron
+     */
+	void setType(NeuronType t);
     
     /**
      * Return the next child INeuron.

@@ -3,7 +3,7 @@ package com.neuralnetwork.shared.util;
 import java.util.Iterator;
 
 import com.neuralnetwork.shared.layers.ILayer;
-import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.neurons.INeuron;
 
 /**
  * Utility class to create connection between layers.

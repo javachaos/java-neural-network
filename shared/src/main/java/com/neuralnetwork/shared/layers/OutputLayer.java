@@ -1,8 +1,8 @@
 package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.LayerType;
-import com.neuralnetwork.shared.nodes.IOutputNeuron;
-import com.neuralnetwork.shared.nodes.OutputNeuron;
+import com.neuralnetwork.shared.neurons.IOutputNeuron;
+import com.neuralnetwork.shared.neurons.OutputNeuron;
 
 /**
  * Represents an output layer of a network.

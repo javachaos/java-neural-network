@@ -15,9 +15,9 @@ import java.util.Vector;
 import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.layers.IInputLayer;
 import com.neuralnetwork.shared.layers.IOutputLayer;
-import com.neuralnetwork.shared.nodes.IInputNeuron;
-import com.neuralnetwork.shared.nodes.INeuron;
-import com.neuralnetwork.shared.nodes.IOutputNeuron;
+import com.neuralnetwork.shared.neurons.IInputNeuron;
+import com.neuralnetwork.shared.neurons.INeuron;
+import com.neuralnetwork.shared.neurons.IOutputNeuron;
 import com.neuralnetwork.shared.training.TrainingStack;
 import com.neuralnetwork.shared.values.ErrorValue;
 

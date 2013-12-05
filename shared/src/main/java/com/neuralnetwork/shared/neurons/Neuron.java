@@ -8,7 +8,7 @@
  * Contributors:
  *      Fred Laderoute - initial API and implementation
  *******************************************************************************/
-package com.neuralnetwork.shared.nodes;
+package com.neuralnetwork.shared.neurons;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -17,6 +17,7 @@ import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.links.Link;
+import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.IValue;
 import com.neuralnetwork.shared.values.RandomValue;
 
@@ -31,7 +32,7 @@ public abstract class Neuron implements INeuron {
     /**
      * The value for this neuron.
      */
-    private IValue<?> value;
+    private DoubleValue value;
     
     /**
      * The activation function for this INeuron.
@@ -138,6 +139,11 @@ public abstract class Neuron implements INeuron {
     }
     
     @Override
+    public final void setType(final NeuronType t) {
+        this.type = t;
+    }
+    
+    @Override
     public final INeuron getNextParent() {
         return getInputLink(++idParentCounter).getTail();
     }
@@ -195,12 +201,12 @@ public abstract class Neuron implements INeuron {
     }
 
     @Override
-    public final IValue<?> getValue() {
+    public final DoubleValue getValue() {
         return value;
     }
 
     @Override
-    public final void setValue(final IValue<?> v) {
+    public final void setValue(final DoubleValue v) {
         this.value = v;
     }
 
@@ -216,11 +222,11 @@ public abstract class Neuron implements INeuron {
 		result = prime * result + idChildCounter;
 		result = prime * result + idParentCounter;
 		result = prime * result
-				+ ((inputLinks == null) ? 0 : inputLinks.hashCode());
+				+ inputLinks.hashCode();
 		result = prime * result + numInputLinks;
 		result = prime * result + numOutputLinks;
 		result = prime * result
-				+ ((outputLinks == null) ? 0 : outputLinks.hashCode());
+				+ outputLinks.hashCode();
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;

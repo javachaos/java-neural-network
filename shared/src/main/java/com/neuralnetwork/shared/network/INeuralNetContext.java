@@ -11,7 +11,7 @@
 package com.neuralnetwork.shared.network;
 
 import com.neuralnetwork.shared.links.ILink;
-import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.neurons.INeuron;
 
 /**
  * Represents a NeuralNetContext which stores all the links of a neural network.

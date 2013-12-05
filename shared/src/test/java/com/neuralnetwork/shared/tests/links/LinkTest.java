@@ -11,9 +11,9 @@ import org.junit.Test;
 import com.neuralnetwork.shared.exceptions.NeuronLinkException;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.links.Link;
-import com.neuralnetwork.shared.nodes.HiddenNeuron;
-import com.neuralnetwork.shared.nodes.IHiddenNeuron;
-import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.neurons.HiddenNeuron;
+import com.neuralnetwork.shared.neurons.IHiddenNeuron;
+import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.OneValue;
 import com.neuralnetwork.shared.values.ZeroValue;
@@ -26,9 +26,7 @@ public class LinkTest {
 
 	/**
 	 * Test method for {@link com.neuralnetwork
-	 * .shared.links.Link#Link(com.neuralnetwork.shared
-	 * .nodes.INeuron, com.neuralnetwork.shared
-	 * .nodes.INeuron, com.neuralnetwork.shared.values.IValue)}.
+	 * .shared.links.Link#Link(com.neuralnetwork.shared.neurons.INeuron, com.neuralnetwork.shared.neurons.INeuron, com.neuralnetwork.shared.values.IValue)}.
 	 */
 	@Test
 	public void testLink() {
@@ -90,8 +88,7 @@ public class LinkTest {
 
 	/**
 	 * Test method for {@link com.neuralnetwork
-	 * .shared.links.Link#setHead(com.neuralnetwork
-	 * .shared.nodes.INeuron)}.
+	 * .shared.links.Link#setHead(com.neuralnetwork.shared.neurons.INeuron)}.
 	 */
 	@Test
 	public void testSetHead() {
@@ -110,8 +107,7 @@ public class LinkTest {
 
 	/**
 	 * Test method for {@link com.neuralnetwork
-	 * .shared.links.Link#setTail(com.neuralnetwork
-	 * .shared.nodes.INeuron)}.
+	 * .shared.links.Link#setTail(com.neuralnetwork.shared.neurons.INeuron)}.
 	 */
 	@Test
 	public void testSetTail() {

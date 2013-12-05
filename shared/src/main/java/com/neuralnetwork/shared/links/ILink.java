@@ -10,7 +10,7 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.links;
 
-import com.neuralnetwork.shared.nodes.INeuron;
+import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.values.IValue;
 
 /**
