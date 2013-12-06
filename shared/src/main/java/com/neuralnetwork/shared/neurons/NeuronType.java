@@ -7,22 +7,22 @@ package com.neuralnetwork.shared.neurons;
  *
  */
 public enum NeuronType {
-	
+
 	/**
 	 * Hidden neuron type.
 	 */
 	HIDDEN,
-		
+
 	/**
 	 * Input neuron type.
 	 */
 	INPUT,
-	
+
 	/**
 	 * Output neuron type.
 	 */
 	OUTPUT,
-	
+
 	/**
 	 * Self organizing map neuron.
 	 */

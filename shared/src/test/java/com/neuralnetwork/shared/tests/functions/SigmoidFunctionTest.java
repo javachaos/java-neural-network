@@ -4,13 +4,16 @@
 package com.neuralnetwork.shared.tests.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.neuralnetwork.shared.functions.FunctionType;
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
+import com.neuralnetwork.shared.values.DoubleValue;
 
 /**
  * @author fred
@@ -81,6 +84,49 @@ public class SigmoidFunctionTest {
         testDerivativeValue(0, EXPECTED_DVALUE_ZERO);
         testDerivativeValue(1.0, EXPECTED_DVALUE_ONE);
         testDerivativeValue(2.0, EXPECTED_DVALUE_TWO);
+    }
+    
+    /**
+     * Test method for {@link com.neuralnetwork.shared.functions
+     * .SigmoidFunction#getFunctionType()}.
+     */
+    @Test
+    public final void testGetFunctionType() {
+        IActivationFunction f = new SigmoidFunction();
+        FunctionType t = f.getFunctionType();
+        assertEquals(t, FunctionType.SIGMOID);
+    }
+    
+    /**
+     * Test method for {@link com.neuralnetwork.shared.functions
+     * .SigmoidFunction#equals()}.
+     */
+    @Test
+    public final void testEquals() {
+        IActivationFunction f = new SigmoidFunction();
+        IActivationFunction f1 = new SigmoidFunction();
+        
+        assertEquals(f, f1);
+        assertEquals(f, f);
+        
+        f = new SigmoidFunction();
+        f1 = null;
+        
+        assertFalse(f.equals(f1));
+        assertFalse(f.equals(new DoubleValue(0.0)));
+    }
+    
+    /**
+     * Test method for {@link com.neuralnetwork.shared.functions
+     * .SigmoidFunction#hashCode()}.
+     */
+    @Test
+    public final void testHashCode() {
+        IActivationFunction f = new SigmoidFunction();
+        IActivationFunction f1 = new SigmoidFunction();
+        
+        assertEquals(f.hashCode(), f1.hashCode());
+        assertEquals(f.hashCode(), f.hashCode());
     }
     
     /**

@@ -55,11 +55,6 @@ public class SOMTrainer implements Runnable {
 	private double timeConstant;
 	
 	/**
-	 * Number of milliseconds to sleep while stopping thread.
-	 */
-	private static final int SLEEP_INTERVAL  = 250;
-	
-	/**
 	 * The lattice object.
 	 */
 	private SOMLattice lattice;
@@ -252,13 +247,6 @@ public class SOMTrainer implements Runnable {
 	public final void stop() {
 		if (runner != null) {
 			running = false;
-			while (runner.isAlive()) {
-			    try {
-                    Thread.sleep(SLEEP_INTERVAL);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-			}
 		}
 	}
 }

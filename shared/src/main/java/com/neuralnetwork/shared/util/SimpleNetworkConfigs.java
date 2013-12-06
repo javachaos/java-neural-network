@@ -11,15 +11,16 @@ package com.neuralnetwork.shared.util;
  * @author fred
  *
  */
-public final class SimpleNetworkConfigs {
-    
-    /**
-     * Unused Constructor.
-     */
-    private SimpleNetworkConfigs() {
-    }
-    
-    /**
+public class SimpleNetworkConfigs {
+	
+	static {
+		new SimpleNetworkConfigs();
+	}
+	
+	private SimpleNetworkConfigs() {
+	}
+	
+	/**
      * Simple network config 5 inputs, 4 hidden, 3 hidden, 4 hidden, 5 outputs.
      */
     public static final NetworkConfig CONFIG_5_4_3_4_5 =

@@ -32,7 +32,7 @@ public final class SigmoidFunction implements IActivationFunction {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((functionId == null) ? 0 : functionId.hashCode());
+				+ functionId.hashCode();
 		return result;
 	}
 
@@ -50,10 +50,7 @@ public final class SigmoidFunction implements IActivationFunction {
 		if (!(obj instanceof SigmoidFunction)) {
 			return false;
 		}
-		SigmoidFunction other = (SigmoidFunction) obj;
-		if (functionId != other.functionId) {
-			return false;
-		}
+		
 		return true;
 	}
 }
