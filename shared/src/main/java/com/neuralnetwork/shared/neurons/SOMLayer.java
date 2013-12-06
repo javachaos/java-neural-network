@@ -47,6 +47,9 @@ public class SOMLayer extends Vector<Double> implements ISOMLayer {
     */
    public SOMLayer(final int size) {
 	   super(size);
+	   for (int i = 0; i < size; i++) {
+		   add(0.0);
+	   }
    }
    
    @Override

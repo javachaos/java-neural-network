@@ -21,5 +21,10 @@ public enum NeuronType {
 	/**
 	 * Output neuron type.
 	 */
-	OUTPUT;
+	OUTPUT,
+	
+	/**
+	 * Self organizing map neuron.
+	 */
+	SOM;
 }
