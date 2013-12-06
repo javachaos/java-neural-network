@@ -36,11 +36,17 @@ public class TrainingStack {
      * The raw data values.
      */
     private Stack<Pair<Vector<Double>, Vector<Double>>> data;
+
+    /**
+     * The sample size of this training stack.
+     */
+	private int sampleSize;
     
     /**
      * Construct a training set.
      */
-    public TrainingStack() {
+    public TrainingStack(final int size) {
+    	this.sampleSize = size;
         data = new Stack<Pair<Vector<Double>, Vector<Double>>>();
     }
     
@@ -55,7 +61,10 @@ public class TrainingStack {
      */
     public final void addTrainingSample(
             final Vector<Double> rawData, final Vector<Double> expectedData) {
-        if (rawData != null && expectedData != null) {
+        if (rawData != null
+        		&& expectedData != null
+        		&& rawData.size() == sampleSize
+        		&& expectedData.size() == sampleSize) {
             Pair<Vector<Double>, Vector<Double>> pair =
                     new Pair<Vector<Double>,
                     Vector<Double>>(rawData, expectedData);
@@ -96,4 +105,15 @@ public class TrainingStack {
     public final Stack<Pair<Vector<Double>, Vector<Double>>> getData() {
         return data;
     }
+
+    /**
+     * Return the size of each sample vector.
+     * 
+     * @return
+     * 		the size of each sample vector
+     */
+	public int getSampleSize() {
+		return sampleSize;
+	}
+
 }

@@ -77,7 +77,7 @@ public class SOMTrainer implements Runnable {
 	/**
 	 * Execution thread to run the training on.
 	 */
-	private Thread runner;
+	private Thread runner = null;
 	
 	/**
 	 * Create a new SOMTrainer object.
@@ -235,6 +235,15 @@ public class SOMTrainer implements Runnable {
 	 */
 	public final boolean isRunning() {
 		return running;
+	}
+	
+	/**
+	 * Return the run thread.
+	 * @return
+	 * 		a reference to the run thread.
+	 */
+	public Thread getThread() {
+		return runner;
 	}
 
 	/**

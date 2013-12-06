@@ -12,11 +12,17 @@ import com.neuralnetwork.shared.neurons.INeuron;
  *
  */
 public final class Connections {
-
-    /**
-     * Unused constructor.
-     */
-    private Connections() { }
+	
+	/**
+	 * Creates a new instance of the connections class.
+	 */
+	private static final Connections instance = new Connections();
+	
+	/**
+	 * Unused Constructor.
+	 */
+	private Connections() {
+	}
     
     /**
      * Create a full connection between layers l1 and l2.
@@ -33,7 +39,7 @@ public final class Connections {
      * @param <T2>
      *      the type of the child layer
      */
-    public static <T1 extends INeuron, T2 extends INeuron> 
+    public <T1 extends INeuron, T2 extends INeuron> 
             void create(final ILayer<T1> l1, final ILayer<T2> l2) {
         Iterator<T1> iter1 = l1.iterator();
         Iterator<T2> iter2 = l2.iterator();
@@ -45,4 +51,8 @@ public final class Connections {
             }
         }
     }
+
+	public static Connections getInstance() {
+		return instance;
+	}
 }

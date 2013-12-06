@@ -139,6 +139,13 @@ public interface INeuron {
     ILink[] getOutputLinks(int... ids);
     
     /**
+     * Get all ILinks.
+     * 
+     * @return the ILinks.
+     */
+    ILink[] getOutputLinks();
+    
+    /**
      * Return the type of this INeuron.
      * 
      * @return

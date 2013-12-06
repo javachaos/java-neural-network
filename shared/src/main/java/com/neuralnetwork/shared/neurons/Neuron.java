@@ -181,6 +181,12 @@ public abstract class Neuron implements INeuron {
         ILink[] t = new ILink[0];
         return temp.toArray(t);
     }
+    
+    @Override
+    public final ILink[] getOutputLinks() {
+        ILink[] t = new ILink[0];
+        return outputLinks.toArray(t);
+    }
 
     @Override
     public final void reset() {

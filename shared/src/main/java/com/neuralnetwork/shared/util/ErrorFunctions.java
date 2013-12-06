@@ -1,6 +1,6 @@
 package com.neuralnetwork.shared.util;
 
-import com.neuralnetwork.shared.neurons.SOMLayer;
+import java.util.Vector;
 
 /**
  * Error functions.
@@ -10,6 +10,10 @@ import com.neuralnetwork.shared.neurons.SOMLayer;
  */
 public final class ErrorFunctions {
     
+	/**
+	 * Singleton instance.
+	 */
+	private static final ErrorFunctions instance = new ErrorFunctions();
     /**
      * Unused ctor.
      */
@@ -28,7 +32,7 @@ public final class ErrorFunctions {
      * @return
      *      the MSE of v1 and v2
      */
-    public static double meanSquaredError(final SOMLayer v1, final SOMLayer v2) {
+    public double meanSquaredError(final Vector<Double> v1, final Vector<Double> v2) {
         double n = v1.size();
         double error = 0;
         for (int i = 0; i < v1.size(); i++) {
@@ -37,5 +41,9 @@ public final class ErrorFunctions {
         
         return error / n;
     }
+
+	public static ErrorFunctions getInstance() {
+		return instance;
+	}
 
 }

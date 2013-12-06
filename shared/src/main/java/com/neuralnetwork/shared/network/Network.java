@@ -226,6 +226,7 @@ public final class Network implements INetwork {
     @Override
     public void build() {
 
+    	Connections c = Connections.getInstance();
 		Stack<IHiddenLayer> temp = new Stack<IHiddenLayer>();
 		while (!layers.empty()) {
 			temp.push(layers.pop());
@@ -250,7 +251,7 @@ public final class Network implements INetwork {
         
         if (!layers.isEmpty()) {
 	        //Connect input layer to first hidden layer.
-	        Connections.create(inputLayer, layers.get(0));
+	        c.create(inputLayer, layers.get(0));
 	        
 	        //Connect each hidden layer to its child hidden layer.
 	        if (layers.size() >= 2) {
@@ -258,15 +259,15 @@ public final class Network implements INetwork {
 	            while (i.hasNext()) {
 	                IHiddenLayer layer = i.next();
 	                if (i.hasNext()) {
-	                    Connections.create(layer, i.next());
+	                    c.create(layer, i.next());
 	                }
 	            }
 	        }
 	        
 	        //Connect the output layer to the last hidden layer.
-	        Connections.create(outputLayer, layers.get(layers.size() - 1));
+	        c.create(outputLayer, layers.get(layers.size() - 1));
         } else {
-        	Connections.create(inputLayer, outputLayer);
+        	c.create(inputLayer, outputLayer);
         }
     }
     
