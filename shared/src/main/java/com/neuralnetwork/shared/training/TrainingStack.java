@@ -44,6 +44,9 @@ public class TrainingStack {
     
     /**
      * Construct a training set.
+     * 
+     * @param size
+     *      the initial size of the training stack.
      */
     public TrainingStack(final int size) {
     	this.sampleSize = size;
@@ -112,7 +115,7 @@ public class TrainingStack {
      * @return
      * 		the size of each sample vector
      */
-	public int getSampleSize() {
+	public final int getSampleSize() {
 		return sampleSize;
 	}
 

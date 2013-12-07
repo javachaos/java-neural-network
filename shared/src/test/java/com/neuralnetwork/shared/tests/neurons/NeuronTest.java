@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013 Fred Laderoute.
+ * All rights reserved. This program and the accompanying
+ * materials are made available under the terms of the GNU 
+ * Public License v3.0 which accompanies this distribution, 
+ * and is available at http://www.gnu.org/licenses/gpl.html
+ *
+ * Contributors:
+ *      Fred Laderoute - initial API and implementation
+ *******************************************************************************/
 /**
  * 
  */
@@ -18,6 +28,7 @@ import com.neuralnetwork.shared.neurons.InputNeuron;
 import com.neuralnetwork.shared.neurons.Neuron;
 import com.neuralnetwork.shared.neurons.NeuronType;
 import com.neuralnetwork.shared.neurons.OutputNeuron;
+import com.neuralnetwork.shared.values.Constants;
 import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.OneValue;
 import com.neuralnetwork.shared.values.ZeroValue;
@@ -28,6 +39,16 @@ import com.neuralnetwork.shared.values.ZeroValue;
  */
 public class NeuronTest {
 
+    /**
+     * Value used for testing.
+     */
+    private static final double TEST_VALUE1 = 0.123;
+    
+    /**
+     * Number of times to fail before failing test case.
+     */
+    private static final int REGRESSION_LIMIT = 100;
+    
 	/**
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.neurons.Neuron#hashCode()}.
@@ -85,9 +106,9 @@ public class NeuronTest {
 	public final void testAddInputLinkINeuronIValueOfQ() {
 		Neuron n = new InputNeuron();
 		Neuron m = new InputNeuron();
-		n.addInputLink(m, new DoubleValue(0.01));
+		n.addInputLink(m, new DoubleValue(TEST_VALUE1));
 		ILink l = n.getInputLink(0);
-		assertEquals(l.getWeight(), new DoubleValue(0.01));
+		assertEquals(l.getWeight(), new DoubleValue(TEST_VALUE1));
 		assertEquals(l.getHead(), n);
 		assertEquals(l.getTail(), m);
 	}
@@ -132,7 +153,7 @@ public class NeuronTest {
 		Neuron m = new HiddenNeuron();
 		m.addInputLink(n);
 		m.addInputLink(n1);
-		ILink[] l = m.getInputLinks(0,1);
+		ILink[] l = m.getInputLinks(0, 1);
 		
 		assertEquals(l[0].getTail(), n);
 		assertEquals(l[1].getTail(), n1);
@@ -206,10 +227,12 @@ public class NeuronTest {
 		Neuron m = new HiddenNeuron();
 		Neuron o = new OutputNeuron();
 		Neuron o1 = new OutputNeuron();
-		n.addOutputLink(m, new DoubleValue(0.123));
-		n1.addOutputLink(m, new DoubleValue(0.123));
-		assertEquals(n.getOutputLink(0).getWeight(), new DoubleValue(0.123));
-		assertEquals(n1.getOutputLink(0).getWeight(), new DoubleValue(0.123));
+		n.addOutputLink(m, new DoubleValue(TEST_VALUE1));
+		n1.addOutputLink(m, new DoubleValue(TEST_VALUE1));
+		assertEquals(n.getOutputLink(0).getWeight(), 
+		             new DoubleValue(TEST_VALUE1));
+		assertEquals(n1.getOutputLink(0).getWeight(), 
+		             new DoubleValue(TEST_VALUE1));
 		m.addOutputLink(o);
 		m.addOutputLink(o1);
 	}
@@ -287,7 +310,7 @@ public class NeuronTest {
 	public final void testReset() {
 		int i = 0;
 		while (getResetTestResult()) {
-			if(i++ == 100) {
+			if (i++ == REGRESSION_LIMIT) {
 				fail("Reset method not correct.");
 			}
 		}
@@ -435,13 +458,13 @@ public class NeuronTest {
 		assertFalse(l.equals(l1));
 		
 		Neuron p = new OutputNeuron();
-		p.setValue(new DoubleValue(10.0));
+		p.setValue(new DoubleValue());
 		Neuron p1 = new OutputNeuron();
-		p1.setValue(new DoubleValue(11.0));
+		p1.setValue(new DoubleValue(Constants.TEN));
 		assertFalse(p.equals(p1));
 		
 		p.setValue(null);
-		p1.setValue(new DoubleValue(11.0));
+		p1.setValue(new DoubleValue(Constants.ELEVEN_D));
 		assertFalse(p.equals(p1));
 		
 		p.setValue(null);

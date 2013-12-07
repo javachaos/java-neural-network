@@ -237,7 +237,7 @@ public class SOMTrainer implements Runnable {
 	 * @return
 	 * 		a reference to the run thread.
 	 */
-	public Thread getThread() {
+	public final Thread getThread() {
 		return runner;
 	}
 

@@ -219,11 +219,26 @@ public abstract class Neuron implements INeuron {
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		
+		int functionValue = 0;
+		if (function != null) {
+		    functionValue = function.hashCode();
+	    }
+		
+		int typeValue = 0;
+		if (type != null) {
+		    typeValue = type.hashCode();
+		}
+		
+		int valueV = 0;
+		if (value != null) {
+		    valueV = value.hashCode();
+		}
 		result = prime * result
-				+ ((function == null) ? 0 : function.hashCode());
+				+ functionValue;
 		result = prime * result + idChildCounter;
 		result = prime * result + idParentCounter;
 		result = prime * result
@@ -232,8 +247,8 @@ public abstract class Neuron implements INeuron {
 		result = prime * result + numOutputLinks;
 		result = prime * result
 				+ outputLinks.hashCode();
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		result = prime * result + typeValue;
+		result = prime * result + valueV;
 		return result;
 	}
 
@@ -241,7 +256,7 @@ public abstract class Neuron implements INeuron {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}

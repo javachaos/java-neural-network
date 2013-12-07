@@ -107,4 +107,11 @@ public interface ISOMNeuron {
      */
      void updateWeights(final SOMLayer input, 
              final double learningRate, final double distanceFalloff);
+
+     /**
+      * The type of neuron.
+      * @return
+      *      the type of neuron.
+      */
+     NeuronType getType();
 }

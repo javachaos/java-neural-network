@@ -55,6 +55,10 @@ public class SOMNeuron implements ISOMNeuron {
     /**
      * Creates a new SOM Neuron, initializing the 
      * underlying neural network associated with this neuron.
+     * 
+     * @param configuration
+     *      the configuration to be used in constructing the new network.
+     *      
      */
     private SOMNeuron(final NetworkConfig configuration) {
     	NeuralNetBuilder b = 
@@ -174,12 +178,8 @@ public class SOMNeuron implements ISOMNeuron {
         return neuralNetwork;
     }
 
-    /**
-     * The type of neuron.
-     * @return
-     * 		the type of neuron.
-     */
-	public NeuronType getType() {
+    @Override
+	public final NeuronType getType() {
 		return type;
 	}
 }

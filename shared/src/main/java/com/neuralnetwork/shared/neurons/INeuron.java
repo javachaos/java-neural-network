@@ -13,7 +13,6 @@ package com.neuralnetwork.shared.neurons;
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.IValue;
 
 /**
  * INeuron interface for the Nodes of the network.

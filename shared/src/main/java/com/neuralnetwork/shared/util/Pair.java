@@ -51,11 +51,20 @@ public class Pair<T1, T2> {
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
-	public int hashCode() {
+    public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((first == null) ? 0 : first.hashCode());
-		result = prime * result + ((second == null) ? 0 : second.hashCode());
+		int firstValue = 0;
+		if (first != null) {
+		    firstValue = first.hashCode();
+		}
+		
+		int secondValue = 0;
+		if (second != null) {
+		    secondValue = second.hashCode();
+		}
+		result = prime * result + firstValue;
+		result = prime * result + secondValue;
 		return result;
 	}
 
@@ -63,7 +72,7 @@ public class Pair<T1, T2> {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+    public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013 Fred Laderoute.
+ * All rights reserved. This program and the accompanying
+ * materials are made available under the terms of the GNU 
+ * Public License v3.0 which accompanies this distribution, 
+ * and is available at http://www.gnu.org/licenses/gpl.html
+ *
+ * Contributors:
+ *      Fred Laderoute - initial API and implementation
+ *******************************************************************************/
 /**
  * 
  */
@@ -19,6 +29,11 @@ import com.neuralnetwork.shared.values.ZeroValue;
  */
 public class AbstractOutputNeuronTest {
 
+    /**
+     * Ten value used for testing.
+     */
+    private static final int TEN = 10;
+    
 	/**
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.neurons.AbstractOutputNeuron
@@ -42,7 +57,8 @@ public class AbstractOutputNeuronTest {
 		AbstractOutputNeuron ai = new OutputNeuron();
 		ai.setValue(new OneValue());
 		assertEquals(ai.getType(), NeuronType.OUTPUT);
-		assertEquals(ai.getOutputValue(), new OneValue().getValue(), 10 * Math.ulp(1.0));
+		assertEquals(ai.getOutputValue(), 
+		             new OneValue().getValue(), TEN * Math.ulp(1.0));
 	}
 
 }

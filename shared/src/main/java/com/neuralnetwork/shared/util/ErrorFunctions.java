@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013 Fred Laderoute.
+ * All rights reserved. This program and the accompanying
+ * materials are made available under the terms of the GNU 
+ * Public License v3.0 which accompanies this distribution, 
+ * and is available at http://www.gnu.org/licenses/gpl.html
+ *
+ * Contributors:
+ *      Fred Laderoute - initial API and implementation
+ *******************************************************************************/
 package com.neuralnetwork.shared.util;
 
 import java.util.Vector;
@@ -13,7 +23,7 @@ public final class ErrorFunctions {
 	/**
 	 * Singleton instance.
 	 */
-	private static final ErrorFunctions instance = new ErrorFunctions();
+	private static final ErrorFunctions INSTANCE = new ErrorFunctions();
     /**
      * Unused ctor.
      */
@@ -32,7 +42,8 @@ public final class ErrorFunctions {
      * @return
      *      the MSE of v1 and v2
      */
-    public double meanSquaredError(final Vector<Double> v1, final Vector<Double> v2) {
+    public double meanSquaredError(final Vector<Double> v1, 
+        final Vector<Double> v2) {
         double n = v1.size();
         double error = 0;
         for (int i = 0; i < v1.size(); i++) {
@@ -42,8 +53,13 @@ public final class ErrorFunctions {
         return error / n;
     }
 
+    /**
+     * Get an instance of the ErrorFunctions class.
+     * @return
+     *      an instance of the ErrorFunctions class.
+     */
 	public static ErrorFunctions getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 
 }

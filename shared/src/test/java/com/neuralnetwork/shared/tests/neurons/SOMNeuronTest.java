@@ -1,6 +1,14 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 Fred Laderoute.
+ * All rights reserved. This program and the accompanying
+ * materials are made available under the terms of the GNU 
+ * Public License v3.0 which accompanies this distribution, 
+ * and is available at http://www.gnu.org/licenses/gpl.html
+ *
+ * Contributors:
+ *      Fred Laderoute - initial API and implementation
+ *******************************************************************************/
+
 package com.neuralnetwork.shared.tests.neurons;
 
 import static org.junit.Assert.assertEquals;
@@ -11,6 +19,7 @@ import org.junit.Test;
 import com.neuralnetwork.shared.neurons.NeuronType;
 import com.neuralnetwork.shared.neurons.SOMLayer;
 import com.neuralnetwork.shared.neurons.SOMNeuron;
+import com.neuralnetwork.shared.values.Constants;
 
 /**
  * @author Fred
@@ -95,7 +104,8 @@ public class SOMNeuronTest {
 	 */
 	@Test
 	public final void testDistanceTo() {
-		SOMNeuron s = new SOMNeuron(3, 5, 2);
+		SOMNeuron s = new SOMNeuron(Constants.THREE, 
+		                            Constants.FIVE, Constants.TWO);
 		SOMNeuron s1 = new SOMNeuron(3, 2, 2);
 		
 		assertEquals(90.0, s.distanceTo(s1), 10 * Math.ulp(90));
@@ -107,7 +117,8 @@ public class SOMNeuronTest {
 	 */
 	@Test
 	public final void testSetWeight() {
-		SOMNeuron s = new SOMNeuron(3, 5, 2);
+	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
+	                                Constants.FIVE, Constants.TWO);
 		s.setWeight(0, 0.1);
 		s.setWeight(1, 0.2);
 		s.setWeight(2, 0.3);
@@ -130,7 +141,8 @@ public class SOMNeuronTest {
 	 */
 	@Test
 	public final void testGetWeight() {
-		SOMNeuron s = new SOMNeuron(3, 5, 2);
+	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
+	                                Constants.FIVE, Constants.TWO);
 		s.setWeight(0, 0.1);
 		s.setWeight(1, 0.2);
 		s.setWeight(2, 0.3);
@@ -147,7 +159,8 @@ public class SOMNeuronTest {
 	 */
 	@Test
 	public final void testGetWeights() {
-		SOMNeuron s = new SOMNeuron(3, 5, 2);
+	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
+	                                Constants.FIVE, Constants.TWO);
 		s.setWeight(0, 0.1);
 		s.setWeight(1, 0.2);
 		s.setWeight(2, 0.3);
@@ -166,7 +179,8 @@ public class SOMNeuronTest {
 	 */
 	@Test
 	public final void testUpdateWeights() {
-		SOMNeuron s = new SOMNeuron(3, 5, 2);
+	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
+	                                Constants.FIVE, Constants.TWO);
 		s.setWeight(0, 0.1);
 		s.setWeight(1, 0.2);
 		s.setWeight(2, 0.3);
@@ -188,7 +202,8 @@ public class SOMNeuronTest {
 	 */
 	@Test
 	public final void testGetNeuralnetwork() {
-		SOMNeuron s = new SOMNeuron(3, 5, 2);
+	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
+	                                Constants.FIVE, Constants.TWO);
 		assertNotNull(s.getNeuralnetwork());
 	}
 
@@ -198,7 +213,8 @@ public class SOMNeuronTest {
 	 */
 	@Test
 	public final void testGetType() {
-		SOMNeuron s = new SOMNeuron(3, 5, 2);
+	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
+	                                Constants.FIVE, Constants.TWO);
 		assertEquals(NeuronType.SOM, s.getType());
 	}
 
