@@ -17,10 +17,27 @@ package com.neuralnetwork.shared.values;
  */
 public final class Constants {
     
+    static {
+        new Constants();
+    }
+    
     /**
-     * Unused constructor.
+     * Unused ctor.
      */
     private Constants() {
+    }
+    
+    /**
+     * Test if two numbers are equal.
+     * @param n
+     *      the first number.
+     * @param n1
+     *      the second number.
+     * @return
+     *      true if they are equal
+     */
+    public static boolean isEqual(final Number n, final Number n1) {
+        return n.intValue() == n1.intValue();
     }
     
     /**

@@ -22,13 +22,16 @@ package com.neuralnetwork.shared.util;
  *
  */
 public final class SimpleNetworkConfigs {
-
-	/**
-	 * Constructs a new SimpleNetwork config 
-	 * this is never called.
-	 */
-	private SimpleNetworkConfigs() {
-	}
+    
+    static {
+        new SimpleNetworkConfigs();
+    }
+    
+    /**
+     * Unused Ctor.
+     */
+    private SimpleNetworkConfigs() {
+    }
 	
 	/**
      * Simple network config 5 inputs, 4 hidden, 3 hidden, 4 hidden, 5 outputs.
