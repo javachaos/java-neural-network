@@ -45,4 +45,12 @@ public interface IActivationFunction {
      * 		the function type
      */
     FunctionType getFunctionType();
+
+    /**
+     * Changes the type of function. 
+     * NOTE: Use with caution.
+     * @param f
+     * 		the new type of funtion to be used.
+     */
+	void changeFunction(FunctionType f);
 }

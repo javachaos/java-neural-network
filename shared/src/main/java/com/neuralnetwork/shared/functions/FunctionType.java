@@ -25,5 +25,11 @@ public enum FunctionType {
 	/**
 	 * Linear function type.
 	 */
-	LINEAR;
+	LINEAR,
+	
+	/**
+	 * The null function type.
+	 * Always returns zero
+	 */
+	NULL;
 }

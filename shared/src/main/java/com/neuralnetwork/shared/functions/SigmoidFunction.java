@@ -24,5 +24,4 @@ public final class SigmoidFunction extends
     public SigmoidFunction() {
         super(FunctionType.SIGMOID);
     }
-
 }
