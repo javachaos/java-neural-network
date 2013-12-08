@@ -24,6 +24,11 @@ public abstract class AbstractFunction implements
     }
     
     @Override
+    public final void changeFunction(final FunctionType f) {
+    	this.functionId = f;
+    }
+    
+    @Override
     public final double activate(final double v) {
         switch(functionId) {
             case LINEAR:
@@ -31,9 +36,8 @@ public abstract class AbstractFunction implements
             case SIGMOID:
                 return 1 / (1 + Math.exp(-v));
             default:
-                break;
+            	return 0;
         }
-        return 0;
     }
     
     @Override
@@ -44,9 +48,8 @@ public abstract class AbstractFunction implements
             case SIGMOID:
                 return activate(v) * (1.0 - activate(v));
             default:
-                break;
+            	return 0;
         }
-        return 0;
     }
     
     @Override
