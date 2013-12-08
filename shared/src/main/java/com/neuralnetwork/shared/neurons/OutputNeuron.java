@@ -10,6 +10,10 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
+import com.neuralnetwork.shared.links.ILink;
+import com.neuralnetwork.shared.values.DoubleValue;
+
+
 
 /**
  * Defines an output neuron.
@@ -29,5 +33,16 @@ public final class OutputNeuron extends AbstractOutputNeuron {
     @Override
     public String toString() {
         return "ON(" + getValue() + ") ";
+    }
+
+    @Override
+    public void feedforward(final DoubleValue v) {
+        double sum = 0.0;
+        for (ILink il : getInputs()) {
+            sum += il.getWeight().getValue() * v.getValue();
+        }
+        DoubleValue n = new DoubleValue(getActivationFunction().activate(sum));
+        
+        setValue(n);
     }
 }

@@ -16,5 +16,4 @@ package com.neuralnetwork.shared.neurons;
  *
  */
 public interface IHiddenNeuron extends INeuron {
-
 }

@@ -11,6 +11,8 @@
 package com.neuralnetwork.shared.neurons;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Vector;
 
 import com.neuralnetwork.shared.functions.IActivationFunction;
@@ -81,15 +83,17 @@ public abstract class Neuron implements INeuron {
      * Construct a new Neuron.
      * With it's value set randomly.
      * 
-     * @param nodeId
+     * @param t
      *      the type of this Neuron
+     * @param v
+     *      the default value of the neuron
      *  
      */
-    public Neuron(final NeuronType nodeId) {
-        this.type = nodeId;
-        this.value = new RandomValue();
+    public Neuron(final NeuronType t, final DoubleValue v) {
+        this.type = t;
+        this.value = v;
         inputLinks = new Vector<ILink>();
-        outputLinks = new Vector<ILink>();
+        setOutputs(new Vector<ILink>());
     }
     
     /**
@@ -100,7 +104,7 @@ public abstract class Neuron implements INeuron {
         this.type = NeuronType.HIDDEN;
         this.value = new RandomValue();
         inputLinks = new Vector<ILink>();
-        outputLinks = new Vector<ILink>();
+        setOutputs(new Vector<ILink>());
     }
     
     @Override
@@ -133,6 +137,12 @@ public abstract class Neuron implements INeuron {
     }
     
     @Override
+    public final ILink[] getInputLinks() {
+        ILink[] t = new ILink[0];
+        return inputLinks.toArray(t);
+    }
+    
+    @Override
     public final NeuronType getType() {
         return type;
     }
@@ -155,9 +165,10 @@ public abstract class Neuron implements INeuron {
     @Override
     public final ILink addOutputLink(
             final INeuron inode, final DoubleValue weight) {
-        this.outputLinks.add(++numOutputLinks, new Link(this, inode, weight));
-        inode.addInputLink(this);
-        return outputLinks.get(numOutputLinks);
+        ILink l = new Link(this, inode, weight);
+        this.getOutputs().add(++numOutputLinks, l);
+        inode.addInputLink(this, weight);
+        return getOutputs().get(numOutputLinks);
     }
 
     @Override
@@ -167,7 +178,7 @@ public abstract class Neuron implements INeuron {
 
     @Override
     public final ILink getOutputLink(final int linkId) {
-        return outputLinks.get(linkId);
+        return getOutputs().get(linkId);
     }
 
     @Override
@@ -183,14 +194,48 @@ public abstract class Neuron implements INeuron {
     }
     
     @Override
+    public final ILink setInputLink(final int i, final ILink l) {
+        ILink r = getInputLink(i);
+        inputLinks.set(i, l);
+        return r;
+    }
+
+    @Override
+    public final ILink[] setInputLinks(final ILink[] links) {
+        ILink[] oldLinks = new ILink[inputLinks.size()];
+        inputLinks.copyInto(oldLinks);
+        inputLinks.clear();
+        Collection<ILink> c = Arrays.asList(links);
+        inputLinks.addAll(c);
+        return oldLinks;
+    }
+
+    @Override
+    public final ILink setOutputLink(final int i, final ILink l) {
+        ILink r = getOutputLink(i);
+        getOutputs().set(i, l);
+        return r;
+    }
+
+    @Override
+    public final ILink[] setOutputLinks(final ILink[] links) {
+        ILink[] oldLinks = new ILink[getOutputs().size()];
+        getOutputs().copyInto(oldLinks);
+        getOutputs().clear();
+        Collection<ILink> c = Arrays.asList(links);
+        getOutputs().addAll(c);
+        return oldLinks;
+    }
+    
+    @Override
     public final ILink[] getOutputLinks() {
         ILink[] t = new ILink[0];
-        return outputLinks.toArray(t);
+        return getOutputs().toArray(t);
     }
 
     @Override
     public final void reset() {
-        for (ILink i : outputLinks) {
+        for (ILink i : getOutputs()) {
             i.setWeight(new RandomValue());
         }
     }
@@ -214,6 +259,9 @@ public abstract class Neuron implements INeuron {
     public final void setValue(final DoubleValue v) {
         this.value = v;
     }
+    
+    @Override
+    public abstract void feedforward(final DoubleValue v);
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -246,7 +294,7 @@ public abstract class Neuron implements INeuron {
 		result = prime * result + numInputLinks;
 		result = prime * result + numOutputLinks;
 		result = prime * result
-				+ outputLinks.hashCode();
+				+ getOutputs().hashCode();
 		result = prime * result + typeValue;
 		result = prime * result + valueV;
 		return result;
@@ -283,7 +331,7 @@ public abstract class Neuron implements INeuron {
 		if (!inputLinks.equals(other.inputLinks)) {
 			return false;
 		}
-		if (!outputLinks.equals(other.outputLinks)) {
+		if (!getOutputs().equals(other.getOutputs())) {
 			return false;
 		}
 		if (type != other.type) {
@@ -298,5 +346,35 @@ public abstract class Neuron implements INeuron {
 		}
 		return true;
 	}
+
+    /**
+     * @return the inputLinks
+     */
+    public final Vector<ILink> getInputs() {
+        return inputLinks;
+    }
+
+    /**
+     * @param inputLink
+     *      the inputLinks to set
+     */
+    public final void setInputs(final Vector<ILink> inputLink) {
+        this.inputLinks = inputLink;
+    }
+
+    /**
+     * @return the outputLinks
+     */
+    public final Vector<ILink> getOutputs() {
+        return outputLinks;
+    }
+
+    /**
+     * @param outputLink
+     *      the outputLinks to set
+     */
+    public final void setOutputs(final Vector<ILink> outputLink) {
+        this.outputLinks = outputLink;
+    }
 
 }

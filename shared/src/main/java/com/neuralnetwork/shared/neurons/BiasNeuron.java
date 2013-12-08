@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
+import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.OneValue;
 
 /**
@@ -19,13 +20,32 @@ import com.neuralnetwork.shared.values.OneValue;
  * @author fredladeroute
  *
  */
-public class BiasNeuron extends InputNeuron implements IInputNeuron {
+public class BiasNeuron extends Neuron 
+        implements IInputNeuron, IHiddenNeuron, IOutputNeuron {
 
     /**
      * Constructs a new bias neuron.
      */
     public BiasNeuron() {
-        super(new OneValue());
+        super(NeuronType.BIAS, new OneValue());
+    }
+
+    @Override
+    public void feedforward() {        
+    }
+
+    @Override
+    public void feedforward(final DoubleValue v) {
+    }
+
+    @Override
+    public final double getOutputValue() {
+        return 1;
+    }
+    
+    @Override
+    public final String toString() {
+        return "BN(1.0)";
     }
 
 }

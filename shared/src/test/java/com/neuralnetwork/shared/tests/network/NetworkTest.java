@@ -18,6 +18,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Vector;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +69,11 @@ public class NetworkTest {
      * Five value.
      */
     private static final int FIVE = 5;
+    
+    /**
+     * Input values for testing the network.
+     */
+    private static final double NN_INPUT_VALUE = 0.0321;
     
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -198,8 +205,14 @@ public class NetworkTest {
     public final void testRunInputs() {
 		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
 		n.build();
-		n.runInputs(null);
-		//TODO Complete.
+		Vector<Double> values = new Vector<Double>();
+		values.add(NN_INPUT_VALUE);
+        values.add(NN_INPUT_VALUE);
+        values.add(NN_INPUT_VALUE);
+        values.add(NN_INPUT_VALUE);
+        values.add(NN_INPUT_VALUE);
+		LOGGER.debug(n.runInputs(values).toString());
+		
 	}
 
 	/**

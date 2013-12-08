@@ -22,8 +22,12 @@ import org.junit.Test;
 
 import com.neuralnetwork.shared.layers.IInputLayer;
 import com.neuralnetwork.shared.layers.InputLayer;
+import com.neuralnetwork.shared.network.INetwork;
+import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.network.LayerType;
-import com.neuralnetwork.shared.values.IValue;
+import com.neuralnetwork.shared.network.Network;
+import com.neuralnetwork.shared.network.NeuralNetContext;
+import com.neuralnetwork.shared.values.Constants;
 import com.neuralnetwork.shared.values.OneValue;
 
 /**
@@ -32,6 +36,11 @@ import com.neuralnetwork.shared.values.OneValue;
  */
 public class InputLayerTest {
     
+    /**
+     * Neural net input value.
+     */
+    private static final Double NN_INPUT_VALUE = 0.0123;
+
     /**
      * Test method for {@link com.neuralnetwork
      * .shared.layers.InputLayer#InputLayer(int)}.
@@ -45,24 +54,13 @@ public class InputLayerTest {
     
     /**
      * Test method for {@link com.neuralnetwork
-     * .shared.layers.InputLayer#getBiasNeuron()}.
-     */
-    @Test
-    public final void testGetBiasNeuron() {
-        InputLayer l = new InputLayer(1);
-        IValue<?> v = l.getBiasNeuron().getValue();
-        assertEquals(v, new OneValue());
-    }
-    
-    /**
-     * Test method for {@link com.neuralnetwork
      * .shared.layers.InputLayer#build()}.
      */
     @Test
     public final void testBuild() {
         IInputLayer l = new InputLayer(1);
         ((IInputLayer) l).build();
-        int size = ((Vector<?>) l).size();
+        int size = l.getSize();
         assertEquals(size, 1);
     }
     
@@ -86,7 +84,23 @@ public class InputLayerTest {
      */
     @Test
     public final void testPropagate() {
-        IInputLayer l = new InputLayer(1);
-        l.propagate(null);
+        INetwork n = new Network(Constants.FIVE, Constants.FIVE, 
+                                 Constants.THREE, 
+                                 new int[] {Constants.FOUR, 
+                                            Constants.TWO, 
+                                            Constants.FOUR});
+        n.build();
+        Vector<Double> values = new Vector<Double>();
+        values.add(NN_INPUT_VALUE);
+        values.add(NN_INPUT_VALUE);
+        values.add(NN_INPUT_VALUE);
+        values.add(NN_INPUT_VALUE);
+        values.add(NN_INPUT_VALUE);
+        
+        IInputLayer l = new InputLayer(Constants.FIVE);
+        l.addValues(values);
+        n.setInputLayer(l);
+        INeuralNetContext nnctx = new NeuralNetContext(n);
+        l.propagate(nnctx);
     }    
 }

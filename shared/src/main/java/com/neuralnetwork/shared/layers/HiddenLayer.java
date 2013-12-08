@@ -10,12 +10,10 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.neurons.BiasNeuron;
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
 import com.neuralnetwork.shared.neurons.IHiddenNeuron;
-import com.neuralnetwork.shared.neurons.IInputNeuron;
 
 /**
  * Represents a hidden neural network layer.
@@ -30,11 +28,6 @@ public final class HiddenLayer
      * Generated Serial Version UID.
      */
     private static final long serialVersionUID = 5485729609664280674L;
-    
-    /**
-     * The single bias neuron for this layer.
-     */
-    private IInputNeuron biasNeuron = new BiasNeuron();
 
     /**
      * Constructs a new hidden layer.
@@ -43,21 +36,9 @@ public final class HiddenLayer
      *      the length of this hidden layer
      */
     public HiddenLayer(final int w) {
-        super(w);
+        super(w + 1);
+        add(new BiasNeuron());
         super.setLayerType(LayerType.HIDDEN);
-    }
-
-    /**
-     * @return the biasNeuron
-     */
-    @Override
-    public IInputNeuron getBiasNeuron() {
-        return biasNeuron;
-    }
-
-    @Override
-    public void propagate(final INeuralNetContext nnctx) {
-        // TODO implement
     }
 
     @Override
@@ -69,7 +50,7 @@ public final class HiddenLayer
 
 	@Override
 	public int getSize() {
-		return size();
+		return size() - 1;
 	}
 
 }

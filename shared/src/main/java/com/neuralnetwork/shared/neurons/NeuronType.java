@@ -36,5 +36,10 @@ public enum NeuronType {
 	/**
 	 * Self organizing map neuron.
 	 */
-	SOM;
+	SOM, 
+	
+	/**
+	 * Neuron with static value of one.
+	 */
+	BIAS;
 }

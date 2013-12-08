@@ -45,24 +45,25 @@ public class DoubleValue extends GenericValue<Double> implements IValue<Double> 
 
     @Override
     public final void setSign(final boolean s) {
-        if (s && getValue() < 0 || !s && getValue() > 0) {
+        if (s && super.getValue() < 0 
+              || !s && super.getValue() > 0) {
             this.setValue(getValue() * -1.0);
         }
     }
 
     @Override
     public final boolean getSign() {
-        return getValue() > 0;
+        return super.getValue() > 0;
     }
 
     @Override
     public final void updateValue(final IValue<?> v) {
-        this.setValue(this.getValue() + v.getValue().doubleValue());
+        this.setValue(super.getValue() + v.getValue().doubleValue());
     }
     
     @Override
     public final String toString() {
-        return "" + getValue().doubleValue();
+        return "" + super.getValue().doubleValue();
     }
 
 }

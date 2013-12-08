@@ -19,9 +19,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.layers.HiddenLayer;
+import com.neuralnetwork.shared.layers.IInputLayer;
+import com.neuralnetwork.shared.layers.InputLayer;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
 import com.neuralnetwork.shared.neurons.InputNeuron;
@@ -39,6 +43,11 @@ import com.neuralnetwork.shared.values.ZeroValue;
  */
 public class NeuronTest {
 
+    /**
+     * Logger instance.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(NeuronTest.class);
+    
     /**
      * Value used for testing.
      */
@@ -76,6 +85,7 @@ public class NeuronTest {
 	 */
 	@Test
 	public final void testNeuronNeuronType() {
+
 		Neuron n = new InputNeuron();
 		Neuron m = new OutputNeuron();
 		Neuron o = new HiddenNeuron();
@@ -301,6 +311,51 @@ public class NeuronTest {
 		assertEquals(l[0].getTail(), o);
 		assertEquals(l[1].getTail(), o1);
 	}
+	
+	/**
+     * Test method for {@link com.neuralnetwork
+     * .shared.neurons.Neuron#setOutputLink(int,ILink)}.
+     */
+	@Test
+	public final void testSetOutputLinkIntILink() {
+	       Neuron n = new InputNeuron();   
+	        Neuron n1 = new InputNeuron();
+	        Neuron m = new HiddenNeuron();
+	        Neuron o = new OutputNeuron();
+	        Neuron o1 = new OutputNeuron();
+	        n.addOutputLink(m);
+	        n1.addOutputLink(m);
+	        m.addOutputLink(o);
+	        m.addOutputLink(o1);
+	        
+	        ILink[] l = m.getOutputLinks(0, 1);
+	        m.setOutputLink(0, l[1]);
+            m.setOutputLink(1, l[0]);
+	        assertEquals(l[0].getTail(), o);
+	        assertEquals(l[1].getTail(), o1);
+	}
+	
+	/**
+     * Test method for {@link com.neuralnetwork
+     * .shared.neurons.Neuron#setOutputLinks(ILink[])}.
+     */
+    @Test
+    public final void testSetOutputLinkILinkArray() {
+           Neuron n = new InputNeuron();   
+            Neuron n1 = new InputNeuron();
+            Neuron m = new HiddenNeuron();
+            Neuron o = new OutputNeuron();
+            Neuron o1 = new OutputNeuron();
+            n.addOutputLink(m);
+            n1.addOutputLink(m);
+            m.addOutputLink(o);
+            m.addOutputLink(o1);
+            
+            ILink[] l = m.getOutputLinks(0, 1);
+            m.setOutputLinks(l);
+            assertEquals(l[0].getTail(), o);
+            assertEquals(l[1].getTail(), o1);
+    }
 
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -403,6 +458,45 @@ public class NeuronTest {
 		assertEquals(n.getValue(), new OneValue());
 		assertEquals(n1.getValue(), new OneValue());
 	}
+	
+	/**
+     * Test method for {@link com.neuralnetwork
+     * .shared.neurons.Neuron#feedforward()}.
+     */
+    @Test
+    public final void testFeedforward() {
+        Neuron n = new InputNeuron(new DoubleValue(0.1));
+        Neuron n1 = new InputNeuron(new DoubleValue(0.1));
+        Neuron m = new HiddenNeuron();
+        Neuron o = new OutputNeuron();
+        Neuron o1 = new OutputNeuron();
+        n.addOutputLink(m);
+        n1.addOutputLink(m);
+        m.addOutputLink(o);
+        m.addOutputLink(o1);
+        
+        DoubleValue v = m.getInputLink(0).getWeight();
+        DoubleValue v1 = m.getInputLink(1).getWeight();
+        
+        assertEquals(m.getInputLink(0), n.getOutputLink(0));
+
+        LOGGER.debug("====== Before Feedforward ======");
+        LOGGER.debug(n + " " + n1);
+        LOGGER.debug(m.toString());
+        LOGGER.debug(o + " " + o1);
+        LOGGER.debug("================================");
+        
+        n.feedforward(new DoubleValue(0.01));
+        
+        DoubleValue v2 = n.getOutputLink(0).getWeight();
+        DoubleValue v3 = n1.getOutputLink(0).getWeight();
+        
+        LOGGER.debug("======= After Feedforward =======");
+        LOGGER.debug(n + " " + n1);
+        LOGGER.debug(m.toString());
+        LOGGER.debug(o + " " + o1);
+        LOGGER.debug("=================================");
+    }
 
 	/**
 	 * Test method for {@link com.neuralnetwork

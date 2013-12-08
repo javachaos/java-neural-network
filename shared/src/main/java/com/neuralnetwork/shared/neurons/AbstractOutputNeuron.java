@@ -10,26 +10,29 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
+import com.neuralnetwork.shared.values.ZeroValue;
+
+
+
 /**
  * Defines an abstract output neuron.
  * 
  * @author fredladeroute
  *
  */
-public class AbstractOutputNeuron extends Neuron implements IOutputNeuron {
-    
+public abstract class AbstractOutputNeuron 
+        extends Neuron implements IOutputNeuron {
+
     /**
      * Construct a new Abstract output neuron.
      */
     public AbstractOutputNeuron() {
-        super(NeuronType.OUTPUT);
+        super(NeuronType.OUTPUT, new ZeroValue());
     }
 
     @Override
     public final double getOutputValue() {
-        return this.getValue().getValue().doubleValue();
+        return getValue().getValue();
     }
-    
-    
 
 }

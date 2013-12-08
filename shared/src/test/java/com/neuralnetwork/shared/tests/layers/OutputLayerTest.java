@@ -16,8 +16,6 @@ package com.neuralnetwork.shared.tests.layers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Vector;
-
 import org.junit.Test;
 
 import com.neuralnetwork.shared.layers.IOutputLayer;
@@ -49,7 +47,7 @@ public class OutputLayerTest {
     public final void testBuild() {
         IOutputLayer l = new OutputLayer(1);
         ((IOutputLayer) l).build();
-        int size = ((Vector<?>) l).size();
+        int size = l.getSize();
         assertEquals(size, 1);
     }
     

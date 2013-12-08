@@ -11,6 +11,7 @@
 package com.neuralnetwork.shared.neurons;
 
 
+
 /**
  * Represents an input neuron.
  * 
@@ -19,4 +20,12 @@ package com.neuralnetwork.shared.neurons;
  */
 public interface IInputNeuron extends INeuron {
 
+    /**
+     * Cause this neuron to activate,
+     * sum up all the inputs * weights, and then
+     * run them through the IActivationFunction finally
+     * update the weights of the output links.
+     * 
+     */
+    void feedforward();
 }

@@ -10,7 +10,11 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
+import java.util.Vector;
+
+import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.values.DoubleValue;
+import com.neuralnetwork.shared.values.ZeroValue;
 
 /**
  * Implementation of an Input neuron.
@@ -18,7 +22,7 @@ import com.neuralnetwork.shared.values.DoubleValue;
  *
  */
 public class InputNeuron extends AbstractInputNeuron {
-   
+    
     /**
      * Constructs a new input value with value v.
      * 
@@ -35,6 +39,21 @@ public class InputNeuron extends AbstractInputNeuron {
      */
     public InputNeuron() {
         super();
+        setValue(new ZeroValue());
+    }
+    
+    @Override
+    public final void feedforward(final DoubleValue v) {
+        feedforward();
+    }
+    
+    @Override
+    public final void feedforward() {
+        Vector<ILink> o = getOutputs();
+        for (int i = 0; i < o.size(); i++) {
+            ILink l = o.get(i);
+            l.getTail().feedforward(getValue());
+        }
     }
     
     @Override

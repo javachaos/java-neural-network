@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
+import java.util.Vector;
+
 import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.neurons.BiasNeuron;
@@ -32,48 +34,47 @@ public final class InputLayer extends Layer<IInputNeuron>
     private static final long serialVersionUID = 7502031311250577255L;
     
     /**
-     * The single bias neuron for this layer.
-     */
-    private IInputNeuron biasNeuron = new BiasNeuron();
-    
-    /**
      * Constructs a new input layer of length w.
      * 
      * @param w
      *      the length of the input layer.
      */
     public InputLayer(final int w) {
-        super(w);
-        super.setLayerType(LayerType.INPUT);
-    }
-    
-    /**
-     * @return the biasNeuron
-     */
-    public IInputNeuron getBiasNeuron() {
-        return biasNeuron;
+        super(w + 1);
+        add(new BiasNeuron());
+        setLayerType(LayerType.INPUT);
     }
 
     @Override
     public void addValue(final DoubleValue v, final int index) {
-        super.set(index, new InputNeuron(v));
+        set(index, new InputNeuron(v));
+    }
+    
+    @Override
+    public void addValues(final Vector<Double> values) {
+        for (int i = 0; i < size(); i++) {
+            set(i, new InputNeuron(new DoubleValue(values.get(i))));
+        }
     }
 
     @Override
-    public void propagate(final INeuralNetContext nnctx) {
-        // TODO Implement
+    public IOutputLayer propagate(final INeuralNetContext nnctx) {
+        for (int i = 0; i < getSize(); i++) {
+            getNeuron(i).feedforward();
+        }
+        return nnctx.getNetwork().getOutputLayer();
     }
 
     @Override
     public void build() {
-        while (size() != getWidth()) {
+        while (size() < getWidth()) {
             add(new InputNeuron());
         }
     }
 
 	@Override
 	public int getSize() {
-		return size();
+		return size() - 1;
 	}
 
 }

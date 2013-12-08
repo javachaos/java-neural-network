@@ -10,40 +10,19 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.network;
 
-import com.neuralnetwork.shared.links.ILink;
-import com.neuralnetwork.shared.neurons.INeuron;
 
 /**
- * Represents a NeuralNetContext which stores all the links of a neural network.
+ * Represents a NeuralNetContext which stores a reference to the network.
  * 
  * @author fredladeroute
  * 
  */
 public interface INeuralNetContext {
-    
-    /**
-     * Get the tail given the head INode.
-     * 
-     * @param head
-     *      the head of the tail to get
-     * @return
-     *      the tail of the given head INode
-     */
-    INeuron getTail(INeuron head);
-    
-    /**
-     * Get the ILink between head and tail
-     * INodes.
-     * 
-     * @param head
-     *      the head INode
-     *
-     * @param tail
-     *      the tail INode
-     *      
-     * @return
-     *      the ILink between INodes head and tail
-     */
-    ILink getLink(INeuron head, INeuron tail);
 
+    /**
+     * Get a reference to the network.
+     * @return
+     *      a reference to the network
+     */
+    INetwork getNetwork();
 }

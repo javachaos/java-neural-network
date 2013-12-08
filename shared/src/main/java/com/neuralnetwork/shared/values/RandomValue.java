@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.values;
 
+import java.util.Random;
+
 
 /**
  * A random value.
@@ -18,13 +20,17 @@ package com.neuralnetwork.shared.values;
  */
 public class RandomValue extends DoubleValue implements IValue<Double> {
 
-    
+    /**
+     * Minimum value.
+     */
+    private static final Random RAND = new Random();
+
     /**
      * Construct a new random value.
      * from [0,1].
      */
     public RandomValue() {
-        super(Math.random());
+        super(RAND.nextDouble());
     }
 
 }

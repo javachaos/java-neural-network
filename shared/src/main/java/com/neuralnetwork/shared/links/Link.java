@@ -46,7 +46,7 @@ public class Link implements ILink {
      * initialized to 0.
      */
     private DoubleValue weight;
-    
+
     /**
      * Construct a new link with head, tail and weight.
      * 
@@ -128,6 +128,47 @@ public class Link implements ILink {
     @Override
     public final int getAge() {
         return age;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public final int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        int weightValue = 0;
+        if (weight != null) {
+            weight.hashCode();
+        }
+        result = prime * result
+                 + weightValue;
+        return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public final boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Link)) {
+            return false;
+        }
+        Link other = (Link) obj;
+        if (weight == null) {
+            if (other.weight != null) {
+                return false;
+            }
+        } else if (!weight.equals(other.weight)) {
+            return false;
+        }
+        return true;
     }
 
 }

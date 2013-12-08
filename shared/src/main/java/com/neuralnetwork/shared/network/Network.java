@@ -28,10 +28,9 @@ import com.neuralnetwork.shared.neurons.IHiddenNeuron;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.neurons.IOutputNeuron;
-import com.neuralnetwork.shared.neurons.InputNeuron;
-import com.neuralnetwork.shared.neurons.OutputNeuron;
 import com.neuralnetwork.shared.training.TrainingStack;
 import com.neuralnetwork.shared.util.Connections;
+import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
@@ -85,6 +84,11 @@ public final class Network implements INetwork {
      * The size of each respective hidden layer in this network.
      */
 	private int[] layerSizes;
+	
+	/**
+	 * The context for this network.
+	 */
+	private INeuralNetContext nnctx;
     
     /**
      * Construct a 2d neural network.
@@ -114,7 +118,6 @@ public final class Network implements INetwork {
         	throw new IllegalArgumentException(
         			"Error cannot have negative amount of output layers.");
         }
-    	
         this.numInputs = numIn;
         this.numOutputs = numOut;
         this.numHidden = numHide;
@@ -123,6 +126,7 @@ public final class Network implements INetwork {
         this.inputLayer = new InputLayer(numInputs);
         this.outputLayer = new OutputLayer(numOutputs);
         this.layers = new Stack<IHiddenLayer>();
+        this.nnctx = new NeuralNetContext(this);
     }
     
     /**
@@ -141,16 +145,21 @@ public final class Network implements INetwork {
         this.inputLayer = new InputLayer(numInputs);
         this.outputLayer = new OutputLayer(numOutputs);
         this.layers = new Stack<IHiddenLayer>();
+        this.nnctx = new NeuralNetContext(this);
     }
     
     @Override
     public INeuron getNeuron(final int x, final int y) {
         
-        if (x >= 0 && y == 0) {
+        if (x < 0 || x < 0) {
+            return null;
+        }
+        
+        if (x + 1 >= 0 && y == 0) {
             return getInputNeuron(x);
-        } else if (x >= 0 && y > 0 && y < getHeight() - 1) {
-            return layers.get(y - 1).getNeuron(x);
-        } else if (x >= 0 && y > 0 && y == getHeight() - 1) {
+        } else if (x + 1 >= 0 && y > 0 && y < getHeight() - 1) {
+            return layers.get(y - 1).getNeuron(x + 1);
+        } else if (x + 1 >= 0 && y > 0 && y == getHeight() - 1) {
             return getOutputNeuron(x);
         }
         
@@ -159,12 +168,18 @@ public final class Network implements INetwork {
 
     @Override
     public IOutputNeuron getOutputNeuron(final int x) {
-        return (OutputNeuron) getOutputLayer().getNeuron(x);
+        if (x < 0) {
+            return null;
+        }
+        return (IOutputNeuron) getOutputLayer().getNeuron(x + 1);
     }
 
     @Override
     public IInputNeuron getInputNeuron(final int x) {
-        return (InputNeuron) getInputLayer().getNeuron(x);
+        if (x < 0) {
+            return null;
+        }
+        return (IInputNeuron) getInputLayer().getNeuron(x + 1);
     }
 
     @Override
@@ -174,8 +189,11 @@ public final class Network implements INetwork {
 
     @Override
     public Vector<Double> runInputs(final Vector<Double> l) {
-        //TODO Complete method.
-        return null;
+        for (int i = 0; i < l.size(); i++) {
+            getInputLayer().addValue(new DoubleValue(l.get(i)), i);
+        }
+        IOutputLayer ol = getInputLayer().propagate(nnctx);
+        return ol.getOutputValues();
     }
 
     @Override
@@ -211,12 +229,14 @@ public final class Network implements INetwork {
     @Override
     public void setOutputLayer(final IOutputLayer l) {
         this.outputLayer = l;
+        rebuild();
     }
 
     @Override
     public void addHiddenLayer(final IHiddenLayer l) {
     	l.build();
         layers.push(l);
+        rebuild();
     }
 
     @Override
@@ -232,6 +252,16 @@ public final class Network implements INetwork {
     @Override
     public void setInputLayer(final IInputLayer l) {
         this.inputLayer = l;
+        rebuild();
+    }
+    
+    /**
+     * Rebuild the network fixing only those links
+     * which are not connected and keeping all other
+     * links intact.
+     */
+    private void rebuild() {
+        
     }
 
     @Override

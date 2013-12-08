@@ -66,6 +66,27 @@ public interface INeuron {
     ILink addInputLink(INeuron ineuron);
     
     /**
+     * Set the input link at i to be l.
+     * @param i
+     *      the index of the link to be set
+     * @param l
+     *      the new link to be set
+     * @return
+     *      the old link.
+     */
+    ILink setInputLink(int i, ILink l);
+    
+    /**
+     * Set the input links for this neuron.
+     * 
+     * @param links
+     *      the links to be set
+     * @return
+     *      the old input links
+     */
+    ILink[] setInputLinks(ILink[] links);
+    
+    /**
      * Get a ILink by the id of the other INeuron.
      * 
      * @param linkId 
@@ -84,6 +105,13 @@ public interface INeuron {
      * @return the ILink.
      */
     ILink[] getInputLinks(int... ids);
+    
+    /**
+     * Get the input links to this neuron.
+     * @return
+     *      the input links to this neuron
+     */
+    ILink[] getInputLinks();
     
     /**
      * Adds a link from this node to ineuron
@@ -116,6 +144,30 @@ public interface INeuron {
      * @see #addOutputLink(INeuron, IValue)
      */
     ILink addOutputLink(INeuron ineuron);
+    
+    /**
+     * Set the output link at i to be l.
+     * 
+     * @param i
+     *      the index to the output link to be set
+     * 
+     * @param l
+     *      the new link to be set
+     * 
+     * @return
+     *      the old output link
+     */
+    ILink setOutputLink(int i, ILink l);
+    
+    /**
+     * Set the output links of this neuron.
+     * @param links
+     *      the new links to be set
+     *      
+     * @return
+     *      the old output links array
+     */
+    ILink[] setOutputLinks(ILink[] links);
     
     /**
      * Get a ILink by the id of the other INeuron.
@@ -202,4 +254,14 @@ public interface INeuron {
      */
     IActivationFunction getActivationFunction();
 
+    /**
+     * Cause this neuron to activate,
+     * sum up all the inputs * weights, and then
+     * run them through the IActivationFunction finally
+     * update the weights of the output links.
+     * 
+     * @param v
+     *      the value to be fed forward to the next neuron
+     */
+    void feedforward(DoubleValue v);
 }

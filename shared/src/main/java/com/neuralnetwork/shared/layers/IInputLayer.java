@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
+import java.util.Vector;
+
 import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.values.DoubleValue;
@@ -33,13 +35,23 @@ public interface IInputLayer extends ILayer<IInputNeuron>, IBuildable {
     void addValue(DoubleValue v, int index);
     
     /**
+     * Add a list of values to this IInputLayer.
+     * 
+     * @param values
+     *      the list of values to be added.
+     */
+    void addValues(Vector<Double> values);
+    
+    /**
      * Propagate the values from this IInputLayer to the
      * next ILayer.
      * 
      * @param nnctx
      *      neural net context parameter
+     * @return
+     *      the output layer of the network
      */
-    void propagate(INeuralNetContext nnctx);
+    IOutputLayer propagate(INeuralNetContext nnctx);
 
     /**
      * Build the input layer using INeurons.
