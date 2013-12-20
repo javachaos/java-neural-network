@@ -6,7 +6,6 @@
     <version>0.0.1</version>
   </parent>
   <artifactId>shared</artifactId>
-  
   <dependencies>
 	  <dependency>
 	    <groupId>ch.qos.logback</groupId>
