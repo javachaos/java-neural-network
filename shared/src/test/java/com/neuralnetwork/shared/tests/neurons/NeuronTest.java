@@ -24,8 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.layers.HiddenLayer;
-import com.neuralnetwork.shared.layers.IInputLayer;
-import com.neuralnetwork.shared.layers.InputLayer;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
 import com.neuralnetwork.shared.neurons.InputNeuron;
@@ -46,7 +44,8 @@ public class NeuronTest {
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(NeuronTest.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(NeuronTest.class);
     
     /**
      * Value used for testing.
@@ -57,6 +56,11 @@ public class NeuronTest {
      * Number of times to fail before failing test case.
      */
     private static final int REGRESSION_LIMIT = 100;
+
+    /**
+     * Double value of 0.1.
+     */
+    private static final double ZERO_POINT_ONE = 0.1;
     
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -465,8 +469,8 @@ public class NeuronTest {
      */
     @Test
     public final void testFeedforward() {
-        Neuron n = new InputNeuron(new DoubleValue(0.1));
-        Neuron n1 = new InputNeuron(new DoubleValue(0.1));
+        Neuron n = new InputNeuron(new DoubleValue(ZERO_POINT_ONE));
+        Neuron n1 = new InputNeuron(new DoubleValue(ZERO_POINT_ONE));
         Neuron m = new HiddenNeuron();
         Neuron o = new OutputNeuron();
         Neuron o1 = new OutputNeuron();
@@ -474,9 +478,6 @@ public class NeuronTest {
         n1.addOutputLink(m);
         m.addOutputLink(o);
         m.addOutputLink(o1);
-        
-        DoubleValue v = m.getInputLink(0).getWeight();
-        DoubleValue v1 = m.getInputLink(1).getWeight();
         
         assertEquals(m.getInputLink(0), n.getOutputLink(0));
 
@@ -486,10 +487,7 @@ public class NeuronTest {
         LOGGER.debug(o + " " + o1);
         LOGGER.debug("================================");
         
-        n.feedforward(new DoubleValue(0.01));
-        
-        DoubleValue v2 = n.getOutputLink(0).getWeight();
-        DoubleValue v3 = n1.getOutputLink(0).getWeight();
+        n.feedforward(new DoubleValue(ZERO_POINT_ONE));
         
         LOGGER.debug("======= After Feedforward =======");
         LOGGER.debug(n + " " + n1);

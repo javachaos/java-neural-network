@@ -16,13 +16,10 @@ package com.neuralnetwork.shared.tests.layers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Vector;
-
 import org.junit.Test;
 
 import com.neuralnetwork.shared.layers.HiddenLayer;
 import com.neuralnetwork.shared.layers.IHiddenLayer;
-import com.neuralnetwork.shared.layers.ILayer;
 import com.neuralnetwork.shared.network.LayerType;
 
 /**
