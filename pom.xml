@@ -10,6 +10,7 @@
     <module>opencl</module>
     <module>shared</module>
     <module>core</module>
+    <module>jbrain</module>
   </modules>
   
   <build>
