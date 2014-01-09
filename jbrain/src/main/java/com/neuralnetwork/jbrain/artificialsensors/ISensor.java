@@ -1,11 +1,12 @@
 package com.neuralnetwork.jbrain.artificialsensors;
 
+
 /**
  * Sensor interface.
  * @author fred
  *
  */
-public interface ISensor {
+public interface ISensor<E> {
 
 	/**
 	 * Get the data from this ISensor.
@@ -13,5 +14,5 @@ public interface ISensor {
 	 * @return
 	 * 		the raw data from this ISensor.
 	 */
-	double[] getData();
+	E getData();
 }

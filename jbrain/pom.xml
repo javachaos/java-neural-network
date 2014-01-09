@@ -9,4 +9,18 @@
   <artifactId>jbrain</artifactId>
   <name>Java Brain</name>
   <description>An artificially intelligent brain coded in Java.</description>
+  
+  <dependencies>
+      <dependency>
+  		<groupId>com.neuralnetwork</groupId>
+  		<artifactId>shared</artifactId>
+  		<version>0.0.1</version>
+  	  </dependency>
+	  <dependency>
+		  <groupId>com.github.sarxos</groupId>
+		  <artifactId>webcam-capture</artifactId>
+		  <version>0.3.9</version>
+	  </dependency>
+  </dependencies>
+  
 </project>
