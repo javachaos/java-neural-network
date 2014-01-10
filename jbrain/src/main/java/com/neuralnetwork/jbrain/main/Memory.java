@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import com.neuralnetwork.jbrain.sensors.camera.RGBData;
-import com.neuralnetwork.shared.network.Network;
+import com.neuralnetwork.shared.network.INetwork;
+import com.neuralnetwork.shared.util.NeuralNetBuilder;
+import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
 
 /**
  * This is a memory for the JBrain
@@ -20,7 +22,7 @@ public class Memory {
 	/**
 	 * The network for this memory.
 	 */
-	private Network network;
+	private INetwork network;
 
 	/**
 	 * Visual data for this memory.
@@ -33,6 +35,9 @@ public class Memory {
 	private Stack<ArrayList<Double>> audioData;
 	
 	public Memory() {
+		visualData = new Stack<ArrayList<RGBData>>();
+		audioData = new Stack<ArrayList<Double>>();
+		network = (new NeuralNetBuilder(SimpleNetworkConfigs.CONFIG_5_4_3_4_5)).build();
 	}
 
 	/**
@@ -58,7 +63,7 @@ public class Memory {
 	 * @return
 	 * 		the neural network for this memory.
 	 */
-	public Network getNetwork() {
+	public INetwork getNetwork() {
 		return network;
 	}
 
