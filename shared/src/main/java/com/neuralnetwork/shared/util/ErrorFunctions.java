@@ -7,10 +7,12 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.util;
 
 import java.util.Vector;
+
+import com.neuralnetwork.shared.links.ILink;
 
 /**
  * Error functions.
@@ -48,6 +50,31 @@ public final class ErrorFunctions {
         double error = 0;
         for (int i = 0; i < v1.size(); i++) {
             error += Math.pow(v2.get(i) - v1.get(i), 2);
+        }
+        
+        return error / n;
+    }
+    
+    /**
+     * Calculate the mean squared error of vectors v1 and v2.
+     * 
+     * @param v1
+     *      vector v1
+     *      
+     * @param v2
+     *      vector v2
+     *      
+     * @return
+     *      the MSE of v1 and v2
+     */
+    public double meanSquaredErrorLink(final Vector<ILink> v1, 
+        final Vector<ILink> v2) {
+        double n = v1.size();
+        double error = 0;
+        for (int i = 0; i < v1.size(); i++) {
+            error += (1.0 / 2) * Math.pow(
+            		v2.get(i).getWeight().getValue() 
+            		- v1.get(i).getWeight().getValue(), 2);
         }
         
         return error / n;

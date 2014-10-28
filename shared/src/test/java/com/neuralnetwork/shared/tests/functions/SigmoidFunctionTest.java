@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -166,7 +166,8 @@ public class SigmoidFunctionTest {
      * @param expected
      *      the expected output from the sigmoid function
      */
-    private void testDerivativeValue(final double input, final double expected) {
+    private void testDerivativeValue(final double input, 
+    		final double expected) {
         LOGGER.debug("===== Sigmoid Derivative Test. =====");
         IActivationFunction f = new SigmoidFunction();
         double v = f.derivative(input);

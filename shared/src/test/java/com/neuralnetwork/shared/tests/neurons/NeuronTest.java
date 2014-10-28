@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -16,7 +16,10 @@ package com.neuralnetwork.shared.tests.neurons;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
+
+import java.util.Vector;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -171,6 +174,10 @@ public class NeuronTest {
 		
 		assertEquals(l[0].getTail(), n);
 		assertEquals(l[1].getTail(), n1);
+		
+		l = m.getInputLinks();
+		assertEquals(l[0].getTail(), n);
+		assertEquals(l[1].getTail(), n1);
 	}
 
 	/**
@@ -314,6 +321,11 @@ public class NeuronTest {
 		
 		assertEquals(l[0].getTail(), o);
 		assertEquals(l[1].getTail(), o1);
+		
+		l = m.getOutputLinks();
+		
+		assertEquals(l[0].getTail(), o);
+		assertEquals(l[1].getTail(), o1);
 	}
 	
 	/**
@@ -359,6 +371,64 @@ public class NeuronTest {
             m.setOutputLinks(l);
             assertEquals(l[0].getTail(), o);
             assertEquals(l[1].getTail(), o1);
+            
+            l = m.getInputLinks(0, 1);
+	        m.setInputLink(0, l[1]);
+            m.setInputLink(1, l[0]);
+            assertEquals(l[0].getTail(), n);
+            assertEquals(l[1].getTail(), n1);
+    }
+    
+    /**
+     * Test method for {@link com.neuralnetwork
+     * .shared.neurons.Neuron#setInputLink(int, ILink)}.
+     */
+    @Test
+    public final void testSetInputLink() {
+    	Neuron n = new InputNeuron();   
+        Neuron n1 = new InputNeuron();
+        Neuron m = new HiddenNeuron();
+        Neuron o = new OutputNeuron();
+        Neuron o1 = new OutputNeuron();
+        m.addInputLink(n);
+        m.addInputLink(n1);
+        m.addOutputLink(o);
+        m.addOutputLink(o1);
+        
+        ILink[] l = m.getOutputLinks(0, 1);
+        m.setInputLinks(l);
+        assertEquals(l[0].getHead(), m);
+        assertEquals(l[1].getHead(), m);
+        assertEquals(l[0].getTail(), o);
+        assertEquals(l[1].getTail(), o1);
+    }
+    
+    /**
+     * Test method for {@link com.neuralnetwork
+     * .shared.neurons.Neuron#setInputs(Vector)}.
+     */
+    @Test
+    public final void testInputs() {
+    	Neuron n = new InputNeuron(); 
+        Neuron n1 = new InputNeuron();
+        Neuron m = new HiddenNeuron();
+
+        m.addInputLink(n);
+        m.addInputLink(n1);
+        Vector<ILink> v = new Vector<ILink>();
+        v.add(m.getInputLinks(0)[0]);
+        v.add(m.getInputLinks(1)[0]);
+        
+    	m.setInputs(v);
+        assertEquals(v.get(0).getHead(), m);
+        assertEquals(v.get(1).getHead(), m);
+        assertEquals(v.get(0).getTail(), n);
+        assertEquals(v.get(1).getTail(), n1);
+    	m.setInputs(null);
+        assertNull(m.getInputs());
+        v.clear();
+    	m.setInputs(v);
+        assertEquals(m.getInputs().size(), 0);
     }
 
 	/**

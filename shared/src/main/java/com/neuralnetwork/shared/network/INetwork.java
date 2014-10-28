@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.network;
 
 import java.util.Vector;
@@ -18,7 +18,7 @@ import com.neuralnetwork.shared.layers.IOutputLayer;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.neurons.IOutputNeuron;
-import com.neuralnetwork.shared.training.TrainingStack;
+import com.neuralnetwork.shared.training.TrainType;
 import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
@@ -71,29 +71,22 @@ public interface INetwork {
     /**
      * Trains this network on one vector.
      * 
-     * @param trainingVector
-     *      the vector to train on the network.
-     *      
-     * @return
-     *      the Mean squared error value
-     */
-    ErrorValue train(Vector<Double> trainingVector);
-    
-    /**
-     * Train the network on the TrainingSet until the desired error is reached
-     * or until the training set in empty and return the last reported error
-     * value. Training method is standard gradient decent.
+     * @param online
+     * 		true if you wish to train online.
      * 
-     * @param trainingSet
-     *      the set of training examples to train the network with
+     * @param trainingVector
+     * 		a pair of 2 vectors used to train the network.
+     * 		the first vector is the hypothesis vector
+     * 		the second is the training vector.
      *      
      * @param expectedError
      *      the expected error rate to stop training at
      *      
      * @return
-     *      the latest mean squared error of the network
+     *      the Mean squared error value
      */
-    ErrorValue train(TrainingStack trainingSet, ErrorValue expectedError);
+	ErrorValue train(boolean online, Vector<Double> trainingVector,
+			ErrorValue expectedError);
     
     /**
      * Get the output layer of this network.
@@ -172,11 +165,26 @@ public interface INetwork {
     void setInputLayer(final IInputLayer l);
     
     /**
+     * Set the desired training algorithm.
+     * 
+     * @param t
+     * 		the training algorithm to be used.
+     */
+    void setTrainingAlgorithm(final TrainType t);
+    
+    /**
      * Build the neural network.
      * 
      * 1. Construct all Neurons in each layer.
      * 2. Construct all the links connecting all layers
      */
     void build();
+    
+    /**
+     * Get the learning rate for the network.
+     * 
+	 * @return the learning rate
+	 */
+    double getLearnRate();
 
 }

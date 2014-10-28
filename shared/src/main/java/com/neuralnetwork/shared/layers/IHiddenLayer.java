@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.neurons.IHiddenNeuron;

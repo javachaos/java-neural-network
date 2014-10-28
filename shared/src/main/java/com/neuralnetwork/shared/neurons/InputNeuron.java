@@ -7,14 +7,14 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
 import java.util.Vector;
 
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.ZeroValue;
+import com.neuralnetwork.shared.values.RandomValue;
 
 /**
  * Implementation of an Input neuron.
@@ -34,12 +34,12 @@ public class InputNeuron extends AbstractInputNeuron {
     }
     
     /**
-     * Constracts a new input value with value
-     * ZeroValue.
+     * Constructs a new input value with value
+     * RandomValue.
      */
     public InputNeuron() {
         super();
-        setValue(new ZeroValue());
+        setValue(new RandomValue());
     }
     
     @Override
@@ -61,4 +61,22 @@ public class InputNeuron extends AbstractInputNeuron {
         return "IN(" + getValue() + ") ";
     }
 
+	@Override
+	public final Double propagateError(final Double e) {
+		double error = e;
+		error = getActivationFunction().derivative(error);
+		return error;
+	}
+
+	@Override
+	public final Double getError() {
+		ILink[] inWeights = getInputLinks();
+		double sumErr = 0;
+		for (int i = 0; i < inWeights.length; i++) {
+			double w = inWeights[i].getWeight().getValue();
+			sumErr += (1.0 / 2) * Math.pow(Math.abs(
+					w - getValue().getValue()), 2);
+		}
+		return sumErr;
+	}
 }

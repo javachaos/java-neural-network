@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -28,7 +28,7 @@ public class RandomValueTest {
 	/**
 	 * Number of times to run the test.
 	 */
-	private static final int NUM_ITER = 1000000;
+	private static final int NUM_ITER = 10000000;
 	
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -38,7 +38,7 @@ public class RandomValueTest {
 	public final void testRandomValue() {
 		for (int i = 0; i < NUM_ITER; i++) {
 			Double v = new RandomValue().getValue();
-			assertTrue(v >= 0 && v < 1);
+			assertTrue(v >= -1 && v <= 1);
 		}
 	}
 

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -15,6 +15,7 @@ package com.neuralnetwork.shared.tests.links;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
@@ -195,6 +196,14 @@ public class LinkTest {
 		l.updateWeight(new DoubleValue(-WEIGHT_TEST_VALUE2));
 		l.updateWeight(new DoubleValue(-WEIGHT_TEST_VALUE2));
 		assertEquals(l.getAge(), 2 * 2);
+	}
+	
+	/**
+	 * Test equals.
+	 */
+	@Test
+	public final void equalsContract() {
+	    EqualsVerifier.forClass(Link.class).verify();
 	}
 
 }

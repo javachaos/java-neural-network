@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.values;
 
 import java.util.Random;
@@ -27,10 +27,10 @@ public class RandomValue extends DoubleValue implements IValue<Double> {
 
     /**
      * Construct a new random value.
-     * from [0,1].
+     * from [-1,1].
      */
     public RandomValue() {
-        super(RAND.nextDouble());
+        super((RAND.nextDouble() * 2) - 1);
     }
 
 }

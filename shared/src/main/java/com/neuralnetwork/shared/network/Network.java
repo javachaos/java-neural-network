@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.network;
 
 import java.util.Iterator;
@@ -28,7 +28,8 @@ import com.neuralnetwork.shared.neurons.IHiddenNeuron;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.neurons.IOutputNeuron;
-import com.neuralnetwork.shared.training.TrainingStack;
+import com.neuralnetwork.shared.training.BackpropAlgorithm;
+import com.neuralnetwork.shared.training.TrainType;
 import com.neuralnetwork.shared.util.Connections;
 import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.ErrorValue;
@@ -89,9 +90,26 @@ public final class Network implements INetwork {
 	 * The context for this network.
 	 */
 	private INeuralNetContext nnctx;
+	
+	/**
+	 * Default training algorithm.
+	 */
+	private TrainType trainAlgorithm = TrainType.BACKPROP;
+	
+	/**
+	 * Marker to indicate that training is occurring.
+	 */
+	private boolean isTraining = false;
+	
+	/**
+	 * Learning Rate.
+	 */
+	private static final double LEARN_RATE = 0.61803398875;
     
     /**
      * Construct a 2d neural network.
+     * With {@link TrainType#RPROP}
+     * as the default training algorithm.
      * 
      * @param numIn
      *      the number of inputs to the network
@@ -131,6 +149,33 @@ public final class Network implements INetwork {
     
     /**
      * Construct a 2d neural network.
+     * 
+     * @param numIn
+     *      the number of inputs to the network
+     *      
+     * @param numOut
+     *      the number of outputs from the network
+     *      
+     * @param numHide
+     *      the number of hidden layers in the network
+     *      
+     * @param sizes
+     * 		the sizes of each hidden layer respectively.
+     * 
+     * @param t
+     * 		the training algorithm for the network
+     */
+    public Network(final int numIn, final int numOut, 
+                final int numHide, final int[] sizes,
+                final TrainType t) {
+    	this(numIn, numOut, numHide, sizes);
+    	this.setTrainingAlgorithm(t);
+    }
+    
+    /**
+     * Construct a 2d neural network.
+     * With {@link TrainType#RPROP}
+     * as the default training algorithm.
      * Note: No hidden layers are created.
      * 
      * @param numIn
@@ -148,18 +193,37 @@ public final class Network implements INetwork {
         this.nnctx = new NeuralNetContext(this);
     }
     
+    /**
+     * Construct a 2d neural network.
+     * Note: No hidden layers are created.
+     * 
+     * @param numIn
+     *      the number of inputs to the network
+     *      
+     * @param numOut
+     *      the number of outputs from the network
+     *      
+     * @param t
+     * 		the training algorithm for the network
+     */
+    public Network(final int numIn, final int numOut,
+    		final TrainType t) {
+    	this(numIn, numOut);
+    	this.setTrainingAlgorithm(t);
+    }
+    
     @Override
-    public INeuron getNeuron(final int x, final int y) {
-        
-        if (x < 0 || x < 0) {
+    public synchronized INeuron getNeuron(final int x, final int y) {
+
+        if (x < 0 || y < 0) {
             return null;
         }
-        
+
         if (x + 1 >= 0 && y == 0) {
             return getInputNeuron(x);
-        } else if (x + 1 >= 0 && y > 0 && y < getHeight() - 1) {
+        } else if (x + 1 >= 0 && y < getHeight() - 1) {
             return layers.get(y - 1).getNeuron(x + 1);
-        } else if (x + 1 >= 0 && y > 0 && y == getHeight() - 1) {
+        } else if (x + 1 >= 0 && y == getHeight() - 1) {
             return getOutputNeuron(x);
         }
         
@@ -188,7 +252,12 @@ public final class Network implements INetwork {
     }
 
     @Override
-    public Vector<Double> runInputs(final Vector<Double> l) {
+    public synchronized Vector<Double> runInputs(final Vector<Double> l) {
+    	if (l.size() != inputLayer.getSize()) {
+    		LOGGER.error("Input vector does not have correct "
+    				+ "dimension to be run through this network.");
+    		return null;
+    	}
         for (int i = 0; i < l.size(); i++) {
             getInputLayer().addValue(new DoubleValue(l.get(i)), i);
         }
@@ -210,18 +279,59 @@ public final class Network implements INetwork {
     }
 
     @Override
-    public ErrorValue train(final Vector<Double> trainingVector) {
-        // TODO Implement method.
-        return null;
+    public synchronized ErrorValue train(final boolean online, 
+    		final Vector<Double> trainingVector,
+    		final ErrorValue expectedError) {
+    	ErrorValue errorValue = new ErrorValue(0);
+    	toggleTraining();
+//    	if (!online) {
+//    	    //reset();
+//    	}
+    	switch (getTrainAlgorithm()) {
+			case BACKPROP:
+					BackpropAlgorithm algo = 
+					new BackpropAlgorithm(trainingVector,
+							this, expectedError);
+					errorValue = new ErrorValue(algo.compute());
+				break;
+			case QPROP:
+				break;
+			case RPROP:
+				break;
+			default:
+				break;
+    	}
+    	toggleTraining();
+    	return errorValue;
     }
 
-    @Override
-    public ErrorValue train(final TrainingStack trainingSet,
-            final ErrorValue expectedError) {
-        return null;
+    /**
+     * Private helper function.
+     */
+    private void toggleTraining() {
+    	isTraining = !isTraining;
     }
 
-    @Override
+    /**
+     * Get the training algorithm.
+	 * @return the trainAlgorithm
+	 */
+	public TrainType getTrainAlgorithm() {
+		return trainAlgorithm;
+	}
+
+	/**
+	 * Set the training algorithm.
+	 * 
+	 * @param t 
+	 * 		the trainAlgorithm to set
+	 */
+	public void setTrainingAlgorithm(
+			final TrainType t) {
+		this.trainAlgorithm = t;
+	}
+
+	@Override
     public IOutputLayer getOutputLayer() {
         return outputLayer;
     }
@@ -255,7 +365,13 @@ public final class Network implements INetwork {
         rebuild();
     }
     
-    /**
+
+    @Override
+	public double getLearnRate() {
+		return LEARN_RATE;
+	}
+
+	/**
      * Rebuild the network fixing only those links
      * which are not connected and keeping all other
      * links intact.
@@ -265,7 +381,7 @@ public final class Network implements INetwork {
     }
 
     @Override
-    public void build() {
+    public synchronized void build() {
 
     	Connections c = Connections.getInstance();
 		Stack<IHiddenLayer> temp = new Stack<IHiddenLayer>();
@@ -341,6 +457,5 @@ public final class Network implements INetwork {
 
         sb.append("\n");
         return sb.toString();
-    }
-    
+    }    
 }

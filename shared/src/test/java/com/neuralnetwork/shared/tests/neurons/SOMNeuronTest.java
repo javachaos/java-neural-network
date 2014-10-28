@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 
 package com.neuralnetwork.shared.tests.neurons;
 
@@ -26,6 +26,11 @@ import com.neuralnetwork.shared.values.Constants;
  *
  */
 public class SOMNeuronTest {
+
+	/**
+	 * Expected distance value.
+	 */
+	private static final int DISTANCE_EXPECTED = 90;
 
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -106,9 +111,11 @@ public class SOMNeuronTest {
 	public final void testDistanceTo() {
 		SOMNeuron s = new SOMNeuron(Constants.THREE, 
 		                            Constants.FIVE, Constants.TWO);
-		SOMNeuron s1 = new SOMNeuron(3, 2, 2);
+		SOMNeuron s1 = new SOMNeuron(Constants.THREE,
+				Constants.TWO, Constants.TWO);
 		
-		assertEquals(90.0, s.distanceTo(s1), 10 * Math.ulp(90));
+		assertEquals(DISTANCE_EXPECTED, s.distanceTo(s1),
+				Constants.TEN * Math.ulp(DISTANCE_EXPECTED));
 	}
 
 	/**
@@ -119,16 +126,19 @@ public class SOMNeuronTest {
 	public final void testSetWeight() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
-		s.setWeight(0, 0.1);
-		s.setWeight(1, 0.2);
-		s.setWeight(2, 0.3);
+	    double w1 = 1.0 / Constants.TEN_D;
+	    double w2 = 2.0 / Constants.TEN_D;
+	    double w3 = Constants.THREE_D / Constants.TEN_D;
+		s.setWeight(0, w1);
+		s.setWeight(1, w2);
+		s.setWeight(2, w3);
 		
-		assertEquals(0.1, s.getWeight(0), 10 * Math.ulp(0.1));
-		assertEquals(0.2, s.getWeight(1), 10 * Math.ulp(0.2));
-		assertEquals(0.3, s.getWeight(2), 10 * Math.ulp(0.3));
+		assertEquals(w1, s.getWeight(0), Constants.TEN * Math.ulp(w1));
+		assertEquals(w2, s.getWeight(1), Constants.TEN * Math.ulp(w2));
+		assertEquals(w3, s.getWeight(2), Constants.TEN * Math.ulp(w3));
 		
 		try {
-			s.setWeight(4, 0.0);
+			s.setWeight(Constants.FOUR, 0.0);
 		} catch (IndexOutOfBoundsException e) {
 			assertEquals(e.getMessage(), 
 					"Weight index was out of bounds.");
@@ -143,14 +153,20 @@ public class SOMNeuronTest {
 	public final void testGetWeight() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
-		s.setWeight(0, 0.1);
-		s.setWeight(1, 0.2);
-		s.setWeight(2, 0.3);
+	    
+	    double w1 = 1.0 / Constants.TEN_D;
+	    double w2 = 2.0 / Constants.TEN_D;
+	    double w3 = Constants.THREE_D / Constants.TEN_D;
+	    
+		s.setWeight(0, w1);
+		s.setWeight(1, w2);
+		s.setWeight(2, w3);
 		
-		assertEquals(s.getWeight(0), 0.1, 10 * Math.ulp(0.1));
-		assertEquals(s.getWeight(1), 0.2, 10 * Math.ulp(0.2));
-		assertEquals(s.getWeight(2), 0.3, 10 * Math.ulp(0.3));
-		assertEquals(s.getWeight(3), 0.1, 10 * Math.ulp(0.1));
+		assertEquals(s.getWeight(0), w1, Constants.TEN * Math.ulp(w1));
+		assertEquals(s.getWeight(1), w2, Constants.TEN * Math.ulp(w2));
+		assertEquals(s.getWeight(2), w3, Constants.TEN * Math.ulp(w3));
+		assertEquals(s.getWeight(Constants.THREE), w1,
+				Constants.TEN * Math.ulp(w1));
 	}
 
 	/**
@@ -161,15 +177,18 @@ public class SOMNeuronTest {
 	public final void testGetWeights() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
-		s.setWeight(0, 0.1);
-		s.setWeight(1, 0.2);
-		s.setWeight(2, 0.3);
+	    double w1 = 1.0 / Constants.TEN_D;
+	    double w2 = 2.0 / Constants.TEN_D;
+	    double w3 = Constants.THREE_D / Constants.TEN_D;
+		s.setWeight(0, w1);
+		s.setWeight(1, w2);
+		s.setWeight(2, w3);
 		
 		SOMLayer l = s.getWeights();
 		
-		assertEquals(l.get(0), 0.1, 10 * Math.ulp(0.1));
-		assertEquals(l.get(1), 0.2, 10 * Math.ulp(0.2));
-		assertEquals(l.get(2), 0.3, 10 * Math.ulp(0.3));
+		assertEquals(l.get(0), w1, Constants.TEN * Math.ulp(w1));
+		assertEquals(l.get(1), w2, Constants.TEN * Math.ulp(w2));
+		assertEquals(l.get(2), w3, Constants.TEN * Math.ulp(w3));
 	}
 
 	/**
@@ -181,16 +200,21 @@ public class SOMNeuronTest {
 	public final void testUpdateWeights() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
-		s.setWeight(0, 0.1);
-		s.setWeight(1, 0.2);
-		s.setWeight(2, 0.3);
+	    double w1 = 1.0 / Constants.TEN_D;
+	    double w2 = 2.0 / Constants.TEN_D;
+	    double w3 = Constants.THREE_D / Constants.TEN_D;
+		s.setWeight(0, w1);
+		s.setWeight(1, w2);
+		s.setWeight(2, w3);
 		SOMLayer l = s.getWeights();
-		SOMNeuron s1 = new SOMNeuron(3, 2, 2);
+		SOMNeuron s1 = new SOMNeuron(Constants.THREE, 2, 2);
 		s1.setWeight(0, 0.0);
 		s1.setWeight(1, 0.0);
 		s1.setWeight(2, 0.0);
 		
-		s.updateWeights(s1.getWeights(), 0.001, 0.00001);
+		s.updateWeights(s1.getWeights(), 
+				1.0 / Math.pow(Constants.TEN_D, Constants.THREE_D),
+				1.0 / Math.pow(Constants.TEN, Constants.FIVE_D));
 		
 		assertEquals(s.getWeights(), l);
 		

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -24,8 +24,11 @@ import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
  */
 public class SimpleNetworkConfigTest {
 
+	/**
+	 * Test simple network config.
+	 */
 	@Test
-	public final void test() {
+	public final void testSimpleNetwork() {
 		NetworkConfig snc = SimpleNetworkConfigs.CONFIG_5_4_3_4_5;
 		snc.getLayerSizes();
 		snc = null;

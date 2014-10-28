@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -39,6 +39,11 @@ public class ConnectionsTest {
 	 * The size of each layer in the test.
 	 */
 	private static final int LAYER_SIZE = 30000;
+	
+	/**
+	 * Testing timeout.
+	 */
+	private static final long TIMEOUT = 5000;
 
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -46,7 +51,7 @@ public class ConnectionsTest {
 	 * #create(com.neuralnetwork.shared.layers.ILayer, 
 	 * com.neuralnetwork.shared.layers.ILayer)}.
 	 */
-	@Test(timeout = 2000)
+	@Test(timeout = TIMEOUT)
 	public final void testCreate() {
 		IInputLayer l1 = new InputLayer(LAYER_SIZE);
 		l1.build();
@@ -60,7 +65,7 @@ public class ConnectionsTest {
             tmp = iter1.next();
             Iterator<IOutputNeuron> iter2 = l2.iterator();
             for (ILink l : tmp.getOutputLinks()) {
-            	if(iter2.hasNext()) {
+            	if (iter2.hasNext()) {
                     assertEquals(l.getTail(), iter2.next());
             	}
             }

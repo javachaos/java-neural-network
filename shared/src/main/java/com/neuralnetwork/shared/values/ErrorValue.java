@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.values;
 
 /**
@@ -18,6 +18,11 @@ package com.neuralnetwork.shared.values;
  */
 public class ErrorValue extends DoubleValue {
 
+	/**
+	 * Default error value.
+	 */
+	public static final ErrorValue E_0_00001 = new ErrorValue(0.00001);
+	
     /**
      * Construct an error value.
      * 

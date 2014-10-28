@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
 import java.util.Vector;
@@ -26,7 +26,8 @@ public class SOMLayer extends Vector<Double> implements ISOMLayer {
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(SOMLayer.class);
+    private static final Logger LOGGER =
+    		LoggerFactory.getLogger(SOMLayer.class);
     
     /**
      * Generated Serial Version UID.

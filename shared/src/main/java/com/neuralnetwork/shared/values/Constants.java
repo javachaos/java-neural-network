@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.values;
 
 /**
@@ -104,4 +104,14 @@ public final class Constants {
      * Constant double value for ten.
      */
     public static final int TEN = 10;
+
+    /**
+     * Number of threads to train with.
+     */
+	public static final int THREAD_POOL_SIZE = 3;
+
+	/**
+	 * Number of seconds to wait until terminating trainer.
+	 */
+	public static final long TRAIN_TIMEOUT = 5;
 }

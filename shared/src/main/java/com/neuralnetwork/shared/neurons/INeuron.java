@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
 import com.neuralnetwork.shared.functions.IActivationFunction;
@@ -233,7 +233,7 @@ public interface INeuron {
 
     /**
      * Reset the weights of all OUTPUT weight values to
-     * a uniform randomly distributed value between [0,1].
+     * a uniform randomly distributed value between [-1,1].
      */
     void reset();
     
@@ -264,4 +264,22 @@ public interface INeuron {
      *      the value to be fed forward to the next neuron
      */
     void feedforward(DoubleValue v);
+
+    /**
+     * Calculate the error.
+     * 
+     * @return
+     * 		the 1/2 MSE.
+     */
+	Double getError();
+
+	/**
+	 * Propagate the error of this node to all its children.
+	 * 
+	 * @param error
+	 * 		the error to propagate.
+	 * @return
+	 * 		propagated error value.
+	 */
+	Double propagateError(Double error);
 }

@@ -7,13 +7,14 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
 package com.neuralnetwork.shared.tests.training;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Random;
 import java.util.Vector;
@@ -57,6 +58,11 @@ public class SOMTrainerTest {
      */
 	private static final long SLEEP_TIME = 100;
 
+	/**
+	 * Testing timeout.
+	 */
+	private static final long TEST_TIMEOUT = 2000;
+
     /**
      * Data used for input.
      */
@@ -77,6 +83,9 @@ public class SOMTrainerTest {
 	 */
 	private static SOMLattice lattice;
 	
+	/**
+	 * Setup SOM Test.
+	 */
     @BeforeClass
     public static void setUp() {
 		r = new Random(SEED);
@@ -151,7 +160,7 @@ public class SOMTrainerTest {
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.training.SOMTrainer#isRunning()}.
 	 */
-	@Test(timeout = 2000)
+	@Test(timeout = TEST_TIMEOUT)
 	public final void testIsRunning() {	
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s.setTraining(lattice, inData);
@@ -183,14 +192,14 @@ public class SOMTrainerTest {
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.training.SOMTrainer#stop()}.
 	 */
-	@Test(timeout = 2000)
+	@Test(timeout = TEST_TIMEOUT)
 	public final void testStop() {
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s.setTraining(lattice, inData);
 		s.start();		
 		while (s.isRunning()) {
 			try {
-				Thread.sleep(100);
+				Thread.sleep(SLEEP_TIME);
 				s.stop();
 				s.getThread().interrupt();
 			} catch (InterruptedException e) {

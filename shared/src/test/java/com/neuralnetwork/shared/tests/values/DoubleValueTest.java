@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.neuralnetwork.shared.values.Constants;
 import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.OneValue;
 
@@ -29,13 +30,38 @@ import com.neuralnetwork.shared.values.OneValue;
 public class DoubleValueTest {
 
 	/**
+	 * Test Const.
+	 */
+	private static final double D_123_123234442 = 123.123234442;
+	
+	/**
+	 * Test Const.
+	 */
+	private static final double D_0_32432 = 0.32432;
+	
+	/**
+	 * Test Const.
+	 */
+	private static final double INITIAL_VALUE = -11.00000;
+	
+	/**
+	 * Test Const.
+	 */
+	private static final double D_11_32432 = 11.32432;
+	
+	/**
+	 * Testing Constant.
+	 */
+	private static final double D_10_32432 = 10.32432;
+
+	/**
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.values.DoubleValue#DoubleValue()}.
 	 */
 	@Test
-	public void testDoubleValue() {
+	public final void testDoubleValue() {
 		DoubleValue v = new DoubleValue();
-		assertEquals(v.getValue(), 0.0, 10 * Math.ulp(v.getValue()));
+		assertEquals(v.getValue(), 0.0, Constants.TEN * Math.ulp(v.getValue()));
 	}
 
 	/**
@@ -43,9 +69,10 @@ public class DoubleValueTest {
 	 * .shared.values.DoubleValue#DoubleValue(double)}.
 	 */
 	@Test
-	public void testDoubleValueDouble() {
-		DoubleValue v = new DoubleValue(10.32432);
-		assertEquals(v.getValue(), 10.32432, 10 * Math.ulp(v.getValue()));
+	public final void testDoubleValueDouble() {
+		DoubleValue v = new DoubleValue(D_10_32432);
+		assertEquals(v.getValue(), 
+				D_10_32432, Constants.TEN * Math.ulp(v.getValue()));
 	}
 
 	/**
@@ -53,9 +80,10 @@ public class DoubleValueTest {
 	 * .shared.values.DoubleValue#setSign(boolean)}.
 	 */
 	@Test
-	public void testSetSign() {
-		DoubleValue v = new DoubleValue(10.32432);
-		assertEquals(v.getValue(), 10.32432, 10 * Math.ulp(v.getValue()));
+	public final void testSetSign() {
+		DoubleValue v = new DoubleValue(D_10_32432);
+		assertEquals(v.getValue(), D_10_32432, Constants.TEN 
+				* Math.ulp(v.getValue()));
 		v.setSign(true);
 		assertTrue(v.getSign());
 		v.setSign(false);
@@ -73,9 +101,10 @@ public class DoubleValueTest {
 	 * .shared.values.DoubleValue#getSign()}.
 	 */
 	@Test
-	public void testGetSign() {
-		DoubleValue v = new DoubleValue(10.32432);
-		assertEquals(v.getValue(), 10.32432, 10 * Math.ulp(v.getValue()));
+	public final void testGetSign() {
+		DoubleValue v = new DoubleValue(D_10_32432);
+		assertEquals(v.getValue(), D_10_32432, Constants.TEN
+				* Math.ulp(v.getValue()));
 		v.setSign(true);
 		assertTrue(v.getSign());
 	}
@@ -86,13 +115,16 @@ public class DoubleValueTest {
 	 * com.neuralnetwork.shared.values.IValue)}.
 	 */
 	@Test
-	public void testUpdateValue() {		
-		DoubleValue v = new DoubleValue(10.32432);
-		assertEquals(v.getValue(), 10.32432, 10 * Math.ulp(v.getValue()));
+	public final void testUpdateValue() {		
+		DoubleValue v = new DoubleValue(D_10_32432);
+		assertEquals(v.getValue(), D_10_32432, Constants.TEN
+				* Math.ulp(v.getValue()));
 		v.updateValue(new OneValue());
-		assertEquals(v.getValue(), 11.32432, 10 * Math.ulp(v.getValue()));
-		v.updateValue(new DoubleValue(-11.00000));
-		assertEquals(v.getValue(), 0.32432, 10 * Math.ulp(v.getValue()));
+		assertEquals(v.getValue(), D_11_32432, Constants.TEN
+				* Math.ulp(v.getValue()));
+		v.updateValue(new DoubleValue(INITIAL_VALUE));
+		assertEquals(v.getValue(), D_0_32432, Constants.TEN
+				* Math.ulp(v.getValue()));
 	}
 
 	/**
@@ -100,8 +132,9 @@ public class DoubleValueTest {
 	 * .shared.values.DoubleValue#toString()}.
 	 */
 	@Test
-	public void testToString() {
-		assertEquals(new DoubleValue(123.123234442).toString(), "123.123234442");
+	public final void testToString() {
+		assertEquals(new DoubleValue(D_123_123234442).toString(), 
+				"123.123234442");
 	}
 
 }

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.neuralnetwork.shared.values.Constants;
 import com.neuralnetwork.shared.values.OneValue;
 
 /**
@@ -32,7 +33,7 @@ public class OneValueTest {
 	@Test
 	public final void testOneValue() {
 		assertEquals(new OneValue().getValue(), 
-				1.0, 10 * Math.ulp(1.0));
+				1.0, Constants.TEN * Math.ulp(1.0));
 	}
 
 }

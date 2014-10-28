@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.training;
 
 import java.util.Vector;
@@ -67,7 +67,7 @@ public class SOMTrainer implements Runnable {
 	/**
 	 * Running flag.
 	 */
-	private static boolean running;
+	private boolean running = false;
 	
 	/**
 	 * Execution thread to run the training on.
@@ -86,7 +86,6 @@ public class SOMTrainer implements Runnable {
 	public SOMTrainer(final double learnRate, final int iterations) {
 	    this.initialLearningRate = learnRate;
 	    this.numIterations = iterations;
-		running = false;
 	}
 	
 	/**
@@ -114,7 +113,8 @@ public class SOMTrainer implements Runnable {
 	 * @return
 	 *     the distance fall off value
 	 */
-	private double getDistanceFalloff(final double squaredDist, final double r) {
+	private double getDistanceFalloff(final double squaredDist, 
+			final double r) {
 		double radiusSq = r * r;
 		return Math.exp(-(squaredDist) / (2 * radiusSq));
 	}

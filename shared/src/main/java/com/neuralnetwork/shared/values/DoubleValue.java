@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.values;
 
 /**
@@ -16,7 +16,8 @@ package com.neuralnetwork.shared.values;
  * @author fredladeroute
  *
  */
-public class DoubleValue extends GenericValue<Double> implements IValue<Double> {
+public class DoubleValue extends GenericValue<Double> 
+								implements IValue<Double> {
     
     /**
      * Constructor for a double value,

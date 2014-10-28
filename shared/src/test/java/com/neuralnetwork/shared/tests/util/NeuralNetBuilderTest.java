@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -62,7 +62,8 @@ public class NeuralNetBuilderTest {
 	 */
 	@Test
 	public final void testNeuralNetBuilderNetworkConfig() {
-		NeuralNetBuilder b = new NeuralNetBuilder(SimpleNetworkConfigs.CONFIG_5_4_3_4_5);
+		NeuralNetBuilder b = new NeuralNetBuilder(
+				SimpleNetworkConfigs.CONFIG_5_4_3_4_5);
 		assertEquals(b.build().getInputLayer().getSize(), NUM_INPUTS);
 		assertEquals(b.build().getOutputLayer().getSize(), NUM_OUTPUTS);
 	}

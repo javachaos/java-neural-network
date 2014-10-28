@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
 import java.util.Vector;
@@ -29,9 +29,7 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
 	public HiddenNeuron() {
 		super();
 	}
-	
-	
-	
+
     @Override
     public final String toString() {
         return "HN(" + getValue() + ") ";
@@ -53,4 +51,26 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
         }
     }
 
+	@Override
+	public final Double propagateError(final Double e) {
+		ILink[] ilinks = getInputLinks();
+		double error = e;
+		error = getActivationFunction().derivative(error);
+		for (ILink il : ilinks) {
+			il.getHead().propagateError(error);
+		}
+		return error;
+	}
+
+	@Override
+	public final Double getError() {
+		ILink[] inWeights = getInputLinks();
+		double sumErr = 0;
+		for (int i = 0; i < inWeights.length; i++) {
+			double w = inWeights[i].getWeight().getValue();
+			sumErr += (1.0 / 2) * Math.pow(Math.abs(
+					w - getValue().getValue()), 2);
+		}
+		return sumErr;
+	}
 }

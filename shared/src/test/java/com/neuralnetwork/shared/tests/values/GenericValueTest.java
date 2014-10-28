@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.neuralnetwork.shared.values.Constants;
 import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.GenericValue;
 
@@ -27,6 +28,16 @@ import com.neuralnetwork.shared.values.GenericValue;
  *
  */
 public class GenericValueTest {
+
+	/**
+	 * Test const.
+	 */
+	private static final double D_0_001 = 0.001;
+	
+	/**
+	 * Test const.
+	 */
+	private static final double D_0_1 = 0.1;
 
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -52,10 +63,10 @@ public class GenericValueTest {
 		GenericValue<Double> v = new DoubleValue();
 		GenericValue<Double> v1 = new DoubleValue();
 		assertEquals(v.hashCode(), v1.hashCode());
-		v.setValue(0.1);
-		v1.setValue(0.1);
+		v.setValue(D_0_1);
+		v1.setValue(D_0_1);
 		assertEquals(v.getValue(), v1.getValue(),
-				10 * Math.ulp(v.getValue()));
+				Constants.TEN * Math.ulp(v.getValue()));
 	}
 
 	/**
@@ -68,10 +79,10 @@ public class GenericValueTest {
 		GenericValue<Double> v = new DoubleValue();
 		GenericValue<Double> v1 = new DoubleValue();
 		assertEquals(v.hashCode(), v1.hashCode());
-		v.setValue(0.1);
-		v1.setValue(0.1);
+		v.setValue(D_0_1);
+		v1.setValue(D_0_1);
 		assertEquals(v.getValue(), v1.getValue(),
-				10 * Math.ulp(v.getValue()));
+				Constants.TEN * Math.ulp(v.getValue()));
 	}
 
 	/**
@@ -84,14 +95,14 @@ public class GenericValueTest {
 		GenericValue<Double> v = new DoubleValue();
 		GenericValue<Double> v1 = new DoubleValue();
 		assertEquals(v.hashCode(), v1.hashCode());
-		v.setValue(0.1);
-		v1.setValue(0.1);
+		v.setValue(D_0_1);
+		v1.setValue(D_0_1);
 		assertTrue(v.equals(v1));
 		assertTrue(v.equals(v));
 		v.setValue(null);
 		assertFalse(v.equals(v1));
 		assertFalse(v1.equals(null));
-		v.setValue(0.001);
+		v.setValue(D_0_001);
 		assertFalse(v1.equals(v));
 		v.setValue(null);
 		v1.setValue(null);

@@ -7,13 +7,11 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.values.DoubleValue;
-
-
 
 /**
  * Defines an output neuron.
@@ -29,7 +27,7 @@ public final class OutputNeuron extends AbstractOutputNeuron {
 	public OutputNeuron() {
 		super();
 	}
-	
+
     @Override
     public String toString() {
         return "ON(" + getValue() + ") ";
@@ -45,4 +43,27 @@ public final class OutputNeuron extends AbstractOutputNeuron {
         
         setValue(n);
     }
+
+	@Override
+	public Double propagateError(final Double e) {
+		ILink[] links = getInputLinks();
+		double error = e;
+		error = getActivationFunction().derivative(error);
+		for (ILink il : links) {
+			il.getHead().propagateError(error);
+		}
+		return error;
+	}
+
+	@Override
+	public Double getError() {
+		ILink[] inWeights = getInputLinks();
+		double sumErr = 0;
+		for (int i = 0; i < inWeights.length; i++) {
+			double w = inWeights[i].getWeight().getValue();
+			sumErr += (1.0 / 2) * Math.pow(Math.abs(
+					w - getValue().getValue()), 2);
+		}
+		return sumErr;
+	}
 }

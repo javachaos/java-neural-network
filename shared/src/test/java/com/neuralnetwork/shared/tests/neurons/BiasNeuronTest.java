@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.neuralnetwork.shared.neurons.BiasNeuron;
+import com.neuralnetwork.shared.values.Constants;
 import com.neuralnetwork.shared.values.OneValue;
 
 /**
@@ -35,6 +36,26 @@ public class BiasNeuronTest {
 	public final void testBiasNeuron() {
 		assertEquals(
 				new BiasNeuron().getValue(), new OneValue());
+	}
+	
+	/**
+	 * Test feedforward methods.
+	 */
+	@Test
+	public final void testFeedForward() {
+		BiasNeuron bn = new BiasNeuron();
+		bn.feedforward();
+		bn.feedforward(new OneValue());
+		assertEquals(bn.getOutputValue(), 1, Constants.TEN);
+	}
+	
+	/**
+	 * Test toString.
+	 */
+	@Test
+	public final void testToString() {
+		BiasNeuron bn = new BiasNeuron();
+		assertEquals(bn.toString(), "BN(1.0)");
 	}
 
 }

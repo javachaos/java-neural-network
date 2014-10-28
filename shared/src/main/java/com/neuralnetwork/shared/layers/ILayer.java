@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.LayerType;
@@ -43,6 +43,9 @@ public interface ILayer<T> extends Iterable<T> {
     
     /**
      * Returns the size of this layer.
+     * (Without bias neuron) so [size() - 1]
+     * such that size() is the true size of the layer including
+     * the bias term.
      * 
      * @return
      * 		the number of neurons in this layer.

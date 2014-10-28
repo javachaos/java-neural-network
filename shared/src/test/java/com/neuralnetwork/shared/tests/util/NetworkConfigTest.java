@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -26,23 +26,38 @@ import com.neuralnetwork.shared.util.NetworkConfig;
 public class NetworkConfigTest {
 
 	/**
+	 * Testing constant.
+	 */
+	private static final int THREE = 3;
+	
+	/**
+	 * Testing constant.
+	 */
+	private static final int FIVE = 5;
+
+	/**
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.util.NetworkConfig#NetworkConfig(int, int, int[])}.
 	 */
 	@Test
 	public final void testNetworkConfig() {
-		NetworkConfig conf = new NetworkConfig(5, 5, new int[]{3, 2, 3});
+		NetworkConfig conf = new NetworkConfig(FIVE, FIVE, 
+				new int[]{THREE, 2, THREE});
 		conf.getNumInputs();
 		try {
-			conf = new NetworkConfig(-5, 5, new int[]{3, 2, 3});
+			conf = new NetworkConfig(
+					-FIVE, FIVE, new int[]{THREE, 2, THREE});
+			conf.getNumInputs();
 		} catch (IllegalArgumentException e) {
 			assertEquals(e.getMessage(), "Error bad configuration.");
 		}
 		
 		try {
-			conf = new NetworkConfig(5, -5, new int[]{3, 2, 3});
-		} catch (IllegalArgumentException e) {
-			assertEquals(e.getMessage(), "Error bad configuration.");
+			conf = new NetworkConfig(
+					FIVE, -FIVE, new int[]{THREE, 2, THREE});
+			conf.getNumInputs();
+		} catch (IllegalArgumentException e1) {
+			assertEquals(e1.getMessage(), "Error bad configuration.");
 		}
 		
 	}
@@ -53,8 +68,9 @@ public class NetworkConfigTest {
 	 */
 	@Test
 	public final void testGetNumInputs() {
-		NetworkConfig conf = new NetworkConfig(5, 5, new int[]{3, 2, 3});
-		assertEquals(conf.getNumInputs(), 5);
+		NetworkConfig conf = new NetworkConfig(FIVE, FIVE,
+				new int[]{THREE, 2, THREE});
+		assertEquals(conf.getNumInputs(), FIVE);
 	}
 
 	/**
@@ -63,10 +79,11 @@ public class NetworkConfigTest {
 	 */
 	@Test
 	public final void testGetLayerSizes() {
-		NetworkConfig conf = new NetworkConfig(5, 5, new int[]{3, 2, 3});
-		assertEquals(conf.getLayerSizes()[0], 3);
+		NetworkConfig conf = new NetworkConfig(FIVE, FIVE,
+				new int[]{THREE, 2, THREE});
+		assertEquals(conf.getLayerSizes()[0], THREE);
 		assertEquals(conf.getLayerSizes()[1], 2);
-		assertEquals(conf.getLayerSizes()[2], 3);
+		assertEquals(conf.getLayerSizes()[2], THREE);
 	}
 
 	/**
@@ -75,7 +92,8 @@ public class NetworkConfigTest {
 	 */
 	@Test
 	public final void testSetLayerSizes() {
-		NetworkConfig conf = new NetworkConfig(5, 5, new int[]{3, 2, 3});
+		NetworkConfig conf = new NetworkConfig(FIVE, FIVE,
+				new int[]{THREE, 2, THREE});
 		conf.setLayerSizes(new int[]{0, 1, 0});
 		assertEquals(conf.getLayerSizes()[0], 0);
 		assertEquals(conf.getLayerSizes()[1], 1);
@@ -88,8 +106,9 @@ public class NetworkConfigTest {
 	 */
 	@Test
 	public final void testGetNumHiddenLayers() {
-		NetworkConfig conf = new NetworkConfig(5, 5, new int[]{3, 2, 3});
-		assertEquals(conf.getNumHiddenLayers(), 3);
+		NetworkConfig conf = new NetworkConfig(FIVE, FIVE,
+				new int[]{THREE, 2, THREE});
+		assertEquals(conf.getNumHiddenLayers(), THREE);
 	}
 
 	/**
@@ -98,8 +117,9 @@ public class NetworkConfigTest {
 	 */
 	@Test
 	public final void testGetNumOuputs() {
-		NetworkConfig conf = new NetworkConfig(5, 5, new int[]{3, 2, 3});
-		assertEquals(conf.getNumOuputs(), 5);
+		NetworkConfig conf = new NetworkConfig(FIVE, FIVE,
+				new int[]{THREE, 2, THREE});
+		assertEquals(conf.getNumOuputs(), FIVE);
 	}
 
 }

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.training;
 
 import java.util.Stack;
@@ -15,8 +15,6 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.neuralnetwork.shared.util.Pair;
 
 /**
  * Represents a Training data set.
@@ -35,22 +33,22 @@ public class TrainingStack {
     /**
      * The raw data values.
      */
-    private Stack<Pair<Vector<Double>, Vector<Double>>> data;
+    private Stack<Vector<Double>> data;
 
     /**
-     * The sample size of this training stack.
+     * The number of features for each sample of this training stack.
      */
-	private int sampleSize;
+	private int featureSize;
     
     /**
      * Construct a training set.
      * 
-     * @param size
+     * @param numFeatures
      *      the initial size of the training stack.
      */
-    public TrainingStack(final int size) {
-    	this.sampleSize = size;
-        data = new Stack<Pair<Vector<Double>, Vector<Double>>>();
+    public TrainingStack(final int numFeatures) {
+    	this.featureSize = numFeatures;
+        data = new Stack<Vector<Double>>();
     }
     
     /**
@@ -58,20 +56,12 @@ public class TrainingStack {
      * 
      * @param rawData
      *      the raw data of this training sample
-     *      
-     * @param expectedData
-     *      the expected results vector of this training sample
      */
     public final void addTrainingSample(
-            final Vector<Double> rawData, final Vector<Double> expectedData) {
+            final Vector<Double> rawData) {
         if (rawData != null
-        		&& expectedData != null
-        		&& rawData.size() == sampleSize
-        		&& expectedData.size() == sampleSize) {
-            Pair<Vector<Double>, Vector<Double>> pair =
-                    new Pair<Vector<Double>,
-                    Vector<Double>>(rawData, expectedData);
-            data.add(pair);
+        		&& rawData.size() == featureSize) {
+            data.add(rawData);
         } else {
             LOGGER.error("Cannot add null training samples.");
         }
@@ -83,7 +73,7 @@ public class TrainingStack {
      * @return
      *      the next training sample, null if set is empty
      */
-    public final Pair<Vector<Double>, Vector<Double>> popSample() {
+    public final Vector<Double> popSample() {
         return data.pop();
     }
     
@@ -93,7 +83,7 @@ public class TrainingStack {
      * @return
      *      the next training sample, null if set is empty
      */
-    public final Pair<Vector<Double>, Vector<Double>> peekSample() {
+    public final Vector<Double> peekSample() {
         return data.peek();
     }
     
@@ -105,7 +95,7 @@ public class TrainingStack {
      * @return
      *      the data from this training set.
      */
-    public final Stack<Pair<Vector<Double>, Vector<Double>>> getData() {
+    public final Stack<Vector<Double>> getData() {
         return data;
     }
 
@@ -115,8 +105,8 @@ public class TrainingStack {
      * @return
      * 		the size of each sample vector
      */
-	public final int getSampleSize() {
-		return sampleSize;
+	public final int getNumFeatures() {
+		return featureSize;
 	}
 
 }

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 /**
  * 
  */
@@ -124,7 +124,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testGetNeuron() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		assertNotNull(n);
 		assertNotNull(n.getNeuron(0, 0));
@@ -147,13 +148,16 @@ public class NetworkTest {
 		assertNotNull(n.getNeuron(TWO, FOUR));
 		assertNotNull(n.getNeuron(THREE, FOUR));
 		assertNotNull(n.getNeuron(FOUR, FOUR));
-		
-		assertNull(n.getNeuron(-ONE, 0));
-		assertNull(n.getNeuron(0, -ONE));
+
+		assertNull(n.getNeuron(Integer.MAX_VALUE, 0));
+
+		assertNull(n.getNeuron(-TWO, 0));
+		assertNull(n.getNeuron(0, -TWO));
+		assertNull(n.getNeuron(ONE, -TWO));
 		assertNull(n.getNeuron(0, THREE * TWO));
 		assertNull(n.getNeuron(-ONE, -ONE));
 		assertNull(n.getNeuron(-ONE, THREE * TWO));
-
+		
 	}
 
 	/**
@@ -162,13 +166,15 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testGetOutputNeuron() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE,
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		assertEquals(n.getOutputNeuron(0).getType(), NeuronType.OUTPUT);
 		assertEquals(n.getOutputNeuron(ONE).getType(), NeuronType.OUTPUT);
 		assertEquals(n.getOutputNeuron(TWO).getType(), NeuronType.OUTPUT);
 		assertEquals(n.getOutputNeuron(THREE).getType(), NeuronType.OUTPUT);
 		assertEquals(n.getOutputNeuron(FOUR).getType(), NeuronType.OUTPUT);
+		assertNull(n.getOutputNeuron(-TWO));
 	}
 
 	/**
@@ -177,13 +183,15 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testGetInputNeuron() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		assertEquals(n.getInputNeuron(0).getType(), NeuronType.INPUT);
 		assertEquals(n.getInputNeuron(ONE).getType(), NeuronType.INPUT);
 		assertEquals(n.getInputNeuron(TWO).getType(), NeuronType.INPUT);
 		assertEquals(n.getInputNeuron(THREE).getType(), NeuronType.INPUT);
 		assertEquals(n.getInputNeuron(FOUR).getType(), NeuronType.INPUT);
+		assertNull(n.getInputNeuron(-TWO));
 	}
 
 	/**
@@ -192,7 +200,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testGetHeight() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		assertEquals(FIVE, n.getHeight());
 	}
@@ -203,7 +212,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testRunInputs() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		Vector<Double> values = new Vector<Double>();
 		values.add(NN_INPUT_VALUE);
@@ -221,7 +231,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testReset() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		n.reset();
 	}
@@ -232,9 +243,11 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testTrainVectorOfDouble() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
-		n.train(null);
+		//n.train(false, null);
+		//n.train(true, null);
 		//TODO Complete.
 	}
 
@@ -246,9 +259,10 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testTrainTrainingStackErrorValue() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
-		n.train(null, null);
+		//n.train(null, null);
 		//TODO Complete.
 	}
 
@@ -258,7 +272,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testGetOutputLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		assertEquals(LayerType.OUTPUT, n.getOutputLayer().getLayerType());
 	}
@@ -270,7 +285,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testSetOutputLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.setOutputLayer(new OutputLayer(THREE));
 		n.build();
 		assertEquals(LayerType.OUTPUT, n.getOutputLayer().getLayerType());
@@ -284,7 +300,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testAddHiddenLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.addHiddenLayer(new HiddenLayer(THREE * TWO));
 		n.build();
 		IHiddenLayer h = n.getHiddenLayer(THREE);
@@ -298,7 +315,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testGetHiddenLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(0).getLayerType());
 		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(1).getLayerType());
@@ -311,7 +329,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testGetInputLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		assertEquals(LayerType.INPUT, n.getInputLayer().getLayerType());
 	}
@@ -323,7 +342,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testSetInputLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.setInputLayer(new InputLayer(THREE * TWO));
 		n.build();
 		assertEquals(LayerType.INPUT, n.getInputLayer().getLayerType());
@@ -336,7 +356,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testBuild() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE, 
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		assertNotNull(n);
 	}
@@ -347,7 +368,8 @@ public class NetworkTest {
 	 */
 	@Test
     public final void testToString() {
-		INetwork n = new Network(FIVE, FIVE, THREE, new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(FIVE, FIVE, THREE,
+				new int[] {FOUR, TWO, FOUR});
 		n.build();
 		LOGGER.debug(n.toString());
 		assertTrue(

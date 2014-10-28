@@ -7,10 +7,10 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import com.neuralnetwork.shared.values.ZeroValue;
+import com.neuralnetwork.shared.values.RandomValue;
 
 
 
@@ -27,7 +27,7 @@ public abstract class AbstractOutputNeuron
      * Construct a new Abstract output neuron.
      */
     public AbstractOutputNeuron() {
-        super(NeuronType.OUTPUT, new ZeroValue());
+        super(NeuronType.OUTPUT, new RandomValue());
     }
 
     @Override

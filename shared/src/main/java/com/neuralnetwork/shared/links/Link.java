@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.links;
 
 import com.neuralnetwork.shared.exceptions.NeuronLinkException;
@@ -46,6 +46,11 @@ public class Link implements ILink {
      * initialized to 0.
      */
     private DoubleValue weight;
+    
+    /**
+     * Id value.
+     */
+    private final DoubleValue id;
 
     /**
      * Construct a new link with head, tail and weight.
@@ -71,7 +76,7 @@ public class Link implements ILink {
         }
 
         this.weight = linkWeight;
-        
+        this.id = linkWeight;
         if (this.weight == null) {
         	this.weight = new ZeroValue();
         }
@@ -138,8 +143,8 @@ public class Link implements ILink {
         final int prime = 31;
         int result = 1;
         int weightValue = 0;
-        if (weight != null) {
-            weight.hashCode();
+        if (id != null) {
+            weightValue = id.hashCode();
         }
         result = prime * result
                  + weightValue;
@@ -161,11 +166,11 @@ public class Link implements ILink {
             return false;
         }
         Link other = (Link) obj;
-        if (weight == null) {
-            if (other.weight != null) {
+        if (id == null) {
+            if (other.id != null) {
                 return false;
             }
-        } else if (!weight.equals(other.weight)) {
+        } else if (!id.equals(other.id)) {
             return false;
         }
         return true;

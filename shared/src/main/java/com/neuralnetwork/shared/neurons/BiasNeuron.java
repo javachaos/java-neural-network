@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
 import com.neuralnetwork.shared.values.DoubleValue;
@@ -47,5 +47,16 @@ public class BiasNeuron extends Neuron
     public final String toString() {
         return "BN(1.0)";
     }
+
+	@Override
+	public final Double getError() {
+		//Bias has no input
+		return 0.0;
+	}
+
+	@Override
+	public final Double propagateError(final Double e) {
+		return 0.0;
+	}
 
 }

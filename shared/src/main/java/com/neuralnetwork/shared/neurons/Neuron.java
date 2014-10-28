@@ -7,13 +7,16 @@
  *
  * Contributors:
  *     Fred Laderoute - initial API and implementation
- *******************************************************************************/
+ ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
@@ -29,6 +32,11 @@ import com.neuralnetwork.shared.values.RandomValue;
  *
  */
 public abstract class Neuron implements INeuron {
+    
+    /**
+     * Logger instance.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(Neuron.class);
     
     /**
      * The value for this neuron.
@@ -359,6 +367,9 @@ public abstract class Neuron implements INeuron {
      *      the inputLinks to set
      */
     public final void setInputs(final Vector<ILink> inputLink) {
+    	if (inputLink == null || inputLink.isEmpty()) {
+    		LOGGER.warn("Input link array is empty or null.");
+    	}
         this.inputLinks = inputLink;
     }
 
@@ -376,5 +387,11 @@ public abstract class Neuron implements INeuron {
     public final void setOutputs(final Vector<ILink> outputLink) {
         this.outputLinks = outputLink;
     }
+    
+	@Override
+	public abstract Double getError();
+
+	@Override
+	public abstract Double propagateError(Double e);
 
 }
