@@ -24,17 +24,17 @@ public class TrainNetworkTask {
      */
     private static final Logger LOGGER = 
     		LoggerFactory.getLogger(TrainNetworkTask.class);
-    
+
 	/**
 	 * Network reference.
 	 */
 	private INetwork network;
-	
+
 	/**
 	 * Training stack.
 	 */
 	private TrainingStack trainStack;
-	
+
 	/**
 	 * Executor service.
 	 */
@@ -74,6 +74,7 @@ public class TrainNetworkTask {
 		try {
 			executorService.awaitTermination(
 					Constants.TRAIN_TIMEOUT, TimeUnit.SECONDS);
+			executorService.shutdown();
 		} catch (InterruptedException e) {
 			LOGGER.error(e.getMessage());
 		}
