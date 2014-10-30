@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.Stack;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.neuralnetwork.shared.network.INetwork;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.IOutputNeuron;
@@ -19,6 +22,12 @@ import com.neuralnetwork.shared.values.ErrorValue;
  */
 public final class BackpropAlgorithm implements ITrainAlgorithm {
 
+    /**
+     * Logger instance.
+     */
+    private static final Logger LOGGER = 
+    		LoggerFactory.getLogger(BackpropAlgorithm.class);
+    
 	/**
 	 * Network to be trained.
 	 */
@@ -38,6 +47,12 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 * Training vector.
 	 */
 	private Vector<Double> trainVector;
+	
+
+	/**
+	 * Training vector.
+	 */
+	private Vector<Double> desiredVector;
 
 	/**
 	 * Create the backprop algorithm.
@@ -45,14 +60,19 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 * @param trainingVector
 	 * 		the training vector.
 	 * 
+	 * @param desiredVector
+	 * 		the desired output vector.
+	 * 
 	 * @param net
 	 * 		the network to run the algorithm on.
 	 * 
 	 * @param expErr
 	 * 		desired error value.
+	 * 
 	 */
 	public BackpropAlgorithm(
 			final Vector<Double> trainingVector,
+			final Vector<Double> desiredVector,
 			final INetwork net, final ErrorValue expErr) {
 		this.trainVector = trainingVector;
 		this.network = net;
@@ -76,9 +96,11 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 * @return
 	 * 		the mean squared error of the network.
 	 */
-	public Double compute() {
-		//TODO Fix, and get right.
+	public synchronized Double compute() {
+		
+		
 		Vector<Double> output = network.runInputs(trainVector);
+		LOGGER.debug("Network output: " + output);
 		currError = new ErrorValue(
 				ErrorFunctions.getInstance().meanSquaredError(
 						output, trainVector));

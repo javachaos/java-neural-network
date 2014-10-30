@@ -10,10 +10,10 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import java.util.Vector;
-
 import com.neuralnetwork.shared.links.ILink;
+import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.values.DoubleValue;
+import com.neuralnetwork.shared.values.ErrorValue;
 
 
 /**
@@ -36,19 +36,21 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
     }
 
     @Override
-    public final void feedforward(final DoubleValue v) {
+    public final ErrorValue feedforward(final DoubleValue v,
+    		final INeuralNetContext nnctx) {
         
         double sum = 0.0;
         for (ILink il : getInputs()) {
             sum += il.getWeight().getValue() * v.getValue();
         }
+        
         DoubleValue n = new DoubleValue(getActivationFunction().activate(sum));
         setValue(n);
-        Vector<ILink> o = getOutputs();
-        for (int i = 0; i < o.size(); i++) {
-            ILink l = o.get(i);
-            l.getTail().feedforward(n);
+        ErrorValue e = ErrorValue.ZERO;
+        for (ILink ol : getOutputs()) {
+            e.updateValue(ol.getTail().feedforward(n, nnctx));
         }
+		return e;
     }
 
 	@Override

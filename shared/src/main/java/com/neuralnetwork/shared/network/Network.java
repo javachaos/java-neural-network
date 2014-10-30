@@ -31,7 +31,6 @@ import com.neuralnetwork.shared.neurons.IOutputNeuron;
 import com.neuralnetwork.shared.training.BackpropAlgorithm;
 import com.neuralnetwork.shared.training.TrainType;
 import com.neuralnetwork.shared.util.Connections;
-import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
@@ -258,9 +257,7 @@ public final class Network implements INetwork {
     				+ "dimension to be run through this network.");
     		return null;
     	}
-        for (int i = 0; i < l.size(); i++) {
-            getInputLayer().addValue(new DoubleValue(l.get(i)), i);
-        }
+    	getInputLayer().addValues(l);
         IOutputLayer ol = getInputLayer().propagate(nnctx);
         return ol.getOutputValues();
     }
@@ -291,7 +288,7 @@ public final class Network implements INetwork {
 			case BACKPROP:
 					BackpropAlgorithm algo = 
 					new BackpropAlgorithm(trainingVector,
-							this, expectedError);
+							trainingVector, this, expectedError);
 					errorValue = new ErrorValue(algo.compute());
 				break;
 			case QPROP:

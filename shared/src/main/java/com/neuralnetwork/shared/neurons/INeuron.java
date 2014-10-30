@@ -12,7 +12,9 @@ package com.neuralnetwork.shared.neurons;
 
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.links.ILink;
+import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.values.DoubleValue;
+import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * INeuron interface for the Nodes of the network.
@@ -262,8 +264,11 @@ public interface INeuron {
      * 
      * @param v
      *      the value to be fed forward to the next neuron
+     * @param nnctx
+     * 		the neural network context to be passed along.
+     * @return output value.
      */
-    void feedforward(DoubleValue v);
+    ErrorValue feedforward(DoubleValue v, INeuralNetContext nnctx);
 
     /**
      * Calculate the error.

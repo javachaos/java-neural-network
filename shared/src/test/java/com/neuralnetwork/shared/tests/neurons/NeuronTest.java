@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.layers.HiddenLayer;
 import com.neuralnetwork.shared.links.ILink;
+import com.neuralnetwork.shared.network.NeuralNetContext;
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
 import com.neuralnetwork.shared.neurons.InputNeuron;
 import com.neuralnetwork.shared.neurons.Neuron;
@@ -63,7 +64,7 @@ public class NeuronTest {
     /**
      * Double value of 0.1.
      */
-    private static final double ZERO_POINT_ONE = 0.1;
+    private static final double D_0_1 = 0.1;
     
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -539,8 +540,8 @@ public class NeuronTest {
      */
     @Test
     public final void testFeedforward() {
-        Neuron n = new InputNeuron(new DoubleValue(ZERO_POINT_ONE));
-        Neuron n1 = new InputNeuron(new DoubleValue(ZERO_POINT_ONE));
+        Neuron n = new InputNeuron(new DoubleValue(D_0_1));
+        Neuron n1 = new InputNeuron(new DoubleValue(D_0_1));
         Neuron m = new HiddenNeuron();
         Neuron o = new OutputNeuron();
         Neuron o1 = new OutputNeuron();
@@ -548,7 +549,7 @@ public class NeuronTest {
         n1.addOutputLink(m);
         m.addOutputLink(o);
         m.addOutputLink(o1);
-        
+
         assertEquals(m.getInputLink(0), n.getOutputLink(0));
 
         LOGGER.debug("====== Before Feedforward ======");
@@ -557,7 +558,8 @@ public class NeuronTest {
         LOGGER.debug(o + " " + o1);
         LOGGER.debug("================================");
         
-        n.feedforward(new DoubleValue(ZERO_POINT_ONE));
+        n.feedforward(new DoubleValue(D_0_1),
+        		new NeuralNetContext(null));
         
         LOGGER.debug("======= After Feedforward =======");
         LOGGER.debug(n + " " + n1);

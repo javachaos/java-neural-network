@@ -22,7 +22,9 @@ import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.links.Link;
+import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.values.DoubleValue;
+import com.neuralnetwork.shared.values.ErrorValue;
 import com.neuralnetwork.shared.values.RandomValue;
 
 /**
@@ -269,7 +271,8 @@ public abstract class Neuron implements INeuron {
     }
     
     @Override
-    public abstract void feedforward(final DoubleValue v);
+    public abstract ErrorValue feedforward(final DoubleValue v, 
+    		final INeuralNetContext nnctx);
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

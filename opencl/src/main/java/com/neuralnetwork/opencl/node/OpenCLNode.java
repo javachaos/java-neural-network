@@ -10,10 +10,12 @@
  ******************************************************************************/
 package com.neuralnetwork.opencl.node;
 
+import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.neurons.Neuron;
 import com.neuralnetwork.shared.neurons.NeuronType;
 import com.neuralnetwork.shared.values.DoubleValue;
+import com.neuralnetwork.shared.values.ErrorValue;
 import com.neuralnetwork.shared.values.ZeroValue;
 
 /**
@@ -35,7 +37,9 @@ public class OpenCLNode extends Neuron implements INeuron {
     }
 
     @Override
-    public final void feedforward(final DoubleValue v) {
+    public final ErrorValue feedforward(final DoubleValue v,
+            final INeuralNetContext nnctx) {
+           return null;
         //TODO improve.
     }
 

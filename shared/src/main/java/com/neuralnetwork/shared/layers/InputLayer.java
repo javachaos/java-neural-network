@@ -12,12 +12,16 @@ package com.neuralnetwork.shared.layers;
 
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.neurons.BiasNeuron;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.InputNeuron;
 import com.neuralnetwork.shared.values.DoubleValue;
+import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * Represents an Input layer to the network.
@@ -28,6 +32,12 @@ import com.neuralnetwork.shared.values.DoubleValue;
 public final class InputLayer extends Layer<IInputNeuron> 
         implements IInputLayer {
 
+    /**
+     * Logger instance.
+     */
+    private static final Logger LOGGER =
+    		LoggerFactory.getLogger(InputLayer.class);
+    
     /**
      * Generated Serial Version UID. 
      */
@@ -52,16 +62,20 @@ public final class InputLayer extends Layer<IInputNeuron>
     
     @Override
     public void addValues(final Vector<Double> values) {
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < values.size(); i++) {
             set(i, new InputNeuron(new DoubleValue(values.get(i))));
         }
     }
 
     @Override
     public IOutputLayer propagate(final INeuralNetContext nnctx) {
-        for (int i = 0; i < getSize(); i++) {
-            getNeuron(i).feedforward();
-        }
+    	ErrorValue v = new ErrorValue(Double.MAX_VALUE);
+    	synchronized (nnctx) {
+	        for (int i = 0; i < getSize(); i++) {
+	        	v.updateValue(getNeuron(i).feedforward(nnctx));
+	        }
+    	}
+    	LOGGER.debug("Propagation Error: " + v.toString());
         return nnctx.getNetwork().getOutputLayer();
     }
 

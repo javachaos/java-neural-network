@@ -24,6 +24,11 @@ public class NeuralNetContext implements INeuralNetContext {
     private INetwork network;
     
     /**
+     * True if the network is processing.
+     */
+    private boolean isRunning;
+    
+    /**
      * Create a new neuralnet context with network n.
      * @param n
      *      the network for this context.
@@ -36,4 +41,14 @@ public class NeuralNetContext implements INeuralNetContext {
     public final INetwork getNetwork() {
         return network;
     }
+
+	@Override
+	public final boolean isRunning() {
+		return isRunning;
+	}
+
+	@Override
+	public final void setRunning(final boolean running) {
+		this.isRunning = running;
+	}
 }

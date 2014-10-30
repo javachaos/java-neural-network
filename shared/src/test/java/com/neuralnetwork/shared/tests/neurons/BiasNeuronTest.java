@@ -44,8 +44,8 @@ public class BiasNeuronTest {
 	@Test
 	public final void testFeedForward() {
 		BiasNeuron bn = new BiasNeuron();
-		bn.feedforward();
-		bn.feedforward(new OneValue());
+		bn.feedforward(null);
+		bn.feedforward(new OneValue(), null);
 		assertEquals(bn.getOutputValue(), 1, Constants.TEN);
 	}
 	

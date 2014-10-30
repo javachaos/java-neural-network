@@ -10,14 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.core;
 
-import com.neuralnetwork.shared.layers.HiddenLayer;
-import com.neuralnetwork.shared.network.INetwork;
-import com.neuralnetwork.shared.training.TrainNetworkTask;
-import com.neuralnetwork.shared.training.TrainingStack;
-import com.neuralnetwork.shared.util.NeuralNetBuilder;
-import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
-import com.neuralnetwork.shared.util.VectorUtil;
-import com.neuralnetwork.shared.values.Constants;
+import com.neuralnetwork.core.BackpropagationNetwork.TransferFunction;
 
 /**
  * Main class.
@@ -26,31 +19,6 @@ import com.neuralnetwork.shared.values.Constants;
  *
  */
 public final class Main {
-
-    /**
-     * Size of the Self organizing map.
-     */
-    private static final int SIZE_N = 4;
-
-//    /**
-//     * Number of iterations for training.
-//     */
-//    private static final int NUM_ITER = 50000;
-//
-//    /**
-//     * Training thread checkin time.
-//     */
-//    private static final int CHECKIN_DELAY = 1000;
-//
-//    /**
-//     * Learning rate for SOM algorithm.
-//     */
-//    private static final double LEARNING_RATE = 0.001;
-//
-//    /**
-//     * Seed value for the random number generator.
-//     */
-//    private static final long SEED = 1234L;
 
     /**
      * Unused ctor.
@@ -64,58 +32,46 @@ public final class Main {
      *      command line args
      */
     public static void main(final String[] args) {
-//        Random r = new Random(SEED);
-//
-//        Vector<SOMLayer> inData = new Vector<SOMLayer>(SIZE_N);
-//        SOMLayer input = new SOMLayer();
-//
-//        for (int i = 0; i < SIZE_N; i++) {
-//            input = new SOMLayer();
-//            for (int j = 0; j < SIZE_N; j++) {
-//                input.add(r.nextDouble());
-//            }
-//            inData.add(input);
-//        }
-//
-//        input = new SOMLayer();
-//        for (int j = 0; j < SIZE_N; j++) {
-//            input.add(r.nextDouble());
-//        }
-//
-//        SOMLattice lattice = new SOMLattice(SIZE_N, SIZE_N, SIZE_N);
-//
-//        SOMTrainer trainer = new SOMTrainer(LEARNING_RATE, NUM_ITER);
-//        trainer.setTraining(lattice, inData);
-//        trainer.start();
-//
-//        //Wait for training to complete, check every second.
-//        while (trainer.isRunning()) {
-//            try {
-//                Thread.sleep(CHECKIN_DELAY);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        lattice = trainer.getLattice();
-//        ISOMNeuron n = lattice.getBMU(input);
-//        System.out.println("X: " + n.getX() + " Y: " + n.getY());
 
-        NeuralNetBuilder builder = new NeuralNetBuilder(SIZE_N, SIZE_N);
-        builder.addHiddenLayer(new HiddenLayer(2));
-        builder.addHiddenLayer(new HiddenLayer(1));
-        builder.build();
+        int[] layerSizes = new int[] { 10, 5, 3, 5, 10 };
+        TransferFunction[] tFuncs = new TransferFunction[] {
+                TransferFunction.None,
+                TransferFunction.Sigmoid,
+                TransferFunction.Sigmoid,
+                TransferFunction.Sigmoid,
+                TransferFunction.Sigmoid };
+        BackpropagationNetwork bpn = new BackpropagationNetwork(
+                layerSizes, tFuncs);
+        double[][] input = new double[][] {
+                { 0.4, 0.2, 0.1, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8},
+                { 0.1, 0.6, 0.2, 0.2, 0.3, 0.7, 0.4, 0.3, 0.65, 0.32},
+                { 0.4, 0.2, 0.6, 0.6, 0.8, 0.4, 0.2, 0.1, 0.3, 0.6},
+                { 0.1, 0.6, 0.2, 0.2, 0.3, 0.7, 0.4, 0.3, 0.65, 0.32},
+                { 0.4, 0.2, 0.1, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8},
+                { 0.1, 0.6, 0.2, 0.2, 0.3, 0.7, 0.4, 0.3, 0.65, 0.32},
+                { 0.4, 0.2, 0.1, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8},
+                { 0.6, 0.6, 0.2, 0.2, 0.3, 0.7, 0.4, 0.3, 0.65, 0.32},
+                { 0.4, 0.6, 0.1, 0.3, 0.8, 0.4, 0.6, 0.1, 0.3, 0.8},
+                { 0.4, 0.2, 0.1, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8}};
+        double[][] desired = new double[][] {
+                { 0.1, 0.6, 0.2, 0.2, 0.3, 0.7, 0.4, 0.3, 0.65, 0.32},
+                { 0.4, 0.2, 0.1, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8},
+                { 0.1, 0.6, 0.6, 0.2, 0.3, 0.7, 0.4, 0.3, 0.65, 0.32},
+                { 0.4, 0.2, 0.1, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8},
+                { 0.1, 0.6, 0.2, 0.2, 0.3, 0.7, 0.4, 0.3, 0.65, 0.32},
+                { 0.1, 0.6, 0.2, 0.2, 0.3, 0.6, 0.4, 0.3, 0.65, 0.32},
+                { 0.4, 0.2, 0.6, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8},
+                { 0.4, 0.2, 0.1, 0.6, 0.8, 0.4, 0.2, 0.1, 0.3, 0.6},
+                { 0.1, 0.6, 0.2, 0.2, 0.3, 0.7, 0.4, 0.3, 0.65, 0.32},
+                { 0.4, 0.2, 0.1, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8}};
+        double[] output = new double[1];
 
-        NeuralNetBuilder b =
-                new NeuralNetBuilder(SimpleNetworkConfigs.CONFIG_5_4_3_4_5);
-        INetwork net = b.build();
-        TrainingStack ts = new TrainingStack(Constants.FIVE);
-        ts.addTrainingSample(VectorUtil.getRandomVector(Constants.FIVE));
-        ts.addTrainingSample(VectorUtil.getRandomVector(Constants.FIVE));
-        ts.addTrainingSample(VectorUtil.getRandomVector(Constants.FIVE));
-        ts.addTrainingSample(VectorUtil.getRandomVector(Constants.FIVE));
-        ts.addTrainingSample(VectorUtil.getRandomVector(Constants.FIVE));
-        ts.addTrainingSample(VectorUtil.getRandomVector(Constants.FIVE));
-        TrainNetworkTask tnt = new TrainNetworkTask(net, ts);
-        tnt.startTraining();
+        double error = 0.0;
+        double desiredError = 0.0000000000000000001;
+        int i = 0;
+        int updateEvery = 10000;
+        double learnRate = 0.61803398875;
+        bpn.train(input, desired, learnRate + 1, learnRate, desiredError);
+        bpn.saveNet("/home/alfred/Documents/main.net");
     }
 }

@@ -10,10 +10,10 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import java.util.Vector;
-
 import com.neuralnetwork.shared.links.ILink;
+import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.values.DoubleValue;
+import com.neuralnetwork.shared.values.ErrorValue;
 import com.neuralnetwork.shared.values.RandomValue;
 
 /**
@@ -43,17 +43,18 @@ public class InputNeuron extends AbstractInputNeuron {
     }
     
     @Override
-    public final void feedforward(final DoubleValue v) {
-        feedforward();
+    public final ErrorValue feedforward(final DoubleValue v,
+    		final INeuralNetContext nnctx) {
+        return feedforward(nnctx);
     }
     
     @Override
-    public final void feedforward() {
-        Vector<ILink> o = getOutputs();
-        for (int i = 0; i < o.size(); i++) {
-            ILink l = o.get(i);
-            l.getTail().feedforward(getValue());
-        }
+    public final ErrorValue feedforward(final INeuralNetContext nnctx) {
+    	ErrorValue v = null;
+    	for (ILink ol : getOutputs()) { //TODO FIX ME, Null at train time.
+            v = ol.getTail().feedforward(getValue(), nnctx);
+    	}
+		return v;
     }
     
     @Override

@@ -23,6 +23,11 @@ public class ErrorValue extends DoubleValue {
 	 */
 	public static final ErrorValue E_0_00001 = new ErrorValue(0.00001);
 	
+	/**
+	 * Default error value.
+	 */
+	public static final ErrorValue ZERO = new ErrorValue(0.0);
+	
     /**
      * Construct an error value.
      * 

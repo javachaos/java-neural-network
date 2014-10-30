@@ -25,4 +25,20 @@ public interface INeuralNetContext {
      *      a reference to the network
      */
     INetwork getNetwork();
+    
+    /**
+     * Return true if is processing.
+     * 
+     * @return
+     * 		true if is running.
+     */
+    boolean isRunning();
+
+    /**
+     * Set isRunning marker.
+     * 
+     * @param b
+     * 		the boolean value to set isRunning to.
+     */
+	void setRunning(boolean b);
 }

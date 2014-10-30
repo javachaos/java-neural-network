@@ -10,7 +10,9 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
+import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.values.DoubleValue;
+import com.neuralnetwork.shared.values.ErrorValue;
 import com.neuralnetwork.shared.values.OneValue;
 
 /**
@@ -31,11 +33,14 @@ public class BiasNeuron extends Neuron
     }
 
     @Override
-    public void feedforward() {        
+	public final ErrorValue feedforward(final INeuralNetContext nnctx) {
+		return ErrorValue.ZERO;        
     }
 
     @Override
-    public void feedforward(final DoubleValue v) {
+	public final ErrorValue feedforward(final DoubleValue v,
+    		final INeuralNetContext nnctx) {
+	    return ErrorValue.ZERO;
     }
 
     @Override
