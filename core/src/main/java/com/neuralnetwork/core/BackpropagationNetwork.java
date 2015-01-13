@@ -39,6 +39,7 @@ public final class BackpropagationNetwork implements Serializable {
      *
      */
     public enum TransferFunction {
+    	
         /**
          * No transfer function.
          */
@@ -61,15 +62,17 @@ public final class BackpropagationNetwork implements Serializable {
          * Evaluate the transfer function transferFunction.
          * @param transferFunction
          *         the transfer fuction to use.
+         *         
          * @param input
          *         the input data.
+         *         
          * @return
          *         the result of applying the
          *         transfer function on the data.
          */
         public static double evaluate(
-                final TransferFunction transferFunction,
-                final double input) {
+        		final TransferFunction transferFunction,
+        		final double input) {
             switch (transferFunction) {
                 case Sigmoid:
                     return new SigmoidFunction().activate(input);
@@ -84,8 +87,10 @@ public final class BackpropagationNetwork implements Serializable {
          * Evaluate the derivitive of the transfer function.
          * @param transferFunction
          *         the transfer fuction to use.
+         *         
          * @param input
          *         the input data.
+         *         
          * @return
          *         the derivitive of the transfer function.
          */
@@ -162,7 +167,7 @@ public final class BackpropagationNetwork implements Serializable {
     /**
      * Random generator.
      */
-    private Random rand = new SecureRandom();
+    private transient Random rand = new SecureRandom();
 
     /**
      * iteration counter.
@@ -251,8 +256,10 @@ public final class BackpropagationNetwork implements Serializable {
 
     /**
      * Return the index to the layer.
+     * 
      * @param l
      *         the layer index to transform.
+     *         
      * @return
      *         the new index to the correct layer.
      */
@@ -266,8 +273,10 @@ public final class BackpropagationNetwork implements Serializable {
 
     /**
      * Run the network.
+     * 
      * @param input
      *         the input to run.
+     *         
      * @return
      *         the result of running the network.
      */
@@ -300,12 +309,16 @@ public final class BackpropagationNetwork implements Serializable {
 
     /**
      * Get value from the network.
+     * 
      * @param l
      *         the layer.
+     *         
      * @param i
      *         the index of that layer.
+     *         
      * @param input
      *         the input vector.
+     *         
      * @return
      *         the value
      */
@@ -320,16 +333,22 @@ public final class BackpropagationNetwork implements Serializable {
 
     /**
      * Train on a vector of training samples.
+     * 
      * @param trainingData
      *         the vector of training samples.
+     *         
      * @param desiredData
      *         the vector of desired training samples.
+     *         
      * @param trainingRate
      *         the training rate.
+     *         
      * @param momentum
      *         the momentum to avoid local minima.
+     *         
      * @param desiredError
      *         the desired network error.
+     *         
      * @return
      *         the final network error.
      */
@@ -350,14 +369,19 @@ public final class BackpropagationNetwork implements Serializable {
 
     /**
      * Train the neural network.
+     * 
      * @param input
      *         the input to train.
+     *         
      * @param desired
      *         the desired output.
+     *         
      * @param trainingRate
      *         the trainingRate
+     *         
      * @param momentum
      *         the momentum
+     *         
      * @return
      *         the mse of the network after training.
      */
@@ -438,12 +462,16 @@ public final class BackpropagationNetwork implements Serializable {
      *
      * @param input
      *         the input to be printed.
+     *         
      * @param output
      *         the output to be printed.
+     *         
      * @param error
      *         the error value.
+     *         
      * @param i
      *         the interation number.
+     *         
      */
     private void prettyPrint(final double[] input,
             final double[] output,
@@ -469,6 +497,7 @@ public final class BackpropagationNetwork implements Serializable {
      *
      * @param fileName
      *         the file path to store the network as.
+     *         
      * @return
      *         the file path
      */
@@ -493,6 +522,7 @@ public final class BackpropagationNetwork implements Serializable {
      *
      * @param fileName
      *         the filename of the file to load.
+     *         
      * @return
      *         the reference to the loaded network.
      *
@@ -515,7 +545,6 @@ public final class BackpropagationNetwork implements Serializable {
             this.previousWeightDelta = net.previousWeightDelta;
             this.weight = net.weight;
             this.transferFunction = net.transferFunction;
-            this.rand = net.rand;
             in.close();
             fileIn.close();
         } catch (IOException e) {
@@ -526,4 +555,3 @@ public final class BackpropagationNetwork implements Serializable {
         return net;
     }
 }
-

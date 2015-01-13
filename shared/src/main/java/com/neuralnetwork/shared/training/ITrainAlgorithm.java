@@ -1,7 +1,5 @@
 package com.neuralnetwork.shared.training;
 
-import java.util.concurrent.Callable;
-
 import com.neuralnetwork.shared.values.ErrorValue;
 
 /**

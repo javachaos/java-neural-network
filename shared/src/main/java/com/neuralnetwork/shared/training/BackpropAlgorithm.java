@@ -49,10 +49,10 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	private Vector<Double> trainVector;
 	
 
-	/**
-	 * Training vector.
-	 */
-	private Vector<Double> desiredVector;
+//	/**
+//	 * Training vector.
+//	 */
+//	private Vector<Double> desiredVector;
 
 	/**
 	 * Create the backprop algorithm.

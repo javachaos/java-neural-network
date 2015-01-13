@@ -72,6 +72,6 @@ public final class Main {
         int updateEvery = 10000;
         double learnRate = 0.61803398875;
         bpn.train(input, desired, learnRate + 1, learnRate, desiredError);
-        bpn.saveNet("/home/alfred/Documents/main.net");
+        bpn.saveNet("/home/fred/Documents/main.net");
     }
 }

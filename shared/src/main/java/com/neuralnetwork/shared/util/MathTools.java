@@ -7,7 +7,7 @@ import java.util.Collection;
  * @author alfred
  *
  */
-public class MathTools {
+public final class MathTools {
 	
 	/**
 	 * Incarnation prohibited.
@@ -18,10 +18,11 @@ public class MathTools {
 	/**
 	 * sum.
 	 * @param col
+	 * 		collection parameter.
 	 * @return
 	 * 		the sum.
 	 */
-	public static final Double sum(final Collection<? extends Number> col) {
+	public static Double sum(final Collection<? extends Number> col) {
 		double sum = 0;
 		for (Number n : col) {
 			sum += (Double) n;
