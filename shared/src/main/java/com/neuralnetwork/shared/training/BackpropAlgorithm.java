@@ -98,7 +98,6 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 */
 	public synchronized Double compute() {
 		
-		
 		Vector<Double> output = network.runInputs(trainVector);
 		LOGGER.debug("Network output: " + output);
 		currError = new ErrorValue(

@@ -33,7 +33,7 @@ public final class Main {
      */
     public static void main(final String[] args) {
 
-        int[] layerSizes = new int[] { 10, 5, 3, 5, 10 };
+        int[] layerSizes = new int[] { 100, 50, 25, 50, 100 };
         TransferFunction[] tFuncs = new TransferFunction[] {
                 TransferFunction.None,
                 TransferFunction.Sigmoid,
@@ -72,6 +72,6 @@ public final class Main {
         int updateEvery = 10000;
         double learnRate = 0.61803398875;
         bpn.train(input, desired, learnRate + 1, learnRate, desiredError);
-        bpn.saveNet("/home/fred/Documents/main.net");
+        bpn.saveNet("/home/alfred/Documents/main.net");
     }
 }
