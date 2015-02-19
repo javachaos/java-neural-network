@@ -112,7 +112,7 @@ public class TrainingStackTest {
 		TrainingStack s = new TrainingStack(I_4);
 		s.addTrainingSample(rawData);
 		
-		assertEquals(s.popSample(), p);
+		assertEquals(s.popSample(), p.getFirst());
 		assertTrue(s.getData().isEmpty());
 	}
 
@@ -138,7 +138,7 @@ public class TrainingStackTest {
 		TrainingStack s = new TrainingStack(I_4);
 		s.addTrainingSample(rawData);
 		
-		assertEquals(s.peekSample(), p);
+		assertEquals(s.peekSample(), p.getFirst());
 	}
 
 	/**

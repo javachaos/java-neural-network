@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Vector;
@@ -37,6 +38,7 @@ import com.neuralnetwork.shared.neurons.OutputNeuron;
 import com.neuralnetwork.shared.values.Constants;
 import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.OneValue;
+import com.neuralnetwork.shared.values.RandomValue;
 import com.neuralnetwork.shared.values.ZeroValue;
 
 /**
@@ -109,9 +111,13 @@ public class NeuronTest {
 	 */
 	@Test
 	public final void testNeuron() {
-		Neuron n = new InputNeuron();
-		Neuron m = new InputNeuron(new ZeroValue());
-		assertEquals(n, m);
+		Neuron n = new InputNeuron(new ZeroValue());
+		Neuron m = new InputNeuron(new OneValue());
+		assertTrue(!n.equals(m));
+
+		n = new InputNeuron();
+		m = new InputNeuron();
+		assertTrue(!n.equals(m));
 	}
 
 	/**
@@ -515,8 +521,8 @@ public class NeuronTest {
 		Neuron n = new InputNeuron();	
 		Neuron n1 = new InputNeuron();
 		
-		assertEquals(n.getValue(), new ZeroValue());
-		assertEquals(n1.getValue(), new ZeroValue());
+		assertFalse(n.getValue().equals(new ZeroValue()));
+		assertFalse(n1.getValue().equals(new ZeroValue()));
 	}
 
 	/**
@@ -575,8 +581,9 @@ public class NeuronTest {
 	 */
 	@Test
 	public final void testEqualsObject() {
-		Neuron n = new InputNeuron();	
-		Neuron n1 = new InputNeuron();
+		RandomValue val = new RandomValue();
+		Neuron n = new InputNeuron(val);
+		Neuron n1 = new InputNeuron(val);
 
 		assertEquals(n, n1);
 		n.setType(null);
@@ -587,7 +594,7 @@ public class NeuronTest {
 		HiddenLayer n2 = new HiddenLayer(1);
 		assertFalse(n.equals(n2));
 		n.setActivationFunction(null);
-		n1 = new InputNeuron();
+		n1 = new InputNeuron(val);
 		assertFalse(n.equals(n1));
 		n1.setType(null);
 		n1.setActivationFunction(null);
@@ -595,8 +602,8 @@ public class NeuronTest {
 		n.setActivationFunction(new SigmoidFunction());
 		assertFalse(n.equals(n1));
 		
-		Neuron i = new InputNeuron();
-		Neuron i1 = new InputNeuron();
+		Neuron i = new InputNeuron(val);
+		Neuron i1 = new InputNeuron(val);
 		Neuron m = new HiddenNeuron();
 		Neuron o = new OutputNeuron();
 		Neuron o1 = new OutputNeuron();

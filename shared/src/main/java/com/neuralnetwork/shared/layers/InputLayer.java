@@ -53,17 +53,24 @@ public final class InputLayer extends Layer<IInputNeuron>
         super(w + 1);
         add(new BiasNeuron());
         setLayerType(LayerType.INPUT);
+        build();
     }
 
     @Override
     public void addValue(final DoubleValue v, final int index) {
-        set(index, new InputNeuron(v));
+        set(index + 1, new InputNeuron(v));
     }
     
     @Override
     public void addValues(final Vector<Double> values) {
+    	if (values.size() != this.size() - 1) {
+    		throw new IllegalArgumentException(
+    				"Values is not the correct dimension. Values: "
+    		        + values.size()
+    				+ ", InputLayer: " + size());
+    	}
         for (int i = 0; i < values.size(); i++) {
-            set(i, new InputNeuron(new DoubleValue(values.get(i))));
+            set(i + 1, new InputNeuron(new DoubleValue(values.get(i))));
         }
     }
 

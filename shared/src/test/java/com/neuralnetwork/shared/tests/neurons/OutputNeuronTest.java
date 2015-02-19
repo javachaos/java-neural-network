@@ -41,7 +41,7 @@ public class OutputNeuronTest {
 		for (int i = 0; i < NUM_ITER; i++) {
 			OutputNeuron o = new OutputNeuron();
 			Double v = o.getOutputValue();
-			assertTrue(v >= 0);
+			assertTrue(v > -1);
 			assertTrue(v < 1);
 		}
 	}

@@ -14,6 +14,7 @@
 package com.neuralnetwork.shared.tests.neurons;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class AbstractInputNeuronTest {
 	public final void testAbstractInputNeuron() {
 		AbstractInputNeuron ai = new InputNeuron();
 		assertEquals(ai.getType(), NeuronType.INPUT);
-		assertEquals(ai.getValue(), new ZeroValue());
+		assertFalse(ai.getValue().equals(new ZeroValue()));
 	}
 
 	/**

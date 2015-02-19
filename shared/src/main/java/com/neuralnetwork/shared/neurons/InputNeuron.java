@@ -15,6 +15,7 @@ import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.values.DoubleValue;
 import com.neuralnetwork.shared.values.ErrorValue;
 import com.neuralnetwork.shared.values.RandomValue;
+import com.neuralnetwork.shared.values.ZeroValue;
 
 /**
  * Implementation of an Input neuron.
@@ -50,7 +51,7 @@ public class InputNeuron extends AbstractInputNeuron {
     
     @Override
     public final ErrorValue feedforward(final INeuralNetContext nnctx) {
-    	ErrorValue v = null;
+    	ErrorValue v = new ErrorValue(0.0);
     	for (ILink ol : getOutputs()) { //TODO FIX ME, Null at train time.
             v = ol.getTail().feedforward(getValue(), nnctx);
     	}
