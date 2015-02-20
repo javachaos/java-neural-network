@@ -49,10 +49,10 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	private Vector<Double> trainVector;
 	
 
-//	/**
-//	 * Training vector.
-//	 */
-//	private Vector<Double> desiredVector;
+	/**
+	 * Training vector.
+	 */
+	private Vector<Double> desiredVector;
 
 	/**
 	 * Create the backprop algorithm.
@@ -122,6 +122,20 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 		
 		return MathTools.sum(errVector);
 		
+	}
+
+	/**
+	 * @return the desiredVector
+	 */
+	public Vector<Double> getDesiredVector() {
+		return desiredVector;
+	}
+
+	/**
+	 * @param desiredVector the desiredVector to set
+	 */
+	public void setDesiredVector(Vector<Double> desiredVector) {
+		this.desiredVector = desiredVector;
 	}
 
 }

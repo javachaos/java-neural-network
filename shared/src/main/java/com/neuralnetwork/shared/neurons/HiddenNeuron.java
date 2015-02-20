@@ -24,6 +24,11 @@ import com.neuralnetwork.shared.values.ErrorValue;
 public class HiddenNeuron extends Neuron implements IHiddenNeuron {
     
 	/**
+	 * Learning Factor.
+	 */
+	private static final double LEARNING_FACTOR = 0.000016;
+
+	/**
 	 * Create a new hidden neuron.
 	 */
 	public HiddenNeuron() {
@@ -41,9 +46,15 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
         
         double sum = 0.0;
         for (ILink il : getInputs()) {
-            sum += il.getWeight().getValue() * v.getValue();
+        	double val = il.getWeight().getValue();
+            sum += val * v.getValue();
+
+            //Experimental learning method...
+            //TODO Experiment. :)
+            //TODO Test: When weight gets too large split weight into two and spawn new neuron. 
+            il.getWeight().setValue(
+            		val + (v.getValue() * LEARNING_FACTOR));
         }
-        
         DoubleValue n = new DoubleValue(getActivationFunction().activate(sum));
         setValue(n);
         ErrorValue e = ErrorValue.ZERO;
