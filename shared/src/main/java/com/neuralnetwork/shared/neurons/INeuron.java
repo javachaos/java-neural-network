@@ -13,8 +13,6 @@ package com.neuralnetwork.shared.neurons;
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.network.INeuralNetContext;
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * INeuron interface for the Nodes of the network.
@@ -31,7 +29,7 @@ public interface INeuron {
      * @return
      *      the value that this neuron holds
      */
-	DoubleValue getValue();
+	Double getValue();
     
     /**
      * Set the value that this neuron will hold.
@@ -39,7 +37,7 @@ public interface INeuron {
      * @param v
      *      the value to set for this neuron
      */
-    void setValue(DoubleValue v);
+    void setValue(Double v);
     
     /**
      * Adds a link from this node to ineuron
@@ -53,7 +51,7 @@ public interface INeuron {
      * 
      * @return a new ILink.
      */
-    ILink addInputLink(INeuron ineuron, DoubleValue weight);
+    ILink addInputLink(INeuron ineuron, Double weight);
     
     /**
      * Adds a link from this node to ineuron
@@ -131,7 +129,7 @@ public interface INeuron {
      * 
      * @return a new ILink.
      */
-    ILink addOutputLink(INeuron ineuron, DoubleValue weight);
+    ILink addOutputLink(INeuron ineuron, Double weight);
     
     /**
      * Adds a link from this node to ineuron
@@ -268,7 +266,7 @@ public interface INeuron {
      * 		the neural network context to be passed along.
      * @return output value.
      */
-    ErrorValue feedforward(DoubleValue v, INeuralNetContext nnctx);
+    Double feedforward(Double v, INeuralNetContext nnctx);
 
     /**
      * Calculate the error.

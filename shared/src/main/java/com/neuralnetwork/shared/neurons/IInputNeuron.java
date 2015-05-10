@@ -11,7 +11,6 @@
 package com.neuralnetwork.shared.neurons;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
-import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * Represents an input neuron.
@@ -32,5 +31,5 @@ public interface IInputNeuron extends INeuron {
      * @return 
      * 		ErrorValue
      */
-    ErrorValue feedforward(INeuralNetContext nnctx);
+	Double feedforward(INeuralNetContext nnctx);
 }

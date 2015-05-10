@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import com.neuralnetwork.shared.functions.FunctionType;
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
-import com.neuralnetwork.shared.values.DoubleValue;
 
 /**
  * @author fred
@@ -123,7 +122,7 @@ public class SigmoidFunctionTest {
         f1 = null;
         
         assertFalse(f.equals(f1));
-        assertFalse(f.equals(new DoubleValue(0.0)));
+        assertFalse(f.equals(0.0));
     }
     
     /**

@@ -11,9 +11,6 @@
 package com.neuralnetwork.shared.neurons;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.ErrorValue;
-import com.neuralnetwork.shared.values.OneValue;
 
 /**
  * Represents a bias neuron who's value is always 1.
@@ -29,18 +26,18 @@ public class BiasNeuron extends Neuron
      * Constructs a new bias neuron.
      */
     public BiasNeuron() {
-        super(NeuronType.BIAS, new OneValue());
+        super(NeuronType.BIAS, 1.0);
     }
 
     @Override
-	public final ErrorValue feedforward(final INeuralNetContext nnctx) {
-		return ErrorValue.ZERO;        
+	public final Double feedforward(final INeuralNetContext nnctx) {
+		return 0.0;        
     }
 
     @Override
-	public final ErrorValue feedforward(final DoubleValue v,
+	public final Double feedforward(final Double v,
     		final INeuralNetContext nnctx) {
-	    return ErrorValue.ZERO;
+	    return 0.0;
     }
 
     @Override

@@ -12,8 +12,6 @@ package com.neuralnetwork.shared.links;
 
 import com.neuralnetwork.shared.exceptions.NeuronLinkException;
 import com.neuralnetwork.shared.neurons.INeuron;
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.ZeroValue;
 
 /**
  * A basic link which connects two INeurons.
@@ -45,12 +43,12 @@ public class Link implements ILink {
      * The weight of this link
      * initialized to 0.
      */
-    private DoubleValue weight;
+    private Double weight;
     
     /**
      * Id value.
      */
-    private final DoubleValue id;
+    private final Double id;
 
     /**
      * Construct a new link with head, tail and weight.
@@ -67,7 +65,7 @@ public class Link implements ILink {
     public Link(
             final INeuron ihead, 
             final INeuron itail, 
-            final DoubleValue linkWeight) {
+            final Double linkWeight) {
 
         if (ihead == null) {
         	throw new NeuronLinkException("Head link was null.");
@@ -78,7 +76,7 @@ public class Link implements ILink {
         this.weight = linkWeight;
         this.id = linkWeight;
         if (this.weight == null) {
-        	this.weight = new ZeroValue();
+        	this.weight = 0.0;
         }
         
         this.head = ihead;
@@ -96,7 +94,7 @@ public class Link implements ILink {
     }
 
     @Override
-    public final DoubleValue getWeight() {
+    public final Double getWeight() {
         return weight;
     }
     
@@ -119,13 +117,13 @@ public class Link implements ILink {
     }
 
     @Override
-    public final void updateWeight(final DoubleValue value) {
+    public final void updateWeight(final Double value) {
         age++;
-        this.weight.updateValue(value);
+        this.weight += value;
     }
 
     @Override
-    public final void setWeight(final DoubleValue weightValue) {
+    public final void setWeight(final Double weightValue) {
         age = 0;
         this.weight = weightValue;
     }

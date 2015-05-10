@@ -10,8 +10,6 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.ZeroValue;
 
 /**
  * Represents an input neuron.
@@ -27,7 +25,7 @@ public abstract class AbstractInputNeuron
      * no initial input value.
      */
     protected AbstractInputNeuron() {
-        super(NeuronType.INPUT, new ZeroValue());
+        super(NeuronType.INPUT, 0.0);
     }
     
     /**
@@ -36,8 +34,8 @@ public abstract class AbstractInputNeuron
      * @param v
      *      the initial value of the neuron
      */
-    protected AbstractInputNeuron(final DoubleValue v) {
-        super(NeuronType.INPUT, new ZeroValue());
+    protected AbstractInputNeuron(final Double v) {
+        super(NeuronType.INPUT, 0.0);
         this.setValue(v);
     }
 

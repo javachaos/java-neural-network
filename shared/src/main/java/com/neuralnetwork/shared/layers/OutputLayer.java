@@ -58,7 +58,7 @@ public class OutputLayer extends Layer<IOutputNeuron> implements IOutputLayer {
     public final Vector<Double> getOutputValues() {
         Vector<Double> v = new Vector<Double>();
         for (int i = 0; i < getSize(); i++) {
-            v.add(getNeuron(i).getValue().getValue());
+            v.add(getNeuron(i).getValue());
         }
         return v;
     }

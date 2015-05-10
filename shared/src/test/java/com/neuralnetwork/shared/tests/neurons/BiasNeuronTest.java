@@ -19,7 +19,6 @@ import org.junit.Test;
 
 import com.neuralnetwork.shared.neurons.BiasNeuron;
 import com.neuralnetwork.shared.values.Constants;
-import com.neuralnetwork.shared.values.OneValue;
 
 /**
  * @author Fred
@@ -35,7 +34,8 @@ public class BiasNeuronTest {
 	@Test
 	public final void testBiasNeuron() {
 		assertEquals(
-				new BiasNeuron().getValue(), new OneValue());
+				1.0, new BiasNeuron().getValue(),
+				Constants.TEN * Math.ulp(1.0));
 	}
 	
 	/**
@@ -45,8 +45,8 @@ public class BiasNeuronTest {
 	public final void testFeedForward() {
 		BiasNeuron bn = new BiasNeuron();
 		bn.feedforward(null);
-		bn.feedforward(new OneValue(), null);
-		assertEquals(bn.getOutputValue(), 1, Constants.TEN);
+		bn.feedforward(1.0, null);
+		assertEquals(1, bn.getOutputValue(), Math.ulp(1));
 	}
 	
 	/**

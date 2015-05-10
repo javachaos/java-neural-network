@@ -12,7 +12,6 @@ import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.IOutputNeuron;
 import com.neuralnetwork.shared.util.ErrorFunctions;
 import com.neuralnetwork.shared.util.MathTools;
-import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * Backpropagation algorithm implementation.
@@ -36,12 +35,12 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	/**
 	 * Expected error value.
 	 */
-	private ErrorValue expectedError;
+	private Double expectedError;
 	
 	/**
 	 * Current error value.
 	 */
-	private ErrorValue currError;
+	private Double currError;
 
 	/**
 	 * Training vector.
@@ -60,7 +59,7 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 * @param trainingVector
 	 * 		the training vector.
 	 * 
-	 * @param desiredVector
+	 * @param dV
 	 * 		the desired output vector.
 	 * 
 	 * @param net
@@ -72,11 +71,12 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 */
 	public BackpropAlgorithm(
 			final Vector<Double> trainingVector,
-			final Vector<Double> desiredVector,
-			final INetwork net, final ErrorValue expErr) {
+			final Vector<Double> dV,
+			final INetwork net, final Double expErr) {
 		this.trainVector = trainingVector;
 		this.network = net;
 		this.expectedError = expErr;
+		this.desiredVector = dV;
 	}
 
 	@Override
@@ -85,10 +85,8 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	}
 
 	@Override
-	public ErrorValue getErrorStatus() {
-		return new ErrorValue(
-				expectedError.getValue()
-				- currError.getValue());
+	public Double getErrorStatus() {
+		return expectedError - currError;
 	}
 
 	/**
@@ -100,9 +98,8 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 		
 		Vector<Double> output = network.runInputs(trainVector);
 		LOGGER.debug("Network output: " + output);
-		currError = new ErrorValue(
-				ErrorFunctions.getInstance().meanSquaredError(
-						output, trainVector));
+		currError =	ErrorFunctions.getInstance().meanSquaredError(
+						output, trainVector);
 		Iterator<IOutputNeuron> iter = network.getOutputLayer().iterator();
 		Stack<Double> outputs = new Stack<Double>();
 		outputs.addAll(output);
@@ -117,7 +114,7 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 		Iterator<IInputNeuron> iterIn = network.getInputLayer().iterator();
 		
 		while (iterIn.hasNext()) {
-			errVector.add(iterIn.next().getValue().getValue());
+			errVector.add(iterIn.next().getValue());
 		}
 		
 		return MathTools.sum(errVector);
@@ -132,10 +129,10 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	}
 
 	/**
-	 * @param desiredVector the desiredVector to set
+	 * @param dV the desiredVector to set
 	 */
-	public void setDesiredVector(Vector<Double> desiredVector) {
-		this.desiredVector = desiredVector;
+	public void setDesiredVector(final Vector<Double> dV) {
+		this.desiredVector = dV;
 	}
 
 }

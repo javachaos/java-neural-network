@@ -14,9 +14,6 @@ import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.neurons.Neuron;
 import com.neuralnetwork.shared.neurons.NeuronType;
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.ErrorValue;
-import com.neuralnetwork.shared.values.ZeroValue;
 
 /**
  * OpenCL node.
@@ -33,11 +30,11 @@ public class OpenCLNode extends Neuron implements INeuron {
      *      the id of this node.
      */
     public OpenCLNode(final NeuronType nodeId) {
-        super(nodeId, new ZeroValue());
+        super(nodeId, 0.0);
     }
 
     @Override
-    public final ErrorValue feedforward(final DoubleValue v,
+    public final Double feedforward(final Double v,
             final INeuralNetContext nnctx) {
            return null;
         //TODO improve.

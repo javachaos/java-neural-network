@@ -14,7 +14,6 @@ import java.util.Vector;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
-import com.neuralnetwork.shared.values.DoubleValue;
 
 /**
  * Represents an InputLayer class.
@@ -32,7 +31,7 @@ public interface IInputLayer extends ILayer<IInputNeuron>, IBuildable {
      * @param index
      *      which INode to insert the IValue at
      */
-    void addValue(DoubleValue v, int index);
+    void addValue(Double v, int index);
     
     /**
      * Add a list of values to this IInputLayer.

@@ -18,7 +18,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
-import com.neuralnetwork.shared.values.OneValue;
 
 /**
  * @author Fred
@@ -33,7 +32,7 @@ public class HiddenNeuronTest {
 	@Test
 	public final void testToString() {
 		HiddenNeuron h = new HiddenNeuron();
-		h.setValue(new OneValue());
+		h.setValue(1.0);
 		assertEquals(h.toString(), "HN(1.0) ");
 	}
 

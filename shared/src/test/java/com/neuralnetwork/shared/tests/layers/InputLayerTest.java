@@ -18,7 +18,10 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Vector;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.layers.IInputLayer;
 import com.neuralnetwork.shared.layers.InputLayer;
@@ -27,14 +30,20 @@ import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.network.Network;
 import com.neuralnetwork.shared.network.NeuralNetContext;
+import com.neuralnetwork.shared.tests.util.TestConstants;
 import com.neuralnetwork.shared.values.Constants;
-import com.neuralnetwork.shared.values.OneValue;
 
 /**
  * @author fred
  *
  */
 public class InputLayerTest {
+	
+    /**
+     * Logger instance.
+     */
+    private static final Logger LOGGER = 
+            LoggerFactory.getLogger(InputLayerTest.class);
     
     /**
      * Neural net input value.
@@ -73,8 +82,41 @@ public class InputLayerTest {
     public final void testAddValue() {
         IInputLayer l = new InputLayer(1);
         l.build();
-        l.addValue(new OneValue(), 0);
-        assertEquals(l.getNeuron(0).getValue(), new OneValue());
+        l.addValue(1.0, 0);
+        assertEquals(1.0, l.getNeuron(0).getValue(), TestConstants.DELTA);
+    }
+    
+    /**
+     * Test method for {@link com.neuralnetwork
+     * .shared.layers.InputLayer#addValues(Vector<Double> values)}.
+     */
+    @Test
+    public final void testAddValues() {
+        IInputLayer l = new InputLayer(1);
+        try {
+        	l.addValues(null);
+        	// Exception not thrown.
+        	Assert.fail();
+        } catch (Throwable t) {
+        	//Success
+        	LOGGER.info("Method InputLayer.addValues"
+        			+ "successfully caught exception.");
+        }
+
+        try {
+            l.addValues(new Vector<Double>());
+        	// Exception not thrown. parameter size mismatch
+        	Assert.fail();
+        } catch (Throwable t) {
+        	LOGGER.info("Method InputLayer.addValues"
+        			+ "successfully caught exception.");
+        }
+        
+        Vector<Double> d = new Vector<Double>();
+        d.add(1.0);
+        l.addValues(new Vector<Double>());
+        l.build();
+        assertEquals(1.0, l.getNeuron(0).getValue(), TestConstants.DELTA);
     }
     
     /**

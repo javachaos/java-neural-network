@@ -20,19 +20,13 @@ import org.junit.Test;
 import com.neuralnetwork.shared.neurons.AbstractOutputNeuron;
 import com.neuralnetwork.shared.neurons.NeuronType;
 import com.neuralnetwork.shared.neurons.OutputNeuron;
-import com.neuralnetwork.shared.values.OneValue;
-import com.neuralnetwork.shared.values.ZeroValue;
+import com.neuralnetwork.shared.tests.util.TestConstants;
 
 /**
  * @author Fred
  *
  */
 public class AbstractOutputNeuronTest {
-
-    /**
-     * Ten value used for testing.
-     */
-    private static final int TEN = 10;
     
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -42,9 +36,9 @@ public class AbstractOutputNeuronTest {
 	@Test
 	public final void testAbstractOutputNeuron() {
 		AbstractOutputNeuron ai = new OutputNeuron();
-		ai.setValue(new ZeroValue());
+		ai.setValue(0.0);
 		assertEquals(ai.getType(), NeuronType.OUTPUT);
-		assertEquals(ai.getValue(), new ZeroValue());
+		assertEquals(0.0, ai.getValue(), TestConstants.DELTA);
 	}
 
 	/**
@@ -55,10 +49,10 @@ public class AbstractOutputNeuronTest {
 	@Test
 	public final void testGetOutputValue() {
 		AbstractOutputNeuron ai = new OutputNeuron();
-		ai.setValue(new OneValue());
+		ai.setValue(1.0);
 		assertEquals(ai.getType(), NeuronType.OUTPUT);
 		assertEquals(ai.getOutputValue(), 
-		             new OneValue().getValue(), TEN * Math.ulp(1.0));
+		             1.0, TestConstants.DELTA);
 	}
 
 }

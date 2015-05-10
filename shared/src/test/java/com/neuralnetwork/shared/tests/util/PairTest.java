@@ -21,7 +21,6 @@ import org.junit.Test;
 
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
 import com.neuralnetwork.shared.util.Pair;
-import com.neuralnetwork.shared.values.DoubleValue;
 
 /**
  * @author Fred
@@ -55,13 +54,13 @@ public class PairTest {
 		
 		assertEquals(p.hashCode(), p1.hashCode());
 		
-		p = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
-		p1 = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
+		p = new Pair<Object, Object>(null, D_0_1);
+		p1 = new Pair<Object, Object>(null, D_0_1);
 		
 		assertEquals(p.hashCode(), p1.hashCode());
 		
-		p = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
-		p1 = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
+		p = new Pair<Object, Object>(D_0_1, null);
+		p1 = new Pair<Object, Object>(D_0_1, null);
 		
 		assertEquals(p.hashCode(), p1.hashCode());
 	}
@@ -75,7 +74,7 @@ public class PairTest {
 	public final void testPair() {
 		Pair<Object, Object> p = 
 				new Pair<Object, Object>(
-						new DoubleValue(D_0_1), new DoubleValue(D_0_1));
+						D_0_1, D_0_1);
 		
 		assertNotNull(p);
 	}
@@ -90,45 +89,45 @@ public class PairTest {
 		Pair<Object, Object> p1 = new Pair<Object, Object>(null, null);
 		assertEquals(p, p1);
 		
-		p = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
-		p1 = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
+		p = new Pair<Object, Object>(null, D_0_1);
+		p1 = new Pair<Object, Object>(null, D_0_1);
 		assertEquals(p, p1);
 		
-		p = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
-		p1 = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
+		p = new Pair<Object, Object>(D_0_1, null);
+		p1 = new Pair<Object, Object>(D_0_1, null);
 		assertEquals(p, p1);
 		
-		p = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
-		p1 = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
+		p = new Pair<Object, Object>(D_0_1, null);
+		p1 = new Pair<Object, Object>(null, D_0_1);
 		assertFalse(p.equals(p1));
 		
-		p = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
-		p1 = new Pair<Object, Object>(new DoubleValue(D_0_1), 
-				new DoubleValue(D_0_1));
+		p = new Pair<Object, Object>(D_0_1, null);
+		p1 = new Pair<Object, Object>(D_0_1, 
+				D_0_1);
 		assertFalse(p.equals(p1));
 		
-		p = new Pair<Object, Object>(new DoubleValue(D_0_1), 
-				new DoubleValue(D_2_1));
-		p1 = new Pair<Object, Object>(new DoubleValue(D_0_1), 
-				new DoubleValue(D_0_1));
+		p = new Pair<Object, Object>(D_0_1, 
+				D_2_1);
+		p1 = new Pair<Object, Object>(D_0_1, 
+				D_0_1);
 		assertFalse(p.equals(p1));
 
 		//Test (first == null)
-		p = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
-		p1 = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
+		p = new Pair<Object, Object>(null, D_0_1);
+		p1 = new Pair<Object, Object>(D_0_1, null);
 		assertFalse(p.equals(p1));
 		
 		//Test (obj == null)
-		p = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
+		p = new Pair<Object, Object>(D_0_1, null);
 		p1 = null;
 		assertFalse(p.equals(p1));
 		
-		p = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
+		p = new Pair<Object, Object>(D_0_1, null);
 		HiddenNeuron n = new HiddenNeuron();
 		assertFalse(p.equals(n));
 		
-		p = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
-		p1 = new Pair<Object, Object>(new DoubleValue(D_0_1), null);
+		p = new Pair<Object, Object>(D_0_1, null);
+		p1 = new Pair<Object, Object>(D_0_1, null);
 		assertEquals(p, p1);
 		assertEquals(p, p);
 	}
@@ -142,8 +141,8 @@ public class PairTest {
 		Pair<Object, Object> p;
 		Pair<Object, Object> p1;
 		
-		p = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
-		p1 = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
+		p = new Pair<Object, Object>(null, D_0_1);
+		p1 = new Pair<Object, Object>(null, D_0_1);
 		assertEquals(p.getSecond(), p1.getSecond());
 	}
 
@@ -156,15 +155,15 @@ public class PairTest {
 		Pair<Object, Object> p;
 		Pair<Object, Object> p1;
 		
-		p = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
-		p1 = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
+		p = new Pair<Object, Object>(null, D_0_1);
+		p1 = new Pair<Object, Object>(null, D_0_1);
 		assertEquals(p.getSecond(), p1.getSecond());
 		
-		p.setSecond(new DoubleValue(D_1_1));
-		p1.setSecond(new DoubleValue(D_1_1));
+		p.setSecond(D_1_1);
+		p1.setSecond(D_1_1);
 		
-		assertEquals(p.getSecond(), new DoubleValue(D_1_1));
-		assertEquals(p1.getSecond(), new DoubleValue(D_1_1));
+		assertEquals(p.getSecond(), D_1_1);
+		assertEquals(p1.getSecond(), D_1_1);
 	}
 
 	/**
@@ -176,8 +175,8 @@ public class PairTest {
 		Pair<Object, Object> p;
 		Pair<Object, Object> p1;
 		
-		p = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
-		p1 = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
+		p = new Pair<Object, Object>(null, D_0_1);
+		p1 = new Pair<Object, Object>(null, D_0_1);
 		assertEquals(p.getFirst(), p1.getFirst());
 	}
 
@@ -190,15 +189,15 @@ public class PairTest {
 		Pair<Object, Object> p;
 		Pair<Object, Object> p1;
 		
-		p = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
-		p1 = new Pair<Object, Object>(null, new DoubleValue(D_0_1));
+		p = new Pair<Object, Object>(null, D_0_1);
+		p1 = new Pair<Object, Object>(null, D_0_1);
 		assertEquals(p.getFirst(), p1.getFirst());
 		
-		p.setFirst(new DoubleValue(D_1_1));
-		p1.setFirst(new DoubleValue(D_1_1));
+		p.setFirst(D_1_1);
+		p1.setFirst(D_1_1);
 		
-		assertEquals(p.getFirst(), new DoubleValue(D_1_1));
-		assertEquals(p1.getFirst(), new DoubleValue(D_1_1));
+		assertEquals(p.getFirst(), D_1_1);
+		assertEquals(p1.getFirst(), D_1_1);
 	}
 
 }

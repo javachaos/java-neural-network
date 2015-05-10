@@ -12,8 +12,6 @@ package com.neuralnetwork.shared.neurons;
 
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.network.INeuralNetContext;
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * Defines an output neuron.
@@ -36,15 +34,15 @@ public final class OutputNeuron extends AbstractOutputNeuron {
     }
 
     @Override
-    public ErrorValue feedforward(final DoubleValue v,
+    public Double feedforward(final Double v,
     		final INeuralNetContext nnctx) {
         double sum = 0.0;
         for (ILink il : getInputs()) {
-            sum += il.getWeight().getValue() * v.getValue();
+            sum += il.getWeight() * v;
         }
-        DoubleValue n = new DoubleValue(getActivationFunction().activate(sum));
+        Double n = getActivationFunction().activate(sum);
         setValue(n);
-		return new ErrorValue(n.getValue());
+		return n;
     }
 
 	@Override
@@ -63,9 +61,9 @@ public final class OutputNeuron extends AbstractOutputNeuron {
 		ILink[] inWeights = getInputLinks();
 		double sumErr = 0;
 		for (int i = 0; i < inWeights.length; i++) {
-			double w = inWeights[i].getWeight().getValue();
+			double w = inWeights[i].getWeight();
 			sumErr += (1.0 / 2) * Math.pow(Math.abs(
-					w - getValue().getValue()), 2);
+					w - getValue()), 2);
 		}
 		return sumErr;
 	}

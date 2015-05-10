@@ -21,8 +21,7 @@ import org.junit.Test;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.InputNeuron;
 import com.neuralnetwork.shared.neurons.NeuronType;
-import com.neuralnetwork.shared.values.OneValue;
-import com.neuralnetwork.shared.values.ZeroValue;
+import com.neuralnetwork.shared.tests.util.TestConstants;
 
 /**
  * @author Fred
@@ -37,9 +36,9 @@ public class InputNeuronTest {
 	 */
 	@Test
 	public final void testInputNeuronIValueOfQ() {
-		IInputNeuron n = new InputNeuron(new OneValue());
+		IInputNeuron n = new InputNeuron(1.0);
 		assertEquals(n.getType(), NeuronType.INPUT);
-		assertEquals(n.getValue(), new OneValue());
+		assertEquals(1.0, n.getValue(), TestConstants.DELTA);
 	}
 
 	/**
@@ -51,7 +50,7 @@ public class InputNeuronTest {
 	public final void testInputNeuron() {
 		IInputNeuron n = new InputNeuron();
 		assertEquals(n.getType(), NeuronType.INPUT);
-		assertFalse(n.getValue().equals(new ZeroValue()));
+		assertFalse(n.getValue().equals(0.0));
 	}
 
 	/**

@@ -11,7 +11,6 @@
 package com.neuralnetwork.shared.links;
 
 import com.neuralnetwork.shared.neurons.INeuron;
-import com.neuralnetwork.shared.values.DoubleValue;
 
 /**
  * Represents the link between to INode classes.
@@ -62,7 +61,7 @@ public interface ILink {
      * @return 
      *      the weight of this link.
      */
-    DoubleValue getWeight();
+    Double getWeight();
     
     /**
      * Update the weight of this link. If the value pushes the weight beyond the
@@ -72,7 +71,7 @@ public interface ILink {
      *      the amount to update the weight by.
      * 
      */
-    void updateWeight(DoubleValue value);
+    void updateWeight(Double value);
     
     /**
      * Change the weight of this ILink to weightValue.
@@ -80,7 +79,7 @@ public interface ILink {
      * @param weightValue
      *      the value of the new weight for this link.
      */
-    void setWeight(DoubleValue weightValue);
+    void setWeight(Double weightValue);
     
     /**
      * Returns the age of this link.

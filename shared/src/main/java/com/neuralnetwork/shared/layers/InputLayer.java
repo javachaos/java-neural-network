@@ -20,8 +20,6 @@ import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.neurons.BiasNeuron;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.InputNeuron;
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * Represents an Input layer to the network.
@@ -57,12 +55,15 @@ public final class InputLayer extends Layer<IInputNeuron>
     }
 
     @Override
-    public void addValue(final DoubleValue v, final int index) {
+    public void addValue(final Double v, final int index) {
         set(index + 1, new InputNeuron(v));
     }
     
     @Override
     public void addValues(final Vector<Double> values) {
+    	if (values == null) {
+    		throw new NullPointerException("Values vector was null.");
+    	}
     	if (values.size() != this.size() - 1) {
     		throw new IllegalArgumentException(
     				"Values is not the correct dimension. Values: "
@@ -70,16 +71,16 @@ public final class InputLayer extends Layer<IInputNeuron>
     				+ ", InputLayer: " + size());
     	}
         for (int i = 0; i < values.size(); i++) {
-            set(i + 1, new InputNeuron(new DoubleValue(values.get(i))));
+            set(i + 1, new InputNeuron(values.get(i)));
         }
     }
 
     @Override
     public IOutputLayer propagate(final INeuralNetContext nnctx) {
-    	ErrorValue v = new ErrorValue(Double.MAX_VALUE);
+    	Double v = Double.MAX_VALUE;
     	synchronized (nnctx) {
 	        for (int i = 0; i < getSize(); i++) {
-	        	v.updateValue(getNeuron(i).feedforward(nnctx));
+	        	v += getNeuron(i).feedforward(nnctx);
 	        }
     	}
     	LOGGER.debug("Propagation Error: " + v.toString());
