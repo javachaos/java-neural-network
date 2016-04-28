@@ -6,6 +6,19 @@
   <packaging>pom</packaging>
   <name>Java Neural Network</name>
   <description>A Java based neural network library.</description>
+
+  <url>http://javachaos.github.io/java-neural-network</url>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  
+  <organization>
+	<name>Alfred Laderoute</name>
+	<url>https://github.com/java-neural-network/</url>
+  </organization>
+  
   <scm>
     <url>https://github.com/javachaos/java-neural-network</url>
     <connection>scm:git:https://github.com/javachaos/java-neural-network</connection>
