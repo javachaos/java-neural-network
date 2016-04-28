@@ -11,6 +11,10 @@
     <connection>scm:git:https://github.com/javachaos/java-neural-network/tree/master</connection>
     <developerConnection>scm:git:https://github.com/javachaos/java-neural-network/tree/develop</developerConnection>
   </scm>
+  <issueManagement>
+    <system>Github</system>
+   	<url>https://github.com/javachaos/java-neural-network/issues</url>
+  </issueManagement>
   <modules>
     <module>opencl</module>
     <module>shared</module>
