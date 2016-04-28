@@ -1,7 +1,8 @@
-sudo: false
-language: java
 # whitelist
 branches:
   only:
     - master
     - develop
+language: java
+sudo: false
+script: mvn clean verify
