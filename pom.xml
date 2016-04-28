@@ -28,7 +28,7 @@
   
   <scm>
     <connection>scm:git:git@github.com:javachaos/java-neural-network.git</connection>
-    <developerConnection>scm:gitgit@github.com:javachaos/java-neural-network.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:javachaos/java-neural-network.git</developerConnection>
     <url>git@github.com:javachaos/java-neural-network.git</url>
   </scm>
   
