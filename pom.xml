@@ -7,8 +7,8 @@
   <name>Java Neural Network</name>
   <description>A Java based neural network library.</description>
   <scm>
-    <connection>scm:git:https://github.com/javachaos/java-neural-network.git</connection>
-    <developerConnection>scm:git:https://github.com/javachaos/java-neural-network.git</developerConnection>
+    <connection>scm:git:https://github.com/javachaos/java-neural-network/tree/master</connection>
+    <developerConnection>scm:git:https://github.com/javachaos/java-neural-network/tree/develop</developerConnection>
   </scm>
   <modules>
     <module>opencl</module>
