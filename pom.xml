@@ -9,7 +9,7 @@
   <scm>
     <url>https://github.com/javachaos/java-neural-network</url>
     <connection>scm:git:git://github.com/javachaos/java-neural-network.git</connection>
-    <developerConnection>scm:git:git://github.com/javachaos/java-neural-network.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:javachaos/java-neural-network.git</developerConnection>
   </scm>
   <modules>
     <module>opencl</module>
