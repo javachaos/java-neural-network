@@ -20,10 +20,11 @@
   </organization>
   
   <scm>
-    <url>https://github.com/javachaos/java-neural-network</url>
-    <connection>scm:git:https://github.com/javachaos/java-neural-network</connection>
-    <developerConnection>scm:git:https://github.com/javachaos/java-neural-network.git</developerConnection>
+    <connection>scm:git:git@github.com:javachaos/java-neural-network.git</connection>
+    <developerConnection>scm:gitgit@github.com:javachaos/java-neural-network.git</developerConnection>
+    <url>git@github.com:javachaos/java-neural-network.git</url>
   </scm>
+  
   <issueManagement>
     <system>Github</system>
    	<url>https://github.com/javachaos/java-neural-network/issues</url>
