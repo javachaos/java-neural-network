@@ -114,7 +114,7 @@ public class InputLayerTest {
         
         Vector<Double> d = new Vector<Double>();
         d.add(1.0);
-        l.addValues(new Vector<Double>());
+        l.addValues(d);
         l.build();
         assertEquals(1.0, l.getNeuron(0).getValue(), TestConstants.DELTA);
     }
