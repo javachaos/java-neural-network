@@ -19,7 +19,6 @@ import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.neurons.IOutputNeuron;
 import com.neuralnetwork.shared.training.TrainType;
-import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * Represents an Artificial neural network of INodes.
@@ -85,8 +84,8 @@ public interface INetwork {
      * @return
      *      the Mean squared error value
      */
-	ErrorValue train(boolean online, Vector<Double> trainingVector,
-			ErrorValue expectedError);
+    Double train(boolean online, Vector<Double> trainingVector,
+    		Double expectedError);
     
     /**
      * Get the output layer of this network.

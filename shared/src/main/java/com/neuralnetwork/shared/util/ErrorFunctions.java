@@ -73,8 +73,8 @@ public final class ErrorFunctions {
         double error = 0;
         for (int i = 0; i < v1.size(); i++) {
             error += (1.0 / 2) * Math.pow(
-            		v2.get(i).getWeight().getValue() 
-            		- v1.get(i).getWeight().getValue(), 2);
+            		v2.get(i).getWeight()
+            		- v1.get(i).getWeight(), 2);
         }
         
         return error / n;

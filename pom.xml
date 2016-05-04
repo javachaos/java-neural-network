@@ -6,6 +6,36 @@
   <packaging>pom</packaging>
   <name>Java Neural Network</name>
   <description>A Java based neural network library.</description>
+
+  <url>http://javachaos.github.io/java-neural-network</url>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <organization>
+	<name>Alfred Laderoute</name>
+	<url>https://github.com/java-neural-network/</url>
+  </organization>
+  
+  <developers>
+	<developer>
+		<id>javachaos</id>
+		<name>Alfred Laderoute</name>
+		<email>fredladeroute at gmail.com</email>
+	</developer>
+  </developers>
+  
+  <scm>
+    <connection>scm:git:https://github.com:javachaos/java-neural-network</connection>
+    <developerConnection>scm:git:https://github.com/javachaos/java-neural-network</developerConnection>
+    <url>https://github.com/javachaos/java-neural-network</url>
+  </scm>
+  
+  <issueManagement>
+    <system>Github</system>
+   	<url>https://github.com/javachaos/java-neural-network/issues</url>
+  </issueManagement>
   <modules>
     <module>opencl</module>
     <module>shared</module>
@@ -15,14 +45,89 @@
   
   <build>
     <plugins>
-        <plugin>
-		    <groupId>org.apache.maven.plugins</groupId>
-		    <artifactId>maven-compiler-plugin</artifactId>
-		    <configuration>
-		        <source>1.6</source>
-		        <target>1.6</target>
-		    </configuration>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-site-plugin</artifactId>
+		<version>3.0</version>
+		<configuration>
+		<reportPlugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-project-info-reports-plugin</artifactId>
+			<version>2.2</version>
+			<configuration>
+				<dependencyDetailsEnabled>true</dependencyDetailsEnabled>
+				<dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+			</configuration>
 		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-javadoc-plugin</artifactId>
+			<version>2.7</version>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-report-plugin</artifactId>
+			<version>2.6</version>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-checkstyle-plugin</artifactId>
+			<version>2.6</version>
+		</plugin>
+		</reportPlugins>
+		</configuration>
+	</plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<configuration>
+			<source>1.7</source>
+			<target>1.7</target>
+		</configuration>
+	</plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-jar-plugin</artifactId>
+		<configuration>
+			<archive>
+				<manifest>
+					<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+					<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+				</manifest>
+			</archive>
+		</configuration>
+	</plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-javadoc-plugin</artifactId>
+		<executions>
+			<execution>
+				<goals>
+					<goal>jar</goal>
+				</goals>
+			</execution>
+		</executions>
+	</plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-source-plugin</artifactId>
+		<executions>
+			<execution>
+				<goals>
+					<goal>jar</goal>
+				</goals>
+			</execution>
+		</executions>
+	</plugin>
+        <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-compiler-plugin</artifactId>
+	    <configuration>
+	        <source>1.7</source>
+	        <target>1.7</target>
+	    </configuration>
+	</plugin>
     </plugins>
   </build>
   

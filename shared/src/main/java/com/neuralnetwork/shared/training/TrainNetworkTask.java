@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.network.INetwork;
 import com.neuralnetwork.shared.values.Constants;
-import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * 
@@ -24,17 +23,17 @@ public class TrainNetworkTask {
      */
     private static final Logger LOGGER = 
     		LoggerFactory.getLogger(TrainNetworkTask.class);
-    
+
 	/**
 	 * Network reference.
 	 */
 	private INetwork network;
-	
+
 	/**
 	 * Training stack.
 	 */
 	private TrainingStack trainStack;
-	
+
 	/**
 	 * Executor service.
 	 */
@@ -59,14 +58,14 @@ public class TrainNetworkTask {
 	 * @return
 	 * 		total error value
 	 */
-	public final ErrorValue startTraining() {
-		ErrorValue totalTrainError = new ErrorValue(0);
+	public final Double startTraining() {
+		Double totalTrainError = 0.0;
 		while (!trainStack.getData().isEmpty()) {
 			try {
-				totalTrainError.updateValue(new ErrorValue(
+				totalTrainError +=
 				executorService.submit(
 						new TrainNetworkSubTask(network, 
-								trainStack.popSample())).get()));
+								trainStack.popSample())).get();
 			} catch (InterruptedException | ExecutionException e) {
 				LOGGER.error(e.getMessage());
 			}
@@ -74,6 +73,7 @@ public class TrainNetworkTask {
 		try {
 			executorService.awaitTermination(
 					Constants.TRAIN_TIMEOUT, TimeUnit.SECONDS);
+			executorService.shutdown();
 		} catch (InterruptedException e) {
 			LOGGER.error(e.getMessage());
 		}

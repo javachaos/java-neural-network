@@ -25,16 +25,14 @@ import com.neuralnetwork.shared.links.Link;
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
 import com.neuralnetwork.shared.neurons.IHiddenNeuron;
 import com.neuralnetwork.shared.neurons.INeuron;
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.OneValue;
-import com.neuralnetwork.shared.values.ZeroValue;
+import com.neuralnetwork.shared.tests.util.TestConstants;
 
 /**
  * @author Fred
  *
  */
 public class LinkTest {
-
+	
     /**
      * Value used in testing.
      */
@@ -59,23 +57,25 @@ public class LinkTest {
 	@Test
     public final void testLink() {
 		INeuron n = new HiddenNeuron();
-		ILink l = new Link(n, n, new OneValue());
+		ILink l = new Link(n, n, 1.0);
 		assertNotNull(l);
 		
 		try {
-			new Link(null, n, new OneValue());
+			new Link(null, n, 1.0);
 		} catch (NeuronLinkException e) {
 			assertEquals(e.getMessage(), "Head link was null.");
 		}
 		
 		try {
-			new Link(n, null, new OneValue());
+			new Link(n, null, 1.0);
 		} catch (NeuronLinkException e) {
 			assertEquals(e.getMessage(), "Tail link was null.");
 		}
 		
 		l = new Link(n, n, null);
-		assertEquals(l.getWeight(), new ZeroValue());
+
+        //assertTrue(Math.abs(l.getNeuron(0).getValue() - 1.0) < EPSILON);
+		assertEquals(l.getWeight(), 0.0, TestConstants.DELTA);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class LinkTest {
 	public final void testGetHead() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
-		ILink l = new Link(h, t, new OneValue());
+		ILink l = new Link(h, t, 1.0);
 		assertEquals(l.getHead(), h);
 	}
 
@@ -98,7 +98,7 @@ public class LinkTest {
     public final void testGetTail() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
-		ILink l = new Link(h, t, new OneValue());
+		ILink l = new Link(h, t, 1.0);
 		assertEquals(l.getTail(), t);
 	}
 
@@ -110,8 +110,8 @@ public class LinkTest {
     public final void testGetWeight() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
-		ILink l = new Link(h, t, new OneValue());
-		assertEquals(l.getWeight(), new OneValue());
+		ILink l = new Link(h, t, 1.0);
+		assertEquals(l.getWeight(), 1.0, TestConstants.DELTA);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class LinkTest {
     public final void testSetHead() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
-		ILink l = new Link(h, t, new OneValue());
+		ILink l = new Link(h, t, 1.0);
 		l.setHead(t);
 		assertEquals(l.getHead(), t);
 		
@@ -141,7 +141,7 @@ public class LinkTest {
     public final void testSetTail() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
-		ILink l = new Link(h, t, new OneValue());
+		ILink l = new Link(h, t, 1.0);
 		l.setTail(h);
 		assertEquals(l.getTail(), h);
 		
@@ -161,11 +161,11 @@ public class LinkTest {
     public final void testUpdateWeight() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
-		ILink l = new Link(h, t, new ZeroValue());
-		l.updateWeight(new DoubleValue(WEIGHT_TEST_VALUE));
-		assertEquals(l.getWeight(), new DoubleValue(WEIGHT_TEST_VALUE));
-		l.updateWeight(new DoubleValue(-WEIGHT_TEST_VALUE));
-		assertEquals(l.getWeight(), new DoubleValue(0.0));
+		ILink l = new Link(h, t, 0.0);
+		l.updateWeight(WEIGHT_TEST_VALUE);
+		assertEquals(WEIGHT_TEST_VALUE, l.getWeight(), TestConstants.DELTA);
+		l.updateWeight(-WEIGHT_TEST_VALUE);
+		assertEquals(0.0, l.getWeight(), TestConstants.DELTA);
 	}
 
 	/**
@@ -177,9 +177,9 @@ public class LinkTest {
     public final void testSetWeight() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
-		ILink l = new Link(h, t, new OneValue());
-		l.setWeight(new DoubleValue(WEIGHT_TEST_VALUE3));
-		assertEquals(l.getWeight(), new DoubleValue(WEIGHT_TEST_VALUE3));
+		ILink l = new Link(h, t, 1.0);
+		l.setWeight(WEIGHT_TEST_VALUE3);
+		assertEquals(WEIGHT_TEST_VALUE3, l.getWeight(), TestConstants.DELTA);
 	}
 
 	/**
@@ -190,11 +190,11 @@ public class LinkTest {
     public final void testGetAge() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
-		ILink l = new Link(h, t, new OneValue());
-		l.updateWeight(new DoubleValue(-WEIGHT_TEST_VALUE2));
-		l.updateWeight(new DoubleValue(-WEIGHT_TEST_VALUE2));
-		l.updateWeight(new DoubleValue(-WEIGHT_TEST_VALUE2));
-		l.updateWeight(new DoubleValue(-WEIGHT_TEST_VALUE2));
+		ILink l = new Link(h, t, 1.0);
+		l.updateWeight(-WEIGHT_TEST_VALUE2);
+		l.updateWeight(-WEIGHT_TEST_VALUE2);
+		l.updateWeight(-WEIGHT_TEST_VALUE2);
+		l.updateWeight(-WEIGHT_TEST_VALUE2);
 		assertEquals(l.getAge(), 2 * 2);
 	}
 	

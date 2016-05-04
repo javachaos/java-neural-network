@@ -18,7 +18,7 @@ import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
  *
  */
 public class Memory {
-	
+
 	/**
 	 * The network for this memory.
 	 */
@@ -28,12 +28,12 @@ public class Memory {
 	 * Visual data for this memory.
 	 */
 	private Stack<ArrayList<RGBData>> visualData;
-	
+
 	/**
 	 * Audio data for this memory.
 	 */
 	private Stack<ArrayList<Double>> audioData;
-	
+
 	public Memory() {
 		visualData = new Stack<ArrayList<RGBData>>();
 		audioData = new Stack<ArrayList<Double>>();

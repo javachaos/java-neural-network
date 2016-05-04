@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-
+import com.neuralnetwork.shared.network.INeuralNetContext;
 
 /**
  * Represents an input neuron.
@@ -26,6 +26,10 @@ public interface IInputNeuron extends INeuron {
      * run them through the IActivationFunction finally
      * update the weights of the output links.
      * 
+     * @param nnctx 
+     * 		the neural network context to be passed along.
+     * @return 
+     * 		ErrorValue
      */
-    void feedforward();
+	Double feedforward(INeuralNetContext nnctx);
 }

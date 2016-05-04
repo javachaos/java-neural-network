@@ -14,14 +14,14 @@
 package com.neuralnetwork.shared.tests.neurons;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
 import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.InputNeuron;
 import com.neuralnetwork.shared.neurons.NeuronType;
-import com.neuralnetwork.shared.values.OneValue;
-import com.neuralnetwork.shared.values.ZeroValue;
+import com.neuralnetwork.shared.tests.util.TestConstants;
 
 /**
  * @author Fred
@@ -36,9 +36,9 @@ public class InputNeuronTest {
 	 */
 	@Test
 	public final void testInputNeuronIValueOfQ() {
-		IInputNeuron n = new InputNeuron(new OneValue());
+		IInputNeuron n = new InputNeuron(1.0);
 		assertEquals(n.getType(), NeuronType.INPUT);
-		assertEquals(n.getValue(), new OneValue());
+		assertEquals(1.0, n.getValue(), TestConstants.DELTA);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class InputNeuronTest {
 	public final void testInputNeuron() {
 		IInputNeuron n = new InputNeuron();
 		assertEquals(n.getType(), NeuronType.INPUT);
-		assertEquals(n.getValue(), new ZeroValue());
+		assertFalse(n.getValue().equals(0.0));
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class InputNeuronTest {
 	@Test
 	public final void testToString() {
 		IInputNeuron n = new InputNeuron();
-		assertEquals(n.toString(), "IN(0.0) ");
+		assertFalse(n.toString().equals("IN(0.0) "));
 	}
 
 }

@@ -16,6 +16,8 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.neuralnetwork.shared.util.VectorUtil;
+
 /**
  * Represents a Training data set.
  * 
@@ -107,6 +109,18 @@ public class TrainingStack {
      */
 	public final int getNumFeatures() {
 		return featureSize;
+	}
+	
+	/**
+	 * Generate random samples.
+	 * 
+	 * @param numberOfSamples
+	 * 		the number of samples to generate.
+	 */
+	public final void generateRandomSamples(final int numberOfSamples) {
+		for (int i = 0; i < numberOfSamples; i++) {
+			addTrainingSample(VectorUtil.getRandomVector(featureSize));
+		}
 	}
 
 }

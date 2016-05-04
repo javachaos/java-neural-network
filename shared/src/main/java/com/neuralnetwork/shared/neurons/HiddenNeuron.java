@@ -10,10 +10,8 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import java.util.Vector;
-
 import com.neuralnetwork.shared.links.ILink;
-import com.neuralnetwork.shared.values.DoubleValue;
+import com.neuralnetwork.shared.network.INeuralNetContext;
 
 
 /**
@@ -23,6 +21,11 @@ import com.neuralnetwork.shared.values.DoubleValue;
  */
 public class HiddenNeuron extends Neuron implements IHiddenNeuron {
     
+	/**
+	 * Learning Factor.
+	 */
+	private static final double LEARNING_FACTOR = 0.000016;
+
 	/**
 	 * Create a new hidden neuron.
 	 */
@@ -36,19 +39,26 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
     }
 
     @Override
-    public final void feedforward(final DoubleValue v) {
+    public final Double feedforward(final Double v,
+    		final INeuralNetContext nnctx) {
         
         double sum = 0.0;
         for (ILink il : getInputs()) {
-            sum += il.getWeight().getValue() * v.getValue();
+        	double val = il.getWeight();
+            sum += val * v;
+
+            //Experimental learning method...
+            //TODO Experiment. :)
+            //TODO Test: When weight gets too large split weight into two and spawn new neuron. 
+            il.setWeight(val + (v * LEARNING_FACTOR));
         }
-        DoubleValue n = new DoubleValue(getActivationFunction().activate(sum));
+        Double n = getActivationFunction().activate(sum);
         setValue(n);
-        Vector<ILink> o = getOutputs();
-        for (int i = 0; i < o.size(); i++) {
-            ILink l = o.get(i);
-            l.getTail().feedforward(n);
+        Double e = 0.0;
+        for (ILink ol : getOutputs()) {
+            e += ol.getTail().feedforward(n, nnctx);
         }
+		return e;
     }
 
 	@Override
@@ -67,9 +77,9 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
 		ILink[] inWeights = getInputLinks();
 		double sumErr = 0;
 		for (int i = 0; i < inWeights.length; i++) {
-			double w = inWeights[i].getWeight().getValue();
+			double w = inWeights[i].getWeight();
 			sumErr += (1.0 / 2) * Math.pow(Math.abs(
-					w - getValue().getValue()), 2);
+					w - getValue()), 2);
 		}
 		return sumErr;
 	}

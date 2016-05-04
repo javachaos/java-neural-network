@@ -1,8 +1,5 @@
 package com.neuralnetwork.shared.training;
 
-import java.util.concurrent.Callable;
-
-import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * Interface for a training algorithm.
@@ -27,5 +24,5 @@ public interface ITrainAlgorithm {
 	 * @return
 	 * 		the error value.
 	 */
-	ErrorValue getErrorStatus();
+	Double getErrorStatus();
 }

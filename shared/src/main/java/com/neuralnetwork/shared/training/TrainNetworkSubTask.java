@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.network.INetwork;
-import com.neuralnetwork.shared.values.ErrorValue;
 
 /**
  * Mini-task to compute neuron MSE.
@@ -51,7 +50,7 @@ public final class TrainNetworkSubTask implements Callable<Double> {
 	@Override
 	public Double call() throws Exception {
 		Double d = network.train(false,
-				trainVector, ErrorValue.E_0_00001).getValue();
+				trainVector, 0.00001);
 		LOGGER.debug(network.toString());
 		LOGGER.info("Mean squared error: " + d);
 		return d;

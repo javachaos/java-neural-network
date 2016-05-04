@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import com.neuralnetwork.shared.values.RandomValue;
 
 
 
@@ -27,12 +26,13 @@ public abstract class AbstractOutputNeuron
      * Construct a new Abstract output neuron.
      */
     public AbstractOutputNeuron() {
-        super(NeuronType.OUTPUT, new RandomValue());
+    	//TODO Fix random value
+        super(NeuronType.OUTPUT, Math.random());
     }
 
     @Override
     public final double getOutputValue() {
-        return getValue().getValue();
+        return getValue();
     }
 
 }

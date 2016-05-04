@@ -4,6 +4,8 @@ package com.neuralnetwork.jbrain.artificialsensors;
 /**
  * Sensor interface.
  * @author fred
+ * @param <E>
+ * 		return type for the data of this sensor.
  *
  */
 public interface ISensor<E> {

@@ -22,8 +22,7 @@ import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.links.Link;
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.RandomValue;
+import com.neuralnetwork.shared.network.INeuralNetContext;
 
 /**
  * An abstract Neuron class implements the INeuron interface.
@@ -41,7 +40,7 @@ public abstract class Neuron implements INeuron {
     /**
      * The value for this neuron.
      */
-    private DoubleValue value;
+    private Double value;
     
     /**
      * The activation function for this INeuron.
@@ -97,7 +96,7 @@ public abstract class Neuron implements INeuron {
      *      the default value of the neuron
      *  
      */
-    public Neuron(final NeuronType t, final DoubleValue v) {
+    public Neuron(final NeuronType t, final Double v) {
         this.type = t;
         this.value = v;
         inputLinks = new Vector<ILink>();
@@ -110,21 +109,21 @@ public abstract class Neuron implements INeuron {
      */
     public Neuron() {
         this.type = NeuronType.HIDDEN;
-        this.value = new RandomValue();
+        this.value = Math.random();
         inputLinks = new Vector<ILink>();
         setOutputs(new Vector<ILink>());
     }
     
     @Override
     public final ILink addInputLink(
-            final INeuron inode, final DoubleValue weight) {
+            final INeuron inode, final Double weight) {
         this.inputLinks.add(++numInputLinks, new Link(this, inode, weight));
         return inputLinks.get(numInputLinks);
     }
 
     @Override
     public final ILink addInputLink(final INeuron inode) {
-        return addInputLink(inode, new RandomValue());
+        return addInputLink(inode, Math.random());
     }
 
     @Override
@@ -172,7 +171,7 @@ public abstract class Neuron implements INeuron {
 
     @Override
     public final ILink addOutputLink(
-            final INeuron inode, final DoubleValue weight) {
+            final INeuron inode, final Double weight) {
         ILink l = new Link(this, inode, weight);
         this.getOutputs().add(++numOutputLinks, l);
         inode.addInputLink(this, weight);
@@ -181,7 +180,7 @@ public abstract class Neuron implements INeuron {
 
     @Override
     public final ILink addOutputLink(final INeuron inode) {
-        return addOutputLink(inode, new RandomValue());
+        return addOutputLink(inode, Math.random());
     }
 
     @Override
@@ -244,7 +243,7 @@ public abstract class Neuron implements INeuron {
     @Override
     public final void reset() {
         for (ILink i : getOutputs()) {
-            i.setWeight(new RandomValue());
+            i.setWeight(Math.random());
         }
     }
 
@@ -259,17 +258,18 @@ public abstract class Neuron implements INeuron {
     }
 
     @Override
-    public final DoubleValue getValue() {
+    public final Double getValue() {
         return value;
     }
 
     @Override
-    public final void setValue(final DoubleValue v) {
+    public final void setValue(final Double v) {
         this.value = v;
     }
     
     @Override
-    public abstract void feedforward(final DoubleValue v);
+    public abstract Double feedforward(final Double v, 
+    		final INeuralNetContext nnctx);
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

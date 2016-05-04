@@ -10,11 +10,8 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import java.util.Vector;
-
 import com.neuralnetwork.shared.links.ILink;
-import com.neuralnetwork.shared.values.DoubleValue;
-import com.neuralnetwork.shared.values.RandomValue;
+import com.neuralnetwork.shared.network.INeuralNetContext;
 
 /**
  * Implementation of an Input neuron.
@@ -29,7 +26,7 @@ public class InputNeuron extends AbstractInputNeuron {
      * @param v
      *      the initial input value
      */
-    public InputNeuron(final DoubleValue v) {
+    public InputNeuron(final Double v) {
         super(v);
     }
     
@@ -39,21 +36,22 @@ public class InputNeuron extends AbstractInputNeuron {
      */
     public InputNeuron() {
         super();
-        setValue(new RandomValue());
+        setValue(Math.random());
     }
     
     @Override
-    public final void feedforward(final DoubleValue v) {
-        feedforward();
+    public final Double feedforward(final Double v,
+    		final INeuralNetContext nnctx) {
+        return feedforward(nnctx);
     }
     
     @Override
-    public final void feedforward() {
-        Vector<ILink> o = getOutputs();
-        for (int i = 0; i < o.size(); i++) {
-            ILink l = o.get(i);
-            l.getTail().feedforward(getValue());
-        }
+    public final Double feedforward(final INeuralNetContext nnctx) {
+    	Double v = 0.0;
+    	for (ILink ol : getOutputs()) { //TODO FIX ME, Null at train time.
+            v = ol.getTail().feedforward(getValue(), nnctx);
+    	}
+		return v;
     }
     
     @Override
@@ -73,9 +71,9 @@ public class InputNeuron extends AbstractInputNeuron {
 		ILink[] inWeights = getInputLinks();
 		double sumErr = 0;
 		for (int i = 0; i < inWeights.length; i++) {
-			double w = inWeights[i].getWeight().getValue();
+			double w = inWeights[i].getWeight();
 			sumErr += (1.0 / 2) * Math.pow(Math.abs(
-					w - getValue().getValue()), 2);
+					w - getValue()), 2);
 		}
 		return sumErr;
 	}
