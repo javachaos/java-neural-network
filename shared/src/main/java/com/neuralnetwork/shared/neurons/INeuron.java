@@ -141,7 +141,6 @@ public interface INeuron {
      * 
      * @return a new ILink.
      * 
-     * @see #addOutputLink(INeuron, IValue)
      */
     ILink addOutputLink(INeuron ineuron);
     

@@ -11,7 +11,7 @@
 package com.neuralnetwork.shared.util;
 
 /**
- * Represents a pair of objects <T1> and <T2>.
+ * Represents a pair of objects T1 and T2.
  * 
  * @author fredladeroute
  *
