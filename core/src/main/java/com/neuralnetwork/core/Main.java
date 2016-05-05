@@ -33,7 +33,7 @@ public final class Main {
      */
     public static void main(final String[] args) {
 
-        int[] layerSizes = new int[] { 100, 50, 25, 50, 100 };
+        int[] layerSizes = new int[] { 10, 5, 2, 5, 10 };
         TransferFunction[] tFuncs = new TransferFunction[] {
                 TransferFunction.None,
                 TransferFunction.Sigmoid,
@@ -64,14 +64,9 @@ public final class Main {
                 { 0.4, 0.2, 0.1, 0.6, 0.8, 0.4, 0.2, 0.1, 0.3, 0.6},
                 { 0.1, 0.6, 0.2, 0.2, 0.3, 0.7, 0.4, 0.3, 0.65, 0.32},
                 { 0.4, 0.2, 0.1, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8}};
-        double[] output = new double[1];
-
-        double error = 0.0;
         double desiredError = 0.0000000000000000001;
-        int i = 0;
-        int updateEvery = 10000;
         double learnRate = 0.61803398875;
         bpn.train(input, desired, learnRate + 1, learnRate, desiredError);
-        bpn.saveNet("/home/alfred/Documents/main.net");
+        bpn.saveNet(System.getProperty("user.home")+"/Documents/main.net");
     }
 }
