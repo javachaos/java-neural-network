@@ -4,4 +4,6 @@ branches:
     - develop
 language: java
 sudo: false
+jdk:
+  - oraclejdk8
 script: mvn clean install
