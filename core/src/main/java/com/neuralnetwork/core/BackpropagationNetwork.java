@@ -48,7 +48,7 @@ public final class BackpropagationNetwork implements Serializable {
         /**
          * Sigmoid transfer function.
          */
-        Sigmoid;
+        Sigmoid
     }
 
     /**
@@ -394,10 +394,9 @@ public final class BackpropagationNetwork implements Serializable {
         }
 
         double error = 0.0, sum = 0.0, weightDelta = 0.0, biasDelta = 0.0;
-        double[] output = new double[layerSize[numLayers - 1]];
 
         // Forward pass.
-        output = run(input);
+        double[] output = run(input);
 
         // Back-propagation pass.
         for (int l = numLayers - 1; l >= 0; l--) {
