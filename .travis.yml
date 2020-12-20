@@ -3,7 +3,6 @@ branches:
   only:
     - develop
 language: java
-sudo: false
 jdk:
-  - oraclejdk8
+  - openjdk11
 script: mvn clean install
