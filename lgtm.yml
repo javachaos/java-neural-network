@@ -3,4 +3,3 @@ extraction:
     index:
       maven:
         version: "3.5.2"
-      java_version: "17"
