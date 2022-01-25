@@ -11,8 +11,11 @@
 package com.neuralnetwork.shared.network;
 
 import java.util.Iterator;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.Vector;
+import java.util.concurrent.*;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +55,7 @@ public final class Network implements INetwork {
     /**
      * The hidden layer(s) of this network.
      */
-    private final Stack<IHiddenLayer> layers;
+    private final ConcurrentMap<Integer, IHiddenLayer> layers;
     
     /**
      * The ouput layer of this network.
@@ -141,7 +144,7 @@ public final class Network implements INetwork {
         this.layerSizes = sizes;
         this.inputLayer = new InputLayer(numInputs);
         this.outputLayer = new OutputLayer(numOutputs);
-        this.layers = new Stack<IHiddenLayer>();
+        this.layers = new ConcurrentHashMap<>();
         this.nnctx = new NeuralNetContext(this);
     }
     
@@ -187,7 +190,7 @@ public final class Network implements INetwork {
         this.numOutputs = numOut;
         this.inputLayer = new InputLayer(numInputs);
         this.outputLayer = new OutputLayer(numOutputs);
-        this.layers = new Stack<IHiddenLayer>();
+        this.layers = new ConcurrentHashMap<>();
         this.nnctx = new NeuralNetContext(this);
     }
     
@@ -211,17 +214,17 @@ public final class Network implements INetwork {
     }
     
     @Override
-    public synchronized INeuron getNeuron(final int x, final int y) {
+    public INeuron getNeuron(final int x, final int y) {
 
-        if (x < 0 || y < 0) {
+        if (x < 0 || y < 0 || x == Integer.MAX_VALUE || y == Integer.MAX_VALUE) {
             return null;
         }
         int n = x + 1;
-        if (n >= 0 && y == 0) {
+        if (y == 0) {
             return getInputNeuron(x);
-        } else if (n >= 0 && y < getHeight() - 1) {
+        } else if (y < getHeight() - 1) {
             return layers.get(y - 1).getNeuron(n);
-        } else if (n >= 0 && y == getHeight() - 1) {
+        } else if (y == getHeight() - 1) {
             return getOutputNeuron(x);
         }
         
@@ -264,7 +267,8 @@ public final class Network implements INetwork {
     @Override
     public void reset() {
         LOGGER.debug("Resetting the network.");
-        Iterator<IHiddenLayer> i = layers.iterator();
+
+        Iterator<IHiddenLayer> i = layers.values().iterator();
         while (i.hasNext()) {
             ILayer<IHiddenNeuron> l = i.next();
             Iterator<IHiddenNeuron> j = l.iterator();
@@ -280,21 +284,16 @@ public final class Network implements INetwork {
     		final Double expectedError) {
     	Double errorValue = 0.0;
     	toggleTraining();
-//    	if (!online) {
-//    	    //reset();
-//    	}
-    	switch (getTrainAlgorithm()) {
+        switch (getTrainAlgorithm()) {
 			case BACKPROP:
 					BackpropAlgorithm algo = 
 					new BackpropAlgorithm(trainingVector,
 							trainingVector, this, expectedError);
 					errorValue = algo.compute();
 				break;
-			case QPROP:
-				break;
-			case RPROP:
-				break;
-			default:
+            case QPROP:
+            case RPROP:
+            default:
 				break;
     	}
     	toggleTraining();
@@ -341,7 +340,7 @@ public final class Network implements INetwork {
     @Override
     public void addHiddenLayer(final IHiddenLayer l) {
     	l.build();
-        layers.push(l);
+        layers.put(l.getIndex(), l);
         rebuild();
     }
 
@@ -377,26 +376,28 @@ public final class Network implements INetwork {
     }
 
     @Override
-    public synchronized void build() {
+    public void build() {
 
     	Connections c = Connections.getInstance();
-		Stack<IHiddenLayer> temp = new Stack<IHiddenLayer>();
-		while (!layers.empty()) {
-			temp.push(layers.pop());
-		}
-    	
-    	for (int i = 0; i < numHidden; i++) {
-    		IHiddenLayer h = new HiddenLayer(layerSizes[i]);
-    		h.build();
-    		layers.push(h);
-    	}
+		Stack<IHiddenLayer> temp = new Stack<>();
+        Iterator<IHiddenLayer> layerIterator = layers.values().iterator();
+        while (layerIterator.hasNext()) {
+            temp.push(layerIterator.next());
+        }
+
+        IntStream.range(0, numHidden).parallel().forEach(i -> {
+            IHiddenLayer h = new HiddenLayer(layerSizes[i], i);
+            h.build();
+            layers.put(h.getIndex(), h);
+        });
     	
 		while (!temp.empty()) {
-			layers.push(temp.pop());
+            IHiddenLayer l = temp.pop();
+            layers.put(l.getIndex(), l);
 		}
     	
         inputLayer.build();
-        Iterator<IHiddenLayer> i = layers.iterator();
+        Iterator<IHiddenLayer> i = layers.values().iterator();
         while (i.hasNext()) {
             i.next().build();
         }
@@ -408,7 +409,7 @@ public final class Network implements INetwork {
 	        
 	        //Connect each hidden layer to its child hidden layer.
 	        if (layers.size() >= 2) {
-	            i = layers.iterator();
+	            i = layers.values().iterator();
 	            while (i.hasNext()) {
 	                IHiddenLayer layer = i.next();
 	                if (i.hasNext()) {
@@ -436,7 +437,7 @@ public final class Network implements INetwork {
         
         sb.append("\n");
         
-        Iterator<IHiddenLayer> hiddenIter = layers.iterator();
+        Iterator<IHiddenLayer> hiddenIter = layers.values().iterator();
         while (hiddenIter.hasNext()) {
             Iterator<IHiddenNeuron> hnIter = hiddenIter.next().iterator();
             while (hnIter.hasNext()) {

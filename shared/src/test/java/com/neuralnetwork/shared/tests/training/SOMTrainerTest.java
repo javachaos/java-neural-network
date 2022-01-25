@@ -70,16 +70,6 @@ public class SOMTrainerTest {
 	private static Vector<SOMLayer> inData;
 
 	/**
-	 * The input SOM Layer for training.
-	 */
-	private static SOMLayer input;
-
-	/**
-	 * The random number generator.
-	 */
-	private static Random r;
-
-	/**
 	 * The SOM lattice.
 	 */
 	private static SOMLattice lattice;
@@ -89,9 +79,15 @@ public class SOMTrainerTest {
 	 */
     @BeforeAll
     public static void setUp() {
-		r = new Random(SEED);
+		/**
+		 * The random number generator.
+		 */
+		Random r = new Random(SEED);
         inData = new Vector<SOMLayer>(INPUT_SIZE);
-        input = new SOMLayer();
+		/**
+		 * The input SOM Layer for training.
+		 */
+		SOMLayer input = new SOMLayer();
         
         for (int i = 0; i < INPUT_SIZE; i++) {
         	input = new SOMLayer();

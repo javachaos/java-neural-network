@@ -47,8 +47,7 @@ public interface INetwork {
     void reset();
     
     /**
-     * Adds a hidden layer to the network at the bottom
-     * of the network.
+     * Adds a hidden layer to the network at l.getIntex()
      * 
      * @param l
      *      the layer to be added to the network

@@ -15,6 +15,8 @@ package com.neuralnetwork.shared.tests.layers;
 
 import java.util.Vector;
 
+import com.neuralnetwork.shared.layers.IOutputLayer;
+import com.neuralnetwork.shared.util.MathTools;
 import nl.jqno.equalsverifier.internal.util.Assert;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -129,7 +131,7 @@ public class InputLayerTest {
         INetwork n = new Network(Constants.FIVE, Constants.FIVE, 
                                  Constants.THREE, 
                                  new int[] {Constants.FOUR, 
-                                            Constants.TWO, 
+                                            Constants.THREE,
                                             Constants.FOUR});
         n.build();
         Vector<Double> values = new Vector<Double>();
@@ -138,11 +140,14 @@ public class InputLayerTest {
         values.add(NN_INPUT_VALUE);
         values.add(NN_INPUT_VALUE);
         values.add(NN_INPUT_VALUE);
-        
+        double start = MathTools.sum(values);
         IInputLayer l = new InputLayer(Constants.FIVE);
         l.addValues(values);
         n.setInputLayer(l);
         INeuralNetContext nnctx = new NeuralNetContext(n);
-        l.propagate(nnctx);
+        IOutputLayer ol = l.propagate(nnctx);
+        double end = MathTools.sum(ol.getOutputValues());
+        LOGGER.debug("Total input: " + start);
+        LOGGER.debug("Total output: " + end);
     }    
 }

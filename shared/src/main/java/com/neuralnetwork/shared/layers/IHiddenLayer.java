@@ -17,5 +17,6 @@ import com.neuralnetwork.shared.neurons.IHiddenNeuron;
  * @author fredladeroute
  *
  */
-public interface IHiddenLayer extends ILayer<IHiddenNeuron>, IBuildable {
+public interface IHiddenLayer extends ILayer<IHiddenNeuron>, IBuildable, Comparable<IHiddenLayer> {
+    int getIndex();
 }

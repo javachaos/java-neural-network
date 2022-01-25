@@ -18,6 +18,8 @@ import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.network.INetwork;
 import com.neuralnetwork.shared.network.Network;
 
+import java.util.stream.IntStream;
+
 /**
  * Class to build neural network data structures.
  * 
@@ -72,9 +74,9 @@ public final class NeuralNetBuilder {
     private void buildWithSettings(final NetworkConfig networkConfig) {
         network = new Network(networkConfig.getNumInputs(), 
                               networkConfig.getNumOuputs());
-        for (int layerSize : networkConfig.getLayerSizes()) {
-            network.addHiddenLayer(new HiddenLayer(layerSize));
-        }
+        int[] sizes = networkConfig.getLayerSizes();
+        IntStream.range(0,sizes.length).parallel()
+                .forEach(i -> network.addHiddenLayer(new HiddenLayer(sizes[i], i)));
     }
 
     /**

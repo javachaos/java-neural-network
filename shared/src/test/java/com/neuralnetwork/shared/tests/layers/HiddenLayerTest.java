@@ -33,7 +33,7 @@ public class HiddenLayerTest {
      */
     @Test
     public final void testHiddenLayer() {
-        IHiddenLayer h = new HiddenLayer(1);
+        IHiddenLayer h = new HiddenLayer(1, 0);
         assertNotNull(h);
         assertEquals(h.getLayerType(), LayerType.HIDDEN);
     }
@@ -44,7 +44,7 @@ public class HiddenLayerTest {
      */
     @Test
     public final void testBuild() {
-        HiddenLayer h = new HiddenLayer(1);
+        HiddenLayer h = new HiddenLayer(1, 0);
         ((IHiddenLayer) h).build();
         int size = h.getSize();
         assertEquals(size, 1);

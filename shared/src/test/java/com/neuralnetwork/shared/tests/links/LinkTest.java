@@ -203,7 +203,7 @@ public class LinkTest {
 	 */
 	@Test
 	public final void equalsContract() {
-	    EqualsVerifier.forClass(Link.class).verify();
+	    EqualsVerifier.simple().forClass(Link.class).verify();
 	}
 
 }

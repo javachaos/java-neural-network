@@ -25,12 +25,7 @@ public class LowResVisualSensor implements ISensor<ArrayList<RGBData>> {
 	 * Default height resolution.
 	 */
 	private int res_h = 144;
-	
-	/**
-	 * The maximum image resolution.
-	 */
-	private final int MAX_RES = 100;
-	
+
 	/**
 	 * Construct a low-res visual sensor
 	 * using specified resolution values.
@@ -44,7 +39,11 @@ public class LowResVisualSensor implements ISensor<ArrayList<RGBData>> {
 	 * 		the height of the visual resolution.
 	 */
 	public LowResVisualSensor(int width, int height) {
-		
+
+		/**
+		 * The maximum image resolution.
+		 */
+		int MAX_RES = 100;
 		if (width > MAX_RES || width < 0)
 			throw new IllegalArgumentException("Width out of range.");
 		if (height > MAX_RES || height < 0)

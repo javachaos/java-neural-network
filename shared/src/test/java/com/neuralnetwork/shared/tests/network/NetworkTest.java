@@ -299,7 +299,7 @@ public class NetworkTest {
     public final void testAddHiddenLayer() {
 		INetwork n = new Network(FIVE, FIVE, THREE, 
 				new int[] {FOUR, TWO, FOUR});
-		n.addHiddenLayer(new HiddenLayer(THREE * TWO));
+		n.addHiddenLayer(new HiddenLayer(THREE * TWO, THREE));
 		n.build();
 		IHiddenLayer h = n.getHiddenLayer(THREE);
 		assertEquals(LayerType.HIDDEN, h.getLayerType());

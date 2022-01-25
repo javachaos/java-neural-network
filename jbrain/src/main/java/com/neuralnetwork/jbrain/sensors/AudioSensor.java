@@ -56,7 +56,7 @@ public class AudioSensor implements ISensor<Byte[]> {
 		}
 		final Byte[] result = new Byte[data.length];
 		int i = 0;
-		for (Byte b : data) {
+		for (byte b : data) {
 			result[i] = b;
 			i++;
 		}

@@ -75,7 +75,7 @@ public class NeuralNetBuilderTest {
 	@Test
 	public final void testAddHiddenLayer() {
 		NeuralNetBuilder b = new NeuralNetBuilder(NUM_INPUTS, NUM_OUTPUTS);
-		b.addHiddenLayer(new HiddenLayer(NUM_HIDDEN));
+		b.addHiddenLayer(new HiddenLayer(NUM_HIDDEN, 0));
 		b.build();
 		assertEquals(b.getNetwork().getHiddenLayer(0).getSize(), NUM_HIDDEN);
 		assertEquals(b.getNetwork()
@@ -89,7 +89,7 @@ public class NeuralNetBuilderTest {
 	@Test
 	public final void testBuild() {
 		NeuralNetBuilder b = new NeuralNetBuilder(NUM_INPUTS, NUM_OUTPUTS);
-		b.addHiddenLayer(new HiddenLayer(NUM_HIDDEN));
+		b.addHiddenLayer(new HiddenLayer(NUM_HIDDEN, 0));
 		b.build();
 		assertEquals(b.getNetwork().getHiddenLayer(0).getSize(), NUM_HIDDEN);
 		assertEquals(b.getNetwork()
@@ -103,7 +103,7 @@ public class NeuralNetBuilderTest {
 	@Test
 	public final void testGetNetwork() {
 		NeuralNetBuilder b = new NeuralNetBuilder(NUM_INPUTS, NUM_OUTPUTS);
-		b.addHiddenLayer(new HiddenLayer(NUM_HIDDEN));
+		b.addHiddenLayer(new HiddenLayer(NUM_HIDDEN, 0));
 		b.build();
 		assertEquals(b.getNetwork().getHiddenLayer(0).getSize(), NUM_HIDDEN);
 		assertEquals(b.getNetwork()

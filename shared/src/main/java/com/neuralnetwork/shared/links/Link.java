@@ -13,6 +13,8 @@ package com.neuralnetwork.shared.links;
 import com.neuralnetwork.shared.exceptions.NeuronLinkException;
 import com.neuralnetwork.shared.neurons.INeuron;
 
+import java.util.Objects;
+
 /**
  * A basic link which connects two INeurons.
  * 
@@ -133,40 +135,16 @@ public class Link implements ILink {
         return age;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
-    public final int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        int weightValue = 0;
-        if (id != null) {
-            weightValue = id.hashCode();
-        }
-        result = prime * result
-                 + weightValue;
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Link)) return false;
+        Link link = (Link) o;
+        return id.equals(link.id);
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
-    public final boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof Link)) {
-            return false;
-        }
-        Link other = (Link) obj;
-        if (id == null) {
-            return other.id == null;
-        } else return id.equals(other.id);
+    public int hashCode() {
+        return Objects.hash(id);
     }
-
 }

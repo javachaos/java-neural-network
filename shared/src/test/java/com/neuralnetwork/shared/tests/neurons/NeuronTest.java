@@ -578,7 +578,7 @@ public class NeuronTest {
 		assertEquals(n, n1);
 		n1 = null;
 		assertFalse(n.equals(n1));
-		HiddenLayer n2 = new HiddenLayer(1);
+		HiddenLayer n2 = new HiddenLayer(1, 0);
 		assertFalse(n.equals(n2));
 		n.setActivationFunction(null);
 		n1 = new InputNeuron(val);

@@ -165,11 +165,6 @@ public final class BackpropagationNetwork implements Serializable {
     private double[][][] previousWeightDelta;
 
     /**
-     * Random generator.
-     */
-    private final transient Random rand = new SecureRandom();
-
-    /**
      * iteration counter.
      */
     private int iter = 0;
@@ -238,6 +233,10 @@ public final class BackpropagationNetwork implements Serializable {
 
         // Init weights and bias.
         for (int l = 0; l < numLayers; l++) {
+            /**
+             * Random generator.
+             */
+            Random rand = new SecureRandom();
             for (int j = 0; j < layerSize[l]; j++) {
                 bias[l][j] = rand.nextGaussian();
                 previousBiasDelta[l][j] = 0.0;

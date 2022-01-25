@@ -11,6 +11,8 @@
 package com.neuralnetwork.shared.layers;
 
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,12 +79,10 @@ public final class InputLayer extends Layer<IInputNeuron>
 
     @Override
     public IOutputLayer propagate(final INeuralNetContext nnctx) {
-    	double v = Double.MAX_VALUE;
-    	synchronized (nnctx) {
-	        for (int i = 0; i < getSize(); i++) {
-	        	v += getNeuron(i).feedforward(nnctx);
-	        }
-    	}
+    	AtomicReference<Double> v = new AtomicReference<>(Double.MAX_VALUE);
+        IntStream.range(0, getSize()).parallel().forEach(i -> {
+            v.updateAndGet(v1 -> v1 + getNeuron(i).feedforward(nnctx));
+        });
     	LOGGER.debug("Propagation Error: " + v);
         return nnctx.getNetwork().getOutputLayer();
     }
