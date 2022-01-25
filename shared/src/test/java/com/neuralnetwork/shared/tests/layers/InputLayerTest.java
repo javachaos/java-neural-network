@@ -15,7 +15,7 @@ package com.neuralnetwork.shared.tests.layers;
 
 import java.util.Vector;
 
-import nl.jqno.equalsverifier.util.Assert;
+import nl.jqno.equalsverifier.internal.util.Assert;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

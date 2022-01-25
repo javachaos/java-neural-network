@@ -6,8 +6,6 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
-import org.apache.commons.lang.ArrayUtils;
-
 import com.neuralnetwork.jbrain.artificialsensors.ISensor;
 import com.neuralnetwork.jbrain.exceptions.JbrainException;
 
@@ -56,8 +54,13 @@ public class AudioSensor implements ISensor<Byte[]> {
 		} catch (LineUnavailableException ex) {
 			throw new JbrainException(ex.getMessage());
 		}
-		
-		return ArrayUtils.toObject(data);
+		final Byte[] result = new Byte[data.length];
+		int i = 0;
+		for (Byte b : data) {
+			result[i] = b;
+			i++;
+		}
+		return result;
 	}
 
 	/**
