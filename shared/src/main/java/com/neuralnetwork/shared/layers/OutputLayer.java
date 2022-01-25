@@ -38,7 +38,7 @@ public class OutputLayer extends Layer<IOutputNeuron> implements IOutputLayer {
      */
     public OutputLayer(final int w) {
         super(w + 1);
-        add((IOutputNeuron) new BiasNeuron());
+        add(new BiasNeuron());
         super.setLayerType(LayerType.OUTPUT);
     }
 

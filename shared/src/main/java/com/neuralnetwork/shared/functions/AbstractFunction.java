@@ -90,11 +90,7 @@ public abstract class AbstractFunction implements
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof SigmoidFunction)) {
-            return false;
-        }
-        
-        return true;
+        return obj instanceof SigmoidFunction;
     }
     
 }

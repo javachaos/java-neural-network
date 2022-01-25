@@ -11,15 +11,14 @@
 
 package com.neuralnetwork.shared.tests.neurons;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
-
 import com.neuralnetwork.shared.neurons.NeuronType;
 import com.neuralnetwork.shared.neurons.SOMLayer;
 import com.neuralnetwork.shared.neurons.SOMNeuron;
 import com.neuralnetwork.shared.values.Constants;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Fred

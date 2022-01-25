@@ -35,12 +35,12 @@ public class TrainingStack {
     /**
      * The raw data values.
      */
-    private Stack<Vector<Double>> data;
+    private final Stack<Vector<Double>> data;
 
     /**
      * The number of features for each sample of this training stack.
      */
-	private int featureSize;
+	private final int featureSize;
     
     /**
      * Construct a training set.

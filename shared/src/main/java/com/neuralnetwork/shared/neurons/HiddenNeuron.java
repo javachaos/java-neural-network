@@ -54,7 +54,7 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
         }
         Double n = getActivationFunction().activate(sum);
         setValue(n);
-        Double e = 0.0;
+        double e = 0.0;
         for (ILink ol : getOutputs()) {
             e += ol.getTail().feedforward(n, nnctx);
         }

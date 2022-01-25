@@ -41,5 +41,5 @@ public enum NeuronType {
 	/**
 	 * Neuron with static value of one.
 	 */
-	BIAS;
+	BIAS
 }

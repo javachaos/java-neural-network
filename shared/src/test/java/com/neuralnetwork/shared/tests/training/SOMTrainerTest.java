@@ -13,18 +13,19 @@
  */
 package com.neuralnetwork.shared.tests.training;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.Random;
-import java.util.Vector;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.neuralnetwork.shared.neurons.SOMLattice;
 import com.neuralnetwork.shared.neurons.SOMLayer;
 import com.neuralnetwork.shared.training.SOMTrainer;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+
+import java.util.Random;
+import java.util.Vector;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Fred
@@ -86,7 +87,7 @@ public class SOMTrainerTest {
 	/**
 	 * Setup SOM Test.
 	 */
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
 		r = new Random(SEED);
         inData = new Vector<SOMLayer>(INPUT_SIZE);
@@ -160,7 +161,8 @@ public class SOMTrainerTest {
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.training.SOMTrainer#isRunning()}.
 	 */
-	@Test(timeout = TEST_TIMEOUT)
+	@Test
+	@Timeout(value = TEST_TIMEOUT, unit = TimeUnit.MILLISECONDS)
 	public final void testIsRunning() {	
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s.setTraining(lattice, inData);
@@ -192,7 +194,8 @@ public class SOMTrainerTest {
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.training.SOMTrainer#stop()}.
 	 */
-	@Test(timeout = TEST_TIMEOUT)
+	@Test
+	@Timeout(value = TEST_TIMEOUT, unit = TimeUnit.MILLISECONDS)
 	public final void testStop() {
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s.setTraining(lattice, inData);

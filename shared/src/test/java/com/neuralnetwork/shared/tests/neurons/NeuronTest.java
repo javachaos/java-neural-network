@@ -13,30 +13,20 @@
  */
 package com.neuralnetwork.shared.tests.neurons;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Vector;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.layers.HiddenLayer;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.network.NeuralNetContext;
-import com.neuralnetwork.shared.neurons.HiddenNeuron;
-import com.neuralnetwork.shared.neurons.InputNeuron;
-import com.neuralnetwork.shared.neurons.Neuron;
-import com.neuralnetwork.shared.neurons.NeuronType;
-import com.neuralnetwork.shared.neurons.OutputNeuron;
+import com.neuralnetwork.shared.neurons.*;
 import com.neuralnetwork.shared.tests.util.TestConstants;
 import com.neuralnetwork.shared.values.Constants;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Vector;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Fred

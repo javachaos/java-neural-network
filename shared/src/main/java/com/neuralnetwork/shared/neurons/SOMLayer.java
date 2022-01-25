@@ -65,7 +65,7 @@ public class SOMLayer extends Vector<Double> implements ISOMLayer {
        double temp;
        
        for (int i = 0; i < size(); i++) {
-           temp = ((Double) elementAt(i)) - ((Double) layer.elementAt(i));
+           temp = elementAt(i) - layer.elementAt(i);
            temp = Math.pow(temp, 2);
            distance += temp;
        }

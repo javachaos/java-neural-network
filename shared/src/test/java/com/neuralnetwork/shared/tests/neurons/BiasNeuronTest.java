@@ -13,12 +13,11 @@
  */
 package com.neuralnetwork.shared.tests.neurons;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.neuralnetwork.shared.neurons.BiasNeuron;
 import com.neuralnetwork.shared.values.Constants;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Fred

@@ -77,13 +77,13 @@ public final class InputLayer extends Layer<IInputNeuron>
 
     @Override
     public IOutputLayer propagate(final INeuralNetContext nnctx) {
-    	Double v = Double.MAX_VALUE;
+    	double v = Double.MAX_VALUE;
     	synchronized (nnctx) {
 	        for (int i = 0; i < getSize(); i++) {
 	        	v += getNeuron(i).feedforward(nnctx);
 	        }
     	}
-    	LOGGER.debug("Propagation Error: " + v.toString());
+    	LOGGER.debug("Propagation Error: " + v);
         return nnctx.getNetwork().getOutputLayer();
     }
 

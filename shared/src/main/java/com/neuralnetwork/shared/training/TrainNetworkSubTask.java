@@ -24,12 +24,12 @@ public final class TrainNetworkSubTask implements Callable<Double> {
 	/**
 	 * Training vector.
 	 */
-	private Vector<Double> trainVector;
+	private final Vector<Double> trainVector;
 
 	/**
 	 * Neuron to do computation on.
 	 */
-	private INetwork network;
+	private final INetwork network;
 
 	/**
 	 * Create a new neuron compute task.

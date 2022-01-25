@@ -47,9 +47,9 @@ public class LowResVisualSensor implements ISensor<ArrayList<RGBData>> {
 		
 		if (width > MAX_RES || width < 0)
 			throw new IllegalArgumentException("Width out of range.");
-		if (width > MAX_RES || width < 0)
+		if (height > MAX_RES || height < 0)
 			throw new IllegalArgumentException("Height out of range.");
-		
+
 		this.setResWidth(width);
 		this.setResHeight(height);
 	

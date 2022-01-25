@@ -13,13 +13,10 @@
  */
 package com.neuralnetwork.shared.tests.layers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.util.Vector;
 
-import org.junit.Assert;
-import org.junit.Test;
+import nl.jqno.equalsverifier.util.Assert;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +29,9 @@ import com.neuralnetwork.shared.network.Network;
 import com.neuralnetwork.shared.network.NeuralNetContext;
 import com.neuralnetwork.shared.tests.util.TestConstants;
 import com.neuralnetwork.shared.values.Constants;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author fred
@@ -68,7 +68,7 @@ public class InputLayerTest {
     @Test
     public final void testBuild() {
         IInputLayer l = new InputLayer(1);
-        ((IInputLayer) l).build();
+        l.build();
         int size = l.getSize();
         assertEquals(size, 1);
     }
@@ -96,7 +96,7 @@ public class InputLayerTest {
         try {
         	l.addValues(null);
         	// Exception not thrown.
-        	Assert.fail();
+        	Assert.fail(null);
         } catch (Throwable t) {
         	//Success
         	LOGGER.info("Method InputLayer.addValues"
@@ -106,12 +106,12 @@ public class InputLayerTest {
         try {
             l.addValues(new Vector<Double>());
         	// Exception not thrown. parameter size mismatch
-        	Assert.fail();
+        	Assert.fail(null);
         } catch (Throwable t) {
         	LOGGER.info("Method InputLayer.addValues"
         			+ "successfully caught exception.");
         }
-        
+
         Vector<Double> d = new Vector<Double>();
         d.add(1.0);
         l.addValues(d);

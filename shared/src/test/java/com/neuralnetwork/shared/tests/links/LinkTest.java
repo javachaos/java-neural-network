@@ -13,11 +13,7 @@
  */
 package com.neuralnetwork.shared.tests.links;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import nl.jqno.equalsverifier.EqualsVerifier;
-
-import org.junit.Test;
 
 import com.neuralnetwork.shared.exceptions.NeuronLinkException;
 import com.neuralnetwork.shared.links.ILink;
@@ -26,6 +22,10 @@ import com.neuralnetwork.shared.neurons.HiddenNeuron;
 import com.neuralnetwork.shared.neurons.IHiddenNeuron;
 import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.tests.util.TestConstants;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Fred

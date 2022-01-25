@@ -30,12 +30,12 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	/**
 	 * Network to be trained.
 	 */
-	private INetwork network;
+	private final INetwork network;
 	
 	/**
 	 * Expected error value.
 	 */
-	private Double expectedError;
+	private final Double expectedError;
 	
 	/**
 	 * Current error value.
@@ -45,7 +45,7 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	/**
 	 * Training vector.
 	 */
-	private Vector<Double> trainVector;
+	private final Vector<Double> trainVector;
 	
 
 	/**

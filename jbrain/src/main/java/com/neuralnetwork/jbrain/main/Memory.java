@@ -22,17 +22,17 @@ public class Memory {
 	/**
 	 * The network for this memory.
 	 */
-	private INetwork network;
+	private final INetwork network;
 
 	/**
 	 * Visual data for this memory.
 	 */
-	private Stack<ArrayList<RGBData>> visualData;
+	private final Stack<ArrayList<RGBData>> visualData;
 
 	/**
 	 * Audio data for this memory.
 	 */
-	private Stack<ArrayList<Double>> audioData;
+	private final Stack<ArrayList<Double>> audioData;
 
 	public Memory() {
 		visualData = new Stack<ArrayList<RGBData>>();

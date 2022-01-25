@@ -13,14 +13,9 @@
  */
 package com.neuralnetwork.shared.tests.network;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import java.util.Vector;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +27,8 @@ import com.neuralnetwork.shared.network.INetwork;
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.network.Network;
 import com.neuralnetwork.shared.neurons.NeuronType;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Fred

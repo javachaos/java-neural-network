@@ -27,17 +27,17 @@ public class TrainNetworkTask {
 	/**
 	 * Network reference.
 	 */
-	private INetwork network;
+	private final INetwork network;
 
 	/**
 	 * Training stack.
 	 */
-	private TrainingStack trainStack;
+	private final TrainingStack trainStack;
 
 	/**
 	 * Executor service.
 	 */
-	private ExecutorService executorService;
+	private final ExecutorService executorService;
 
 	/**
 	 * Create a Train network task.
@@ -59,7 +59,7 @@ public class TrainNetworkTask {
 	 * 		total error value
 	 */
 	public final Double startTraining() {
-		Double totalTrainError = 0.0;
+		double totalTrainError = 0.0;
 		while (!trainStack.getData().isEmpty()) {
 			try {
 				totalTrainError +=

@@ -27,12 +27,13 @@ public class SOMLattice implements ISOMLattice {
     /**
      * Width and height of the lattice.
      */
-	private int width, height;
+	private final int width;
+    private final int height;
 	
 	/**
 	 * SOM Neuron lattice.
 	 */
-	private SOMNeuron[][] lattice;
+	private final SOMNeuron[][] lattice;
 	
 	/**
 	 * Constructs a SOM Lattice.

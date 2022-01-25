@@ -21,7 +21,7 @@ public class NeuralNetContext implements INeuralNetContext {
     /**
      * The network reference.
      */
-    private INetwork network;
+    private final INetwork network;
     
     /**
      * True if the network is processing.

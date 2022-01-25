@@ -37,12 +37,12 @@ public class SOMTrainer implements Runnable {
     /**
      * Initial learning rate.
      */
-	private double initialLearningRate;
+	private final double initialLearningRate;
 	
 	/**
 	 * The number of iterations to perform.
 	 */
-	private int	numIterations;
+	private final int	numIterations;
 	
 	/**
 	 * The radius of the lattice.
@@ -171,7 +171,7 @@ public class SOMTrainer implements Runnable {
 			// For each of the input vectors, look for the best matching
 			// unit, then adjust the weights for the BMU's neighborhood
 			for (int i = 0; i < inputs.size(); i++) {
-				curInput = (SOMLayer) inputs.elementAt(i);
+				curInput = inputs.elementAt(i);
 				bmu = lattice.getBMU(curInput);
 				// We have the BMU for this input now, so adjust everything in
 				// it's neighborhood

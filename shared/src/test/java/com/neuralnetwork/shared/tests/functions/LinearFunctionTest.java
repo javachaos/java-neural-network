@@ -13,13 +13,12 @@
  */
 package com.neuralnetwork.shared.tests.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
-
 import com.neuralnetwork.shared.functions.FunctionType;
 import com.neuralnetwork.shared.functions.LinearFunction;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Fred

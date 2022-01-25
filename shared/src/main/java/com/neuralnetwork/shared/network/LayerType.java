@@ -31,5 +31,5 @@ public enum LayerType {
     /**
      * Output layer.
      */
-    OUTPUT;
+    OUTPUT
 }

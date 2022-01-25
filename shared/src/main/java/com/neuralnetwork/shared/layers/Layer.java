@@ -33,7 +33,7 @@ public abstract class Layer<T extends INeuron>
     /**
      * Represents the width of the layer.
      */
-    private int width;
+    private final int width;
     
     /**
      * The layer type for this layer.

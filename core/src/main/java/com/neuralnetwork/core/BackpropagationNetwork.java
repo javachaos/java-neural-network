@@ -167,7 +167,7 @@ public final class BackpropagationNetwork implements Serializable {
     /**
      * Random generator.
      */
-    private transient Random rand = new SecureRandom();
+    private final transient Random rand = new SecureRandom();
 
     /**
      * iteration counter.
@@ -485,8 +485,8 @@ public final class BackpropagationNetwork implements Serializable {
             sb.append("[" + d + "] ");
         }
         LOGGER.info("Iteration " + i + ":\n\t\tInput "
-                + ssb.toString() + "\n\t\tOutput "
-                + sb.toString() + "\n\t\tError " + error);
+                + ssb + "\n\t\tOutput "
+                + sb + "\n\t\tError " + error);
         sb = new StringBuffer();
         ssb = new StringBuffer();
     }

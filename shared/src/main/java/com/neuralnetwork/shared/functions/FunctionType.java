@@ -31,5 +31,5 @@ public enum FunctionType {
 	 * The null function type.
 	 * Always returns zero
 	 */
-	NULL;
+	NULL
 }

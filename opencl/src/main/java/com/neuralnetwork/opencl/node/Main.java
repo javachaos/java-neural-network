@@ -78,7 +78,7 @@ public final class Main {
     /**
      * The source code of the OpenCL program to execute.
      */
-    private static String programSource =
+    private static final String programSource =
         "__kernel void "
         + "sampleKernel(__global const float *a,"
         + "             __global const float *b,"
@@ -152,13 +152,13 @@ public final class Main {
         cl_mem[] memObjects = new cl_mem[NUM_DATA];
         memObjects[0] = clCreateBuffer(context,
             CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-            Sizeof.cl_float * N, srcA, null);
+            Sizeof.cl_float * (long) N, srcA, null);
         memObjects[1] = clCreateBuffer(context,
             CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-            Sizeof.cl_float * N, srcB, null);
+            Sizeof.cl_float * (long) N, srcB, null);
         memObjects[2] = clCreateBuffer(context,
             CL_MEM_READ_WRITE,
-            Sizeof.cl_float * N, null, null);
+            Sizeof.cl_float * (long) N, null, null);
 
         // Create the program from the source code
         cl_program program = clCreateProgramWithSource(context,
@@ -185,7 +185,7 @@ public final class Main {
 
         // Read the output data
         clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0,
-            N * Sizeof.cl_float, dst, 0, null, null);
+                (long) N * Sizeof.cl_float, dst, 0, null, null);
 
         // Release kernel, program, and memory objects
         clReleaseMemObject(memObjects[0]);

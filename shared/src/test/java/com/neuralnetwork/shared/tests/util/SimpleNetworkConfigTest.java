@@ -13,10 +13,9 @@
  */
 package com.neuralnetwork.shared.tests.util;
 
-import org.junit.Test;
-
 import com.neuralnetwork.shared.util.NetworkConfig;
 import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Fred

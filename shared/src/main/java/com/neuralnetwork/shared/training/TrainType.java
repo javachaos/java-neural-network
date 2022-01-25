@@ -20,6 +20,6 @@ public enum TrainType {
 	/**
 	 * Quick RPROP training algortihm.
 	 */
-	QPROP;
-	
+	QPROP
+
 }

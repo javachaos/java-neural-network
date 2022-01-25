@@ -13,11 +13,8 @@
  */
 package com.neuralnetwork.shared.tests.util;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Iterator;
-
-import org.junit.Test;
+import java.util.concurrent.TimeUnit;
 
 import com.neuralnetwork.shared.layers.IInputLayer;
 import com.neuralnetwork.shared.layers.IOutputLayer;
@@ -28,6 +25,10 @@ import com.neuralnetwork.shared.neurons.IInputNeuron;
 import com.neuralnetwork.shared.neurons.INeuron;
 import com.neuralnetwork.shared.neurons.IOutputNeuron;
 import com.neuralnetwork.shared.util.Connections;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Fred
@@ -51,7 +52,8 @@ public class ConnectionsTest {
 	 * #create(com.neuralnetwork.shared.layers.ILayer, 
 	 * com.neuralnetwork.shared.layers.ILayer)}.
 	 */
-	@Test(timeout = TIMEOUT)
+	@Test
+	@Timeout(value = TIMEOUT, unit = TimeUnit.MILLISECONDS)
 	public final void testCreate() {
 		IInputLayer l1 = new InputLayer(LAYER_SIZE);
 		l1.build();

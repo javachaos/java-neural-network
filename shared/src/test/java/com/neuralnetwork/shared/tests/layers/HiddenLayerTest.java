@@ -13,14 +13,13 @@
  */
 package com.neuralnetwork.shared.tests.layers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
-
 import com.neuralnetwork.shared.layers.HiddenLayer;
 import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.network.LayerType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author fred

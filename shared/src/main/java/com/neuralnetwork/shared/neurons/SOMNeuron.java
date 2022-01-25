@@ -45,7 +45,7 @@ public class SOMNeuron implements ISOMNeuron {
     /**
      * Neural network associated with this SOM Neuron.
      */
-    private INetwork neuralNetwork;
+    private final INetwork neuralNetwork;
     
     /**
      * The x and y co ordinates of this Neuron within the Lattice.
@@ -146,10 +146,10 @@ public class SOMNeuron implements ISOMNeuron {
         if (wIndex >= weights.size()) {
             LOGGER.warn("Weight index out of bounds. "
                     + "Returning (index MOD size).");
-            return (Double) weights.elementAt(wIndex % weights.size());
+            return weights.elementAt(wIndex % weights.size());
         }
         
-        return (Double) weights.elementAt(wIndex);
+        return weights.elementAt(wIndex);
     }
     
     @Override
@@ -164,8 +164,8 @@ public class SOMNeuron implements ISOMNeuron {
             final double distanceFalloff) {
         double wt, vw;
         for (int i = 0; i < weights.size(); i++) {
-            wt = (Double) weights.elementAt(i);
-            vw = (Double) input.elementAt(i);
+            wt = weights.elementAt(i);
+            vw = input.elementAt(i);
             wt += distanceFalloff * learningRate * (vw - wt);
             weights.setElementAt(new Double(wt), i);
         }

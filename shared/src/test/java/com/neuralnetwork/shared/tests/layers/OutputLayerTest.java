@@ -13,14 +13,13 @@
  */
 package com.neuralnetwork.shared.tests.layers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
-
 import com.neuralnetwork.shared.layers.IOutputLayer;
 import com.neuralnetwork.shared.layers.OutputLayer;
 import com.neuralnetwork.shared.network.LayerType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author fred
@@ -46,7 +45,7 @@ public class OutputLayerTest {
     @Test
     public final void testBuild() {
         IOutputLayer l = new OutputLayer(1);
-        ((IOutputLayer) l).build();
+        l.build();
         int size = l.getSize();
         assertEquals(size, 1);
     }

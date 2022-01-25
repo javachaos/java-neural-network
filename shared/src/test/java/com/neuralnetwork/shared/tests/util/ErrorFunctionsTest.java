@@ -13,14 +13,13 @@
  */
 package com.neuralnetwork.shared.tests.util;
 
-import static org.junit.Assert.assertEquals;
+import com.neuralnetwork.shared.util.ErrorFunctions;
+import com.neuralnetwork.shared.values.Constants;
+import org.junit.jupiter.api.Test;
 
 import java.util.Vector;
 
-import org.junit.Test;
-
-import com.neuralnetwork.shared.util.ErrorFunctions;
-import com.neuralnetwork.shared.values.Constants;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Fred

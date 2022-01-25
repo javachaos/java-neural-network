@@ -52,7 +52,7 @@ public final class Network implements INetwork {
     /**
      * The hidden layer(s) of this network.
      */
-    private Stack<IHiddenLayer> layers;
+    private final Stack<IHiddenLayer> layers;
     
     /**
      * The ouput layer of this network.
@@ -67,12 +67,12 @@ public final class Network implements INetwork {
     /**
      * Number of inputs in the network.
      */
-    private int numInputs;
+    private final int numInputs;
 
     /**
      * Number of outputs in the network.
      */
-    private int numOutputs;
+    private final int numOutputs;
 
     /**
      * Number of hidden layers in the network.
@@ -87,7 +87,7 @@ public final class Network implements INetwork {
 	/**
 	 * The context for this network.
 	 */
-	private INeuralNetContext nnctx;
+	private final INeuralNetContext nnctx;
 	
 	/**
 	 * Default training algorithm.
@@ -216,12 +216,12 @@ public final class Network implements INetwork {
         if (x < 0 || y < 0) {
             return null;
         }
-
-        if (x + 1 >= 0 && y == 0) {
+        int n = x + 1;
+        if (n >= 0 && y == 0) {
             return getInputNeuron(x);
-        } else if (x + 1 >= 0 && y < getHeight() - 1) {
-            return layers.get(y - 1).getNeuron(x + 1);
-        } else if (x + 1 >= 0 && y == getHeight() - 1) {
+        } else if (n >= 0 && y < getHeight() - 1) {
+            return layers.get(y - 1).getNeuron(n);
+        } else if (n >= 0 && y == getHeight() - 1) {
             return getOutputNeuron(x);
         }
         
@@ -233,7 +233,7 @@ public final class Network implements INetwork {
         if (x < 0) {
             return null;
         }
-        return (IOutputNeuron) getOutputLayer().getNeuron(x + 1);
+        return getOutputLayer().getNeuron(x + 1);
     }
 
     @Override
@@ -241,7 +241,7 @@ public final class Network implements INetwork {
         if (x < 0) {
             return null;
         }
-        return (IInputNeuron) getInputLayer().getNeuron(x + 1);
+        return getInputLayer().getNeuron(x + 1);
     }
 
     @Override

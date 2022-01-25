@@ -22,12 +22,12 @@ public class NetworkConfig {
     /**
      * Number of inputs for the desired network.
      */
-    private int numInputs;
+    private final int numInputs;
     
     /**
      * Number of outputs for the desired network.
      */
-    private int numOuputs;
+    private final int numOuputs;
     
     /**
      * The number of hidden layers for the network.
@@ -35,7 +35,7 @@ public class NetworkConfig {
      * which means there will be zero hidden layers.
      * 1 input layer and 1 output layer.
      */
-    private int numHiddenLayers;
+    private final int numHiddenLayers;
     
     /**
      * List of integers describing the number of
