@@ -1,1 +1,8 @@
-java_version: 17
+extraction:
+  java:
+    index:
+      java_version: 17
+      maven:
+        # Specify the required Maven version.
+        # Default: the Maven version is determined automatically, where feasible.
+        version: 3.5.2
