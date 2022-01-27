@@ -51,13 +51,13 @@ public class BiasNeuron extends Neuron
     }
 
 	@Override
-	public final Double getError() {
+	public final Double getError() {//TODO test
 		//Bias has no input
 		return 0.0;
 	}
 
 	@Override
-	public final Double propagateError(final Double e) {
+	public final Double propagateError(final Double e) {//TODO test
 		return 0.0;
 	}
 

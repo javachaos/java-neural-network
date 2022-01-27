@@ -53,4 +53,10 @@ public interface IActivationFunction {
      * 		the new type of funtion to be used.
      */
 	void changeFunction(FunctionType f);
+	
+	@Override
+	int hashCode();
+	
+	@Override
+	boolean equals(Object o);
 }

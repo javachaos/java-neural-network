@@ -62,7 +62,7 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
     }
 
 	@Override
-	public final Double propagateError(final Double e) {
+	public final Double propagateError(final Double e) {//TODO test
 		ILink[] ilinks = getInputLinks();
 		double error = e;
 		error = getActivationFunction().derivative(error);
@@ -73,7 +73,7 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
 	}
 
 	@Override
-	public final Double getError() {
+	public final Double getError() {//TODO test
 		ILink[] inWeights = getInputLinks();
 		double sumErr = 0;
 		for (int i = 0; i < inWeights.length; i++) {

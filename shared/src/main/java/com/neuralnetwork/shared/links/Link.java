@@ -68,19 +68,16 @@ public class Link implements ILink {
             final INeuron ihead, 
             final INeuron itail, 
             final Double linkWeight) {
-
         if (ihead == null) {
         	throw new NeuronLinkException("Head link was null.");
         } else if (itail == null) {
         	throw new NeuronLinkException("Tail link was null.");
         }
-
         this.weight = linkWeight;
         this.id = linkWeight;
         if (this.weight == null) {
         	this.weight = 0.0;
         }
-        
         this.head = ihead;
         this.tail = itail;
     }
@@ -135,16 +132,21 @@ public class Link implements ILink {
         return age;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Link)) return false;
-        Link link = (Link) o;
-        return id.equals(link.id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(age, id, weight);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@Override
+	public boolean equals(Object obj) {//TODO write test for coverage
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Link other = (Link) obj;
+		return age == other.age && Objects.equals(id, other.id) && Objects.equals(weight, other.weight);
+	}
+    
 }

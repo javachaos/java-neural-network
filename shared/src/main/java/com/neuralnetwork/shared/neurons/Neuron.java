@@ -13,6 +13,7 @@ package com.neuralnetwork.shared.neurons;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public abstract class Neuron implements INeuron {
      * 
      * Default: SigmoidFunction
      */
-    private IActivationFunction function = new SigmoidFunction();
+    private SigmoidFunction function = new SigmoidFunction();
     
     /**
      * Array of all input links connected to this Neuron.
@@ -249,7 +250,7 @@ public abstract class Neuron implements INeuron {
 
     @Override
     public final void setActivationFunction(final IActivationFunction f) {
-        this.function = f;
+        this.function = (SigmoidFunction) f;
     }
 
     @Override
@@ -271,86 +272,29 @@ public abstract class Neuron implements INeuron {
     public abstract Double feedforward(final Double v, 
     		final INeuralNetContext nnctx);
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
+
+
 	@Override
-	public final int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		
-		int functionValue = 0;
-		if (function != null) {
-		    functionValue = function.hashCode();
-	    }
-		
-		int typeValue = 0;
-		if (type != null) {
-		    typeValue = type.hashCode();
-		}
-		
-		int valueV = 0;
-		if (value != null) {
-		    valueV = value.hashCode();
-		}
-		result = prime * result
-				+ functionValue;
-		result = prime * result + idChildCounter;
-		result = prime * result + idParentCounter;
-		result = prime * result
-				+ inputLinks.hashCode();
-		result = prime * result + numInputLinks;
-		result = prime * result + numOutputLinks;
-		result = prime * result
-				+ getOutputs().hashCode();
-		result = prime * result + typeValue;
-		result = prime * result + valueV;
-		return result;
+	public int hashCode() {
+		return Objects.hash(function, inputLinks, numInputLinks, numOutputLinks, outputLinks, type, value);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public final boolean equals(final Object obj) {
-		if (this == obj) {
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (!(obj instanceof Neuron)) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		Neuron other = (Neuron) obj;
-		if (function == null) {
-			if (other.function != null) {
-				return false;
-			}
-		} else if (!function.equals(other.function)) {
-			return false;
-		}
-		if (idChildCounter != other.idChildCounter) {
-			return false;
-		}
-		if (idParentCounter != other.idParentCounter) {
-			return false;
-		}
-		if (!inputLinks.equals(other.inputLinks)) {
-			return false;
-		}
-		if (!getOutputs().equals(other.getOutputs())) {
-			return false;
-		}
-		if (type != other.type) {
-			return false;
-		}
-		if (value == null) {
-            return other.value == null;
-		} else return value.equals(other.value);
-    }
+		return Objects.equals(function, other.function) && Objects.equals(inputLinks, other.inputLinks)
+				&& numInputLinks == other.numInputLinks && numOutputLinks == other.numOutputLinks
+				&& Objects.equals(outputLinks, other.outputLinks) && type == other.type
+				&& Objects.equals(value, other.value);
+	}
 
-    /**
+	/**
      * @return the inputLinks
      */
     public final Vector<ILink> getInputs() {

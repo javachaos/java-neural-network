@@ -17,7 +17,7 @@ import com.neuralnetwork.shared.values.Constants;
  *
  */
 public class TrainNetworkTask {
-
+//TODO test
     /**
      * Logger instance.
      */

@@ -60,14 +60,14 @@ public class InputNeuron extends AbstractInputNeuron {
     }
 
 	@Override
-	public final Double propagateError(final Double e) {
+	public final Double propagateError(final Double e) {//TODO test
 		double error = e;
 		error = getActivationFunction().derivative(error);
 		return error;
 	}
 
 	@Override
-	public final Double getError() {
+	public final Double getError() {//TODO test
 		ILink[] inWeights = getInputLinks();
 		double sumErr = 0;
 		for (int i = 0; i < inWeights.length; i++) {

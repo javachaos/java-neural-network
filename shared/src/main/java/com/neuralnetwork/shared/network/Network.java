@@ -11,10 +11,10 @@
 package com.neuralnetwork.shared.network;
 
 import java.util.Iterator;
-import java.util.Queue;
 import java.util.Stack;
 import java.util.Vector;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;

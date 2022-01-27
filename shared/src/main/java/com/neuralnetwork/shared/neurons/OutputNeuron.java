@@ -46,7 +46,7 @@ public final class OutputNeuron extends AbstractOutputNeuron {
     }
 
 	@Override
-	public Double propagateError(final Double e) {
+	public Double propagateError(final Double e) {//TODO test
 		ILink[] links = getInputLinks();
 		double error = e;
 		error = getActivationFunction().derivative(error);
@@ -57,7 +57,7 @@ public final class OutputNeuron extends AbstractOutputNeuron {
 	}
 
 	@Override
-	public Double getError() {
+	public Double getError() {//TODO test
 		ILink[] inWeights = getInputLinks();
 		double sumErr = 0;
 		for (int i = 0; i < inWeights.length; i++) {

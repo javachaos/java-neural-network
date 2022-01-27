@@ -61,14 +61,14 @@ public class NeuronTest {
 	 */
 	@Test
 	public final void testHashCode() {
-		Neuron n = new HiddenNeuron();
+		HiddenNeuron n = new HiddenNeuron();
 		assertEquals(n.hashCode(), n.hashCode());
 	
 		n.setValue(null);
 		n.setType(null);
 		n.addOutputLink(new HiddenNeuron());
 		assertEquals(n.hashCode(), n.hashCode());
-		Neuron v = new OutputNeuron();
+		OutputNeuron v = new OutputNeuron();
 		v.setValue(null);
 		v.setType(null);
 		v.setActivationFunction(null);

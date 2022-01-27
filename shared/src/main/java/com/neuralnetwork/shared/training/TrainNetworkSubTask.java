@@ -14,7 +14,7 @@ import com.neuralnetwork.shared.network.INetwork;
  * @author alfred
  */
 public final class TrainNetworkSubTask implements Callable<Double> {
-
+//TODO Test
     /**
      * Logger instance.
      */

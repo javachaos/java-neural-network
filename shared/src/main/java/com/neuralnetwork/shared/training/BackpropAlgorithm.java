@@ -20,7 +20,7 @@ import com.neuralnetwork.shared.util.MathTools;
  *
  */
 public final class BackpropAlgorithm implements ITrainAlgorithm {
-
+//TODO test
     /**
      * Logger instance.
      */

@@ -76,7 +76,7 @@ public class SOMNeuron implements ISOMNeuron {
     	this(SimpleNetworkConfigs.CONFIG_5_4_3_4_5);
         weights = new SOMLayer();
         for (int x = 0; x < numWeights; x++) {
-            weights.addElement(new Double(Math.random()));
+            weights.addElement(Double.valueOf(Math.random()));
         }
     }
     
@@ -96,7 +96,7 @@ public class SOMNeuron implements ISOMNeuron {
     	this(SimpleNetworkConfigs.CONFIG_5_4_3_4_5);
         weights = new SOMLayer();
         for (int i = 0; i < numWeights; i++) {
-            weights.addElement(new Double(Math.random()));
+            weights.addElement(Double.valueOf(Math.random()));
         }
         setX(x);
         setY(y);
@@ -138,7 +138,7 @@ public class SOMNeuron implements ISOMNeuron {
             throw new IndexOutOfBoundsException(
             		"Weight index was out of bounds.");
         }
-        weights.setElementAt(new Double(value), wIndex);
+        weights.setElementAt(Double.valueOf(value), wIndex);
     }
     
     @Override
@@ -167,7 +167,7 @@ public class SOMNeuron implements ISOMNeuron {
             wt = weights.elementAt(i);
             vw = input.elementAt(i);
             wt += distanceFalloff * learningRate * (vw - wt);
-            weights.setElementAt(new Double(wt), i);
+            weights.setElementAt(Double.valueOf(wt), i);
         }
     }
 

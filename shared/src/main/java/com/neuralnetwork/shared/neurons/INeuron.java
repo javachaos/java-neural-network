@@ -284,4 +284,10 @@ public interface INeuron {
 	 * 		propagated error value.
 	 */
 	Double propagateError(Double error);
+	
+	@Override
+	int hashCode();
+	
+	@Override
+	boolean equals(Object o);
 }
