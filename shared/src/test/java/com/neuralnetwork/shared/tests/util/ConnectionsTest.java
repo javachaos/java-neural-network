@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Fred
  *
  */
-public class ConnectionsTest {
+class ConnectionsTest {
 
 	/**
 	 * The size of each layer in the test.
@@ -54,7 +54,7 @@ public class ConnectionsTest {
 	 */
 	@Test
 	@Timeout(value = TIMEOUT, unit = TimeUnit.MILLISECONDS)
-	public final void testCreate() {
+	final void testCreate() {
 		IInputLayer l1 = new InputLayer(LAYER_SIZE);
 		l1.build();
 		IOutputLayer l2 = new OutputLayer(LAYER_SIZE);

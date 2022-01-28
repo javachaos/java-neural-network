@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author fred
  *
  */
-public class OutOfBoundsExceptionTest {
+class OutOfBoundsExceptionTest {
     
     /**
      * Logger instance.
@@ -40,12 +40,12 @@ public class OutOfBoundsExceptionTest {
      * Test the out of bounds exception.
      */
     @Test
-    public final void test() {
+    final void test() {
         try {
             throw new OutOfBoundsException(EXCEPTION_MSG);
         } catch (OutOfBoundsException e) {
             LOGGER.debug(e.getMessage());
-            assertEquals(e.getMessage(), EXCEPTION_MSG);
+            assertEquals(EXCEPTION_MSG, e.getMessage());
         }
     }
     

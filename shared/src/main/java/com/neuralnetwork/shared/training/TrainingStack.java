@@ -10,8 +10,9 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.training;
 
-import java.util.Stack;
-import java.util.Vector;
+import java.util.Deque;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class TrainingStack {
     /**
      * The raw data values.
      */
-    private final Stack<Vector<Double>> data;
+    private final Deque<List<Double>> data;
 
     /**
      * The number of features for each sample of this training stack.
@@ -50,7 +51,7 @@ public class TrainingStack {
      */
     public TrainingStack(final int numFeatures) {
     	this.featureSize = numFeatures;
-        data = new Stack<Vector<Double>>();
+        data = new LinkedBlockingDeque<>();
     }
     
     /**
@@ -60,7 +61,7 @@ public class TrainingStack {
      *      the raw data of this training sample
      */
     public final void addTrainingSample(
-            final Vector<Double> rawData) {
+            final List<Double> rawData) {
         if (rawData != null
         		&& rawData.size() == featureSize) {
             data.add(rawData);
@@ -75,7 +76,7 @@ public class TrainingStack {
      * @return
      *      the next training sample, null if set is empty
      */
-    public final Vector<Double> popSample() {
+    public final List<Double> popSample() {
         return data.pop();
     }
     
@@ -85,7 +86,7 @@ public class TrainingStack {
      * @return
      *      the next training sample, null if set is empty
      */
-    public final Vector<Double> peekSample() {
+    public final List<Double> peekSample() {
         return data.peek();
     }
     
@@ -97,7 +98,7 @@ public class TrainingStack {
      * @return
      *      the data from this training set.
      */
-    public final Stack<Vector<Double>> getData() {
+    public final Deque<List<Double>> getData() {
         return data;
     }
 

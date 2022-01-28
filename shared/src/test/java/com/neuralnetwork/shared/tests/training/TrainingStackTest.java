@@ -13,19 +13,23 @@
  */
 package com.neuralnetwork.shared.tests.training;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
 import java.util.Vector;
+
+import org.junit.jupiter.api.Test;
 
 import com.neuralnetwork.shared.training.TrainingStack;
 import com.neuralnetwork.shared.util.Pair;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Fred
  *
  */
-public class TrainingStackTest {
+class TrainingStackTest {
 
 	/**
 	 * Testing constant.
@@ -48,7 +52,7 @@ public class TrainingStackTest {
 	 * #TrainingStack()}.
 	 */
 	@Test
-	public final void testTrainingStack() {
+	final void testTrainingStack() {
 		TrainingStack s = new TrainingStack(1);
 		assertNotNull(s);
 		assertNotNull(s.getData());
@@ -60,9 +64,9 @@ public class TrainingStackTest {
 	 * java.util.Vector, java.util.Vector)}.
 	 */
 	@Test
-	public final void testAddTrainingSample() {
-		Vector<Double> rawData = new Vector<Double>();
-		Vector<Double> expectedData = new Vector<Double>();
+	final void testAddTrainingSample() {
+		ArrayList<Double> rawData = new ArrayList<Double>();
+		ArrayList<Double> expectedData = new ArrayList<Double>();
 		rawData.add(D_0_01);
 		rawData.add(D_0_01);
 		rawData.add(D_0_01);
@@ -73,17 +77,23 @@ public class TrainingStackTest {
 		expectedData.add(D_0_03);
 		expectedData.add(D_0_03);
 		TrainingStack s = new TrainingStack(I_4);
+		assertNotNull(s);
 		s.addTrainingSample(rawData);
 		TrainingStack s1 = new TrainingStack(1);
+		assertNotNull(s1);
 		s1.addTrainingSample(rawData);
 		s1 = new TrainingStack(1);
+		assertNotNull(s1);
 		s1.addTrainingSample(null);		
 		s1 = new TrainingStack(1);
+		assertNotNull(s1);
 		s1.addTrainingSample(null);		
 		s1 = new TrainingStack(1);
+		assertNotNull(s1);
 		s1.addTrainingSample(rawData);		
 		expectedData.remove(0);
 		s1 = new TrainingStack(I_4);
+		assertNotNull(s1);
 		s1.addTrainingSample(rawData);
 	}
 
@@ -92,9 +102,9 @@ public class TrainingStackTest {
 	 * .shared.training.TrainingStack#popSample()}.
 	 */
 	@Test
-	public final void testPopSample() {
-		Vector<Double> rawData = new Vector<Double>();
-		Vector<Double> expectedData = new Vector<Double>();
+	final void testPopSample() {
+		ArrayList<Double> rawData = new ArrayList<Double>();
+		ArrayList<Double> expectedData = new ArrayList<Double>();
 		rawData.add(D_0_01);
 		rawData.add(D_0_01);
 		rawData.add(D_0_01);
@@ -103,9 +113,9 @@ public class TrainingStackTest {
 		expectedData.add(D_0_03);
 		expectedData.add(D_0_03);
 		expectedData.add(D_0_03);
-		Pair<Vector<Double>, Vector<Double>> p =
-				new Pair<Vector<Double>, 
-				Vector<Double>>(rawData, expectedData);
+		Pair<ArrayList<Double>, ArrayList<Double>> p =
+				new Pair<ArrayList<Double>, 
+				ArrayList<Double>>(rawData, expectedData);
 		TrainingStack s = new TrainingStack(I_4);
 		s.addTrainingSample(rawData);
 		
@@ -118,9 +128,9 @@ public class TrainingStackTest {
 	 * .shared.training.TrainingStack#peekSample()}.
 	 */
 	@Test
-	public final void testPeekSample() {
-		Vector<Double> rawData = new Vector<Double>();
-		Vector<Double> expectedData = new Vector<Double>();
+	final void testPeekSample() {
+		ArrayList<Double> rawData = new ArrayList<Double>();
+		ArrayList<Double> expectedData = new ArrayList<Double>();
 		rawData.add(D_0_01);
 		rawData.add(D_0_01);
 		rawData.add(D_0_01);
@@ -129,9 +139,9 @@ public class TrainingStackTest {
 		expectedData.add(D_0_03);
 		expectedData.add(D_0_03);
 		expectedData.add(D_0_03);
-		Pair<Vector<Double>, Vector<Double>> p =
-				new Pair<Vector<Double>, 
-				Vector<Double>>(rawData, expectedData);
+		Pair<ArrayList<Double>, ArrayList<Double>> p =
+				new Pair<ArrayList<Double>, 
+				ArrayList<Double>>(rawData, expectedData);
 		TrainingStack s = new TrainingStack(I_4);
 		s.addTrainingSample(rawData);
 		
@@ -143,8 +153,8 @@ public class TrainingStackTest {
 	 * .shared.training.TrainingStack#getData()}.
 	 */
 	@Test
-	public final void testGetData() {
-		Vector<Double> rawData = new Vector<Double>();
+	final void testGetData() {
+		ArrayList<Double> rawData = new ArrayList<Double>();
 		rawData.add(D_0_01);
 		rawData.add(D_0_01);
 		rawData.add(D_0_01);
@@ -152,8 +162,8 @@ public class TrainingStackTest {
 		TrainingStack s = new TrainingStack(I_4);
 		s.addTrainingSample(rawData);
 		
-		assertEquals(s.getData().size(), 1);
-		assertEquals(s.getNumFeatures(), I_4);
+		assertEquals(1, s.getData().size());
+		assertEquals(I_4, s.getNumFeatures());
 	}
 
 }

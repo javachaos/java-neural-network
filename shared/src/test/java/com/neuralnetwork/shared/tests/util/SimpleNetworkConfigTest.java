@@ -15,20 +15,24 @@ package com.neuralnetwork.shared.tests.util;
 
 import com.neuralnetwork.shared.util.NetworkConfig;
 import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 /**
  * @author Fred
  *
  */
-public class SimpleNetworkConfigTest {
+class SimpleNetworkConfigTest {
 
 	/**
 	 * Test simple network config.
 	 */
 	@Test
-	public final void testSimpleNetwork() {
+	final void testSimpleNetwork() {
 		NetworkConfig snc = SimpleNetworkConfigs.CONFIG_5_4_3_4_5;
+		assertEquals(3, snc.getNumHiddenLayers());
 		snc.getLayerSizes();
 		snc = null;
 	}

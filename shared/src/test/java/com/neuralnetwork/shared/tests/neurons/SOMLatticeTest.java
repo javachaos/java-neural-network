@@ -25,18 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Fred
  *
  */
-public class SOMLatticeTest {
+class SOMLatticeTest {
 
 	/**
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.neurons.SOMLattice#SOMLattice(int, int, int)}.
 	 */
 	@Test
-	public final void testSOMLattice() {
+	final void testSOMLattice() {
 		SOMLattice s = new SOMLattice(Constants.FIVE, 
 		                              Constants.FIVE, Constants.FIVE);
-		assertEquals(Constants.FIVE, s.getHeight());
-		assertEquals(Constants.FIVE, s.getWidth());
 		assertEquals(Constants.FIVE, s.getNeuron(0, 0).getWeights().size());
 	}
 
@@ -45,11 +43,11 @@ public class SOMLatticeTest {
 	 * .shared.neurons.SOMLattice#getNeuron(int, int)}.
 	 */
 	@Test
-	public final void testGetNeuron() {
+	final void testGetNeuron() {
 		SOMLattice s = new SOMLattice(Constants.FIVE, 
 		                              Constants.FIVE, Constants.FIVE);
-		assertEquals(s.getNeuron(Constants.ONE, 
-		                         Constants.FOUR).getType(), NeuronType.SOM);
+		assertEquals(NeuronType.SOM, s.getNeuron(Constants.ONE, 
+		                         Constants.FOUR).getType());
 	}
 
 	/**
@@ -57,12 +55,10 @@ public class SOMLatticeTest {
 	 * .shared.neurons.SOMLattice#getWidth()}.
 	 */
 	@Test
-	public final void testGetWidth() {
+	final void testGetWidth() {
 		SOMLattice s = new SOMLattice(Constants.FIVE, 
 		                              Constants.FIVE, Constants.FIVE);
-		assertEquals(Constants.FIVE, s.getHeight());
 		assertEquals(Constants.FIVE, s.getWidth());
-		assertEquals(Constants.FIVE, s.getNeuron(0, 0).getWeights().size());
 	}
 
 	/**
@@ -70,12 +66,10 @@ public class SOMLatticeTest {
 	 * .shared.neurons.SOMLattice#getHeight()}.
 	 */
 	@Test
-	public final void testGetHeight() {
+	final void testGetHeight() {
 	    SOMLattice s = new SOMLattice(Constants.FIVE, 
 	                                  Constants.FIVE, Constants.FIVE);
 		assertEquals(Constants.FIVE, s.getHeight());
-		assertEquals(Constants.FIVE, s.getWidth());
-		assertEquals(Constants.FIVE, s.getNeuron(0, 0).getWeights().size());
 	}
 
 	/**
@@ -84,7 +78,7 @@ public class SOMLatticeTest {
 	 * com.neuralnetwork.shared.neurons.SOMLayer)}.
 	 */
 	@Test
-	public final void testGetBMU() {
+	final void testGetBMU() {
 	    SOMLattice s = new SOMLattice(Constants.FIVE, 
 	                                  Constants.FIVE, Constants.FIVE);
 		SOMLayer i = new SOMLayer();
@@ -93,7 +87,7 @@ public class SOMLatticeTest {
 		i.add(0.0);
 		i.add(0.0);
 		i.add(0.0);
-		assertEquals(s.getBMU(i).getType(), NeuronType.SOM);
+		assertEquals(NeuronType.SOM, s.getBMU(i).getType());
 	}
 
 }

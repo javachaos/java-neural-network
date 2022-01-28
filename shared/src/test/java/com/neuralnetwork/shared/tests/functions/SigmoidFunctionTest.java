@@ -13,6 +13,9 @@
  */
 package com.neuralnetwork.shared.tests.functions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +24,11 @@ import com.neuralnetwork.shared.functions.FunctionType;
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 /**
  * @author fred
  *
  */
-public class SigmoidFunctionTest {
+class SigmoidFunctionTest {
     
     /**
      * Logger instance.
@@ -77,7 +77,7 @@ public class SigmoidFunctionTest {
      * .SigmoidFunction#activate(double)}.
      */
     @Test
-    public final void testActivate() {
+    final void testActivate() {
         testValue(0, EXPECTED_VALUE_ZERO);
         testValue(1.0, EXPECTED_VALUE_ONE);
         testValue(2.0, EXPECTED_VALUE_TWO);
@@ -89,7 +89,7 @@ public class SigmoidFunctionTest {
      * .SigmoidFunction#derivative(double)}.
      */
     @Test
-    public final void testDerivative() {
+    final void testDerivative() {
         testDerivativeValue(0, EXPECTED_DVALUE_ZERO);
         testDerivativeValue(1.0, EXPECTED_DVALUE_ONE);
         testDerivativeValue(2.0, EXPECTED_DVALUE_TWO);
@@ -100,10 +100,10 @@ public class SigmoidFunctionTest {
      * .SigmoidFunction#getFunctionType()}.
      */
     @Test
-    public final void testGetFunctionType() {
+    final void testGetFunctionType() {
         IActivationFunction f = new SigmoidFunction();
         FunctionType t = f.getFunctionType();
-        assertEquals(t, FunctionType.SIGMOID);
+        assertEquals(FunctionType.SIGMOID, t);
     }
     
     /**
@@ -111,7 +111,7 @@ public class SigmoidFunctionTest {
      * .SigmoidFunction#equals()}.
      */
     @Test
-    public final void testEquals() {
+    final void testEquals() {
         IActivationFunction f = new SigmoidFunction();
         IActivationFunction f1 = new SigmoidFunction();
         
@@ -121,8 +121,8 @@ public class SigmoidFunctionTest {
         f = new SigmoidFunction();
         f1 = null;
         
-        assertFalse(f.equals(f1));
-        assertFalse(f.equals(0.0));
+        assertNotEquals(f, f1);
+        assertNotEquals(0.0, f);
     }
     
     /**
@@ -130,7 +130,7 @@ public class SigmoidFunctionTest {
      * .SigmoidFunction#hashCode()}.
      */
     @Test
-    public final void testHashCode() {
+    final void testHashCode() {
         IActivationFunction f = new SigmoidFunction();
         IActivationFunction f1 = new SigmoidFunction();
         

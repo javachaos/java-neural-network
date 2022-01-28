@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Fred
  *
  */
-public class BiasNeuronTest {
+class BiasNeuronTest {
 
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -31,7 +31,7 @@ public class BiasNeuronTest {
 	 * #BiasNeuron()}.
 	 */
 	@Test
-	public final void testBiasNeuron() {
+	final void testBiasNeuron() {
 		assertEquals(
 				1.0, new BiasNeuron().getValue(),
 				Constants.TEN * Math.ulp(1.0));
@@ -41,7 +41,7 @@ public class BiasNeuronTest {
 	 * Test feedforward methods.
 	 */
 	@Test
-	public final void testFeedForward() {
+	final void testFeedForward() {
 		BiasNeuron bn = new BiasNeuron();
 		bn.feedforward(null);
 		bn.feedforward(1.0, null);
@@ -52,9 +52,9 @@ public class BiasNeuronTest {
 	 * Test toString.
 	 */
 	@Test
-	public final void testToString() {
+	final void testToString() {
 		BiasNeuron bn = new BiasNeuron();
-		assertEquals(bn.toString(), "BN(1.0)");
+		assertEquals("BN(1.0)", bn.toString());
 	}
 
 }

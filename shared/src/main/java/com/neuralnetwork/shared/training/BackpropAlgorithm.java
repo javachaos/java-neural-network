@@ -1,8 +1,9 @@
 package com.neuralnetwork.shared.training;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Stack;
-import java.util.Vector;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,6 @@ import com.neuralnetwork.shared.util.MathTools;
  *
  */
 public final class BackpropAlgorithm implements ITrainAlgorithm {
-//TODO test
     /**
      * Logger instance.
      */
@@ -45,13 +45,13 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	/**
 	 * Training vector.
 	 */
-	private final Vector<Double> trainVector;
+	private final List<Double> trainVector;
 	
 
 	/**
 	 * Training vector.
 	 */
-	private Vector<Double> desiredVector;
+	private List<Double> desiredVector;
 
 	/**
 	 * Create the backprop algorithm.
@@ -70,8 +70,8 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 * 
 	 */
 	public BackpropAlgorithm(
-			final Vector<Double> trainingVector,
-			final Vector<Double> dV,
+			final List<Double> trainingVector,
+			final List<Double> dV,
 			final INetwork net, final Double expErr) {
 		this.trainVector = trainingVector;
 		this.network = net;
@@ -96,12 +96,12 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 */
 	public synchronized Double compute() {
 		
-		Vector<Double> output = network.runInputs(trainVector);
-		LOGGER.debug("Network output: " + output);
+		List<Double> output = network.runInputs(trainVector);
+		LOGGER.debug("Network output: {}", output);
 		currError =	ErrorFunctions.getInstance().meanSquaredError(
 						output, trainVector);
 		Iterator<IOutputNeuron> iter = network.getOutputLayer().iterator();
-		Stack<Double> outputs = new Stack<Double>();
+		LinkedBlockingDeque<Double> outputs = new LinkedBlockingDeque<>();
 		outputs.addAll(output);
 		//Skip bias neuron.
 		iter.next();
@@ -109,7 +109,7 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 			iter.next().propagateError(outputs.pop());
 		}
 		
-		Vector<Double> errVector = new Vector<Double>();
+		List<Double> errVector = new ArrayList<>();
 		
 		Iterator<IInputNeuron> iterIn = network.getInputLayer().iterator();
 		
@@ -124,14 +124,14 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	/**
 	 * @return the desiredVector
 	 */
-	public Vector<Double> getDesiredVector() {
+	public List<Double> getDesiredVector() {
 		return desiredVector;
 	}
 
 	/**
 	 * @param dV the desiredVector to set
 	 */
-	public void setDesiredVector(final Vector<Double> dV) {
+	public void setDesiredVector(final List<Double> dV) {
 		this.desiredVector = dV;
 	}
 

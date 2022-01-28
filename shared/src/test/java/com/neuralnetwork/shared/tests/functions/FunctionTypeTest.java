@@ -23,24 +23,24 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Fred
  *
  */
-public class FunctionTypeTest {
+class FunctionTypeTest {
 
     /**
      * Tests the FunctionType class.
      */
 	@Test
-	public final void test() {
+	final void test() {
 		FunctionType[] t = FunctionType.values();
 		
 		for (FunctionType f : t) {
 			assertNotNull(f);
 		}
 		
-		assertEquals(FunctionType.valueOf("SIGMOID"),
-				FunctionType.SIGMOID);
+		assertEquals(FunctionType.SIGMOID,
+				FunctionType.valueOf("SIGMOID"));
 		
-		assertEquals(FunctionType.valueOf("LINEAR"),
-				FunctionType.LINEAR);
+		assertEquals(FunctionType.LINEAR,
+				FunctionType.valueOf("LINEAR"));
 		
 	}
 

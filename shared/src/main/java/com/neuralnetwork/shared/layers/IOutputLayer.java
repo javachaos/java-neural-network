@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import java.util.Vector;
+import java.util.List;
 
 import com.neuralnetwork.shared.neurons.IOutputNeuron;
 
@@ -27,5 +27,5 @@ public interface IOutputLayer extends ILayer<IOutputNeuron>, IBuildable {
      * @return
      *      the output values of the network
      */
-    Vector<Double> getOutputValues();
+	List<Double> getOutputValues();
 }

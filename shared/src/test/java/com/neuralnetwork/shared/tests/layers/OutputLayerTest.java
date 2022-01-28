@@ -25,17 +25,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author fred
  *
  */
-public class OutputLayerTest {
+class OutputLayerTest {
     
     /**
      * Test method for {@link com.neuralnetwork
      * .shared.layers.OutputLayer#OutputLayer(int)}.
      */
     @Test
-    public final void testOutputLayer() {
+    final void testOutputLayer() {
         IOutputLayer o = new OutputLayer(1);
         assertNotNull(o);
-        assertEquals(o.getLayerType(), LayerType.OUTPUT);
+        assertEquals(LayerType.OUTPUT, o.getLayerType());
     }
     
     /**
@@ -43,11 +43,11 @@ public class OutputLayerTest {
      * .shared.layers.OutputLayer#build()}.
      */
     @Test
-    public final void testBuild() {
+    final void testBuild() {
         IOutputLayer l = new OutputLayer(1);
         l.build();
         int size = l.getSize();
-        assertEquals(size, 1);
+        assertEquals(1, size);
     }
     
 }

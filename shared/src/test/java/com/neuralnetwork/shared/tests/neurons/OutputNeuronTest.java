@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Fred
  *
  */
-public class OutputNeuronTest {
+class OutputNeuronTest {
 
 	/**
 	 * Number of times to run the test.
@@ -35,7 +35,7 @@ public class OutputNeuronTest {
 	 * .shared.neurons.OutputNeuron#OutputNeuron()}.
 	 */
 	@Test
-	public final void testOutputNeuron() {
+	final void testOutputNeuron() {
 		for (int i = 0; i < NUM_ITER; i++) {
 			OutputNeuron o = new OutputNeuron();
 			Double v = o.getOutputValue();
@@ -49,10 +49,10 @@ public class OutputNeuronTest {
 	 * .shared.neurons.OutputNeuron#toString()}.
 	 */
 	@Test
-	public final void testToString() {
+	final void testToString() {
 		OutputNeuron o = new OutputNeuron();
 		o.setValue(0.0);
-		assertEquals(o.toString(), "ON(0.0) ");
+		assertEquals("ON(0.0) ", o.toString());
 	}
 
 }

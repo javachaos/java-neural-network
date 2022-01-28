@@ -25,17 +25,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author fred
  *
  */
-public class HiddenLayerTest {
+class HiddenLayerTest {
     
     /**
      * Test method for {@link com.neuralnetwork
      * .shared.layers.HiddenLayer#HiddenLayer(int)}.
      */
     @Test
-    public final void testHiddenLayer() {
+    final void testHiddenLayer() {
         IHiddenLayer h = new HiddenLayer(1, 0);
         assertNotNull(h);
-        assertEquals(h.getLayerType(), LayerType.HIDDEN);
+        assertEquals(LayerType.HIDDEN, h.getLayerType());
     }
     
     /**
@@ -43,10 +43,10 @@ public class HiddenLayerTest {
      * .shared.layers.HiddenLayer#build()}.
      */
     @Test
-    public final void testBuild() {
+    final void testBuild() {
         HiddenLayer h = new HiddenLayer(1, 0);
         ((IHiddenLayer) h).build();
         int size = h.getSize();
-        assertEquals(size, 1);
+        assertEquals(1, size);
     }
 }

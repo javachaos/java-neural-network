@@ -10,7 +10,8 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Objects;
 
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.neurons.INeuron;
@@ -23,7 +24,7 @@ import com.neuralnetwork.shared.neurons.INeuron;
  *      the type of Layer this is
  */
 public abstract class Layer<T extends INeuron> 
-        extends Vector<T> implements ILayer<T> {
+        extends ArrayList<T> implements ILayer<T> {
 
     /**
      * Generated Serial Version UID.
@@ -46,7 +47,7 @@ public abstract class Layer<T extends INeuron>
      * @param w
      *      the width of the Layer to be created
      */
-	public Layer(final int w) {
+	Layer(final int w) {
         super(w);
         this.width = w;
     }
@@ -78,4 +79,25 @@ public abstract class Layer<T extends INeuron>
         return width;
     }
 
+	@Override
+	public synchronized int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(layerType, width);
+		return result;
+	}
+
+	@Override
+	public synchronized boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Layer<?> other = (Layer<?>) obj;
+		return layerType == other.layerType && width == other.width;
+	}
+
+    
 }

@@ -10,11 +10,13 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.network;
 
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.Stack;
-import java.util.Vector;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -253,11 +255,11 @@ public final class Network implements INetwork {
     }
 
     @Override
-    public synchronized Vector<Double> runInputs(final Vector<Double> l) {
+    public synchronized List<Double> runInputs(final List<Double> l) {
     	if (l.size() != inputLayer.getSize()) {
     		LOGGER.error("Input vector does not have correct "
     				+ "dimension to be run through this network.");
-    		return null;
+    		return new ArrayList<>();
     	}
     	getInputLayer().addValues(l);
         IOutputLayer ol = getInputLayer().propagate(nnctx);
@@ -280,7 +282,7 @@ public final class Network implements INetwork {
 
     @Override
     public synchronized Double train(final boolean online, 
-    		final Vector<Double> trainingVector,
+    		final List<Double> trainingVector,
     		final Double expectedError) {
     	Double errorValue = 0.0;
     	toggleTraining();
@@ -291,8 +293,7 @@ public final class Network implements INetwork {
 							trainingVector, this, expectedError);
 					errorValue = algo.compute();
 				break;
-            case QPROP:
-            case RPROP:
+            case QPROP, RPROP:
             default:
 				break;
     	}
@@ -372,14 +373,14 @@ public final class Network implements INetwork {
      * links intact.
      */
     private void rebuild() {
-        
+        throw new UnsupportedOperationException("Currently unsupported.");
     }
 
     @Override
     public void build() {
 
     	Connections c = Connections.getInstance();
-		Stack<IHiddenLayer> temp = new Stack<>();
+		Deque<IHiddenLayer> temp = new LinkedBlockingDeque<>();
         Iterator<IHiddenLayer> layerIterator = layers.values().iterator();
         while (layerIterator.hasNext()) {
             temp.push(layerIterator.next());
@@ -391,7 +392,7 @@ public final class Network implements INetwork {
             layers.put(h.getIndex(), h);
         });
     	
-		while (!temp.empty()) {
+		while (!temp.isEmpty()) {
             IHiddenLayer l = temp.pop();
             layers.put(l.getIndex(), l);
 		}

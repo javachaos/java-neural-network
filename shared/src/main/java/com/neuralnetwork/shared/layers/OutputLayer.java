@@ -10,7 +10,8 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.neurons.BiasNeuron;
@@ -55,8 +56,8 @@ public class OutputLayer extends Layer<IOutputNeuron> implements IOutputLayer {
 	}
 
     @Override
-    public final Vector<Double> getOutputValues() {
-        Vector<Double> v = new Vector<Double>();
+    public final List<Double> getOutputValues() {
+    	List<Double> v = new ArrayList<>();
         for (int i = 0; i < getSize(); i++) {
             v.add(getNeuron(i).getValue());
         }

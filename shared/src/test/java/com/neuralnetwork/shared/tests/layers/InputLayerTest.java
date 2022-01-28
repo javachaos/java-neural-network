@@ -13,33 +13,35 @@
  */
 package com.neuralnetwork.shared.tests.layers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.ArrayList;
 import java.util.Vector;
 
-import com.neuralnetwork.shared.layers.IOutputLayer;
-import com.neuralnetwork.shared.util.MathTools;
-import nl.jqno.equalsverifier.internal.util.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.layers.IInputLayer;
+import com.neuralnetwork.shared.layers.IOutputLayer;
 import com.neuralnetwork.shared.layers.InputLayer;
 import com.neuralnetwork.shared.network.INetwork;
 import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.network.Network;
 import com.neuralnetwork.shared.network.NeuralNetContext;
-import com.neuralnetwork.shared.tests.util.TestConstants;
+import com.neuralnetwork.shared.tests.values.TestConstants;
+import com.neuralnetwork.shared.util.MathTools;
 import com.neuralnetwork.shared.values.Constants;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author fred
  *
  */
-public class InputLayerTest {
+class InputLayerTest {
 	
     /**
      * Logger instance.
@@ -57,10 +59,10 @@ public class InputLayerTest {
      * .shared.layers.InputLayer#InputLayer(int)}.
      */
     @Test
-    public final void testInputLayer() {
+    final void testInputLayer() {
         IInputLayer l = new InputLayer(1);
         assertNotNull(l);
-        assertEquals(l.getLayerType(), LayerType.INPUT);
+        assertEquals(LayerType.INPUT, l.getLayerType());
     }
     
     /**
@@ -68,11 +70,11 @@ public class InputLayerTest {
      * .shared.layers.InputLayer#build()}.
      */
     @Test
-    public final void testBuild() {
+    final void testBuild() {
         IInputLayer l = new InputLayer(1);
         l.build();
         int size = l.getSize();
-        assertEquals(size, 1);
+        assertEquals(1, size);
     }
     
     /**
@@ -81,7 +83,7 @@ public class InputLayerTest {
      * com.neuralnetwork.shared.values.IValue, int)}.
      */
     @Test
-    public final void testAddValue() {
+    final void testAddValue() {
         IInputLayer l = new InputLayer(1);
         l.build();
         l.addValue(1.0, 0);
@@ -93,28 +95,13 @@ public class InputLayerTest {
      * .shared.layers.InputLayer#addValues(Vector<Double> values)}.
      */
     @Test
-    public final void testAddValues() {
+    final void testAddValues() {
         IInputLayer l = new InputLayer(1);
-        try {
-        	l.addValues(null);
-        	// Exception not thrown.
-        	Assert.fail(null);
-        } catch (Throwable t) {
-        	//Success
-        	LOGGER.info("Method InputLayer.addValues"
-        			+ "successfully caught exception.");
-        }
+        ArrayList<Double> empty = new ArrayList<Double>();
+        Assertions.assertThrows(NullPointerException.class, () -> l.addValues(null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> l.addValues(empty));
 
-        try {
-            l.addValues(new Vector<Double>());
-        	// Exception not thrown. parameter size mismatch
-        	Assert.fail(null);
-        } catch (Throwable t) {
-        	LOGGER.info("Method InputLayer.addValues"
-        			+ "successfully caught exception.");
-        }
-
-        Vector<Double> d = new Vector<Double>();
+        ArrayList<Double> d = new ArrayList<Double>();
         d.add(1.0);
         l.addValues(d);
         l.build();
@@ -127,26 +114,28 @@ public class InputLayerTest {
      * com.neuralnetwork.shared.network.INeuralNetContext)}.
      */
     @Test
-    public final void testPropagate() {
+    final void testPropagate() {
         INetwork n = new Network(Constants.FIVE, Constants.FIVE, 
                                  Constants.THREE, 
                                  new int[] {Constants.FOUR, 
                                             Constants.THREE,
                                             Constants.FOUR});
         n.build();
-        Vector<Double> values = new Vector<Double>();
+        ArrayList<Double> values = new ArrayList<Double>();
         values.add(NN_INPUT_VALUE);
         values.add(NN_INPUT_VALUE);
         values.add(NN_INPUT_VALUE);
         values.add(NN_INPUT_VALUE);
         values.add(NN_INPUT_VALUE);
         double start = MathTools.sum(values);
+        assertNotEquals(0.0, start);
         IInputLayer l = new InputLayer(Constants.FIVE);
         l.addValues(values);
         n.setInputLayer(l);
         INeuralNetContext nnctx = new NeuralNetContext(n);
         IOutputLayer ol = l.propagate(nnctx);
         double end = MathTools.sum(ol.getOutputValues());
+        assertNotEquals(0.0, end);
         LOGGER.debug("Total input: " + start);
         LOGGER.debug("Total output: " + end);
     }    

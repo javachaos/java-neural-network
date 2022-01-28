@@ -1,11 +1,7 @@
 package com.neuralnetwork.jbrain.sensors;
 
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.util.ArrayList;
 
-import com.github.sarxos.webcam.Webcam;
 import com.neuralnetwork.jbrain.artificialsensors.ISensor;
 import com.neuralnetwork.jbrain.sensors.camera.RGBData;
 
@@ -19,12 +15,12 @@ public class LowResVisualSensor implements ISensor<ArrayList<RGBData>> {
 	/**
 	 * Default width resolution.
 	 */
-	private int res_w = 176;
+	private int resWidth = 176;
 	
 	/**
 	 * Default height resolution.
 	 */
-	private int res_h = 144;
+	private int resHeight = 144;
 
 	/**
 	 * Construct a low-res visual sensor
@@ -43,10 +39,10 @@ public class LowResVisualSensor implements ISensor<ArrayList<RGBData>> {
 		/**
 		 * The maximum image resolution.
 		 */
-		int MAX_RES = 100;
-		if (width > MAX_RES || width < 0)
+		int maxResolution = 100;
+		if (width > maxResolution || width < 0)
 			throw new IllegalArgumentException("Width out of range.");
-		if (height > MAX_RES || height < 0)
+		if (height > maxResolution || height < 0)
 			throw new IllegalArgumentException("Height out of range.");
 
 		this.setResWidth(width);
@@ -63,37 +59,23 @@ public class LowResVisualSensor implements ISensor<ArrayList<RGBData>> {
 	
 	@Override
 	public ArrayList<RGBData> getData() {
-		Webcam webcam = Webcam.getDefault();
-		webcam.setViewSize(new Dimension(res_w, res_h));
-		webcam.open();
-		BufferedImage image = webcam.getImage();
-		Raster r = image.getData();
-		webcam.close();
-		ArrayList<RGBData> data = new ArrayList<RGBData>();
-		
-		for (int x = 0; x < res_w; x++) {
-			for (int y = 0; y < res_h; y++) {
-				double[] d = r.getPixel(x, y, new double[3]);
-				data.add(new RGBData(d[0], d[1], d[2]));
-			}
-		}
-		return data;
+		return new ArrayList<>();
 	}
 
 	public int getResWidth() {
-		return res_w;
+		return resWidth;
 	}
 
-	public void setResWidth(int res_w) {
-		this.res_w = res_w;
+	public void setResWidth(int resWidth) {
+		this.resWidth = resWidth;
 	}
 
 	public int getResHeight() {
-		return res_h;
+		return resHeight;
 	}
 
-	public void setResHeight(int res_h) {
-		this.res_h = res_h;
+	public void setResHeight(int resHeight) {
+		this.resHeight = resHeight;
 	}
 
 }

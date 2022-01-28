@@ -13,19 +13,20 @@
  */
 package com.neuralnetwork.shared.tests.util;
 
-import com.neuralnetwork.shared.util.ErrorFunctions;
-import com.neuralnetwork.shared.values.Constants;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
-import java.util.Vector;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.neuralnetwork.shared.util.ErrorFunctions;
+import com.neuralnetwork.shared.values.Constants;
 
 /**
  * @author Fred
  *
  */
-public class ErrorFunctionsTest {
+class ErrorFunctionsTest {
 
 	/**
 	 * Testing constant.
@@ -74,32 +75,32 @@ public class ErrorFunctionsTest {
 	 * com.neuralnetwork.shared.neurons.SOMLayer)}.
 	 */
 	@Test
-	public final void testMeanSquaredError() {
-		Vector<Double> v1 = new Vector<Double>();
+	final void testMeanSquaredError() {
+		ArrayList<Double> v1 = new ArrayList<Double>();
 		v1.add(0.0);
 		v1.add(0.0);
 		v1.add(0.0);
 		v1.add(0.0);
-		Vector<Double> v2 = new Vector<Double>();
+		ArrayList<Double> v2 = new ArrayList<Double>();
 		v2.add(0.0);
 		v2.add(0.0);
 		v2.add(0.0);
 		v2.add(0.0);
-		assertEquals(ErrorFunctions.getInstance().meanSquaredError(v1, v2),
-				0.0, Constants.TEN * Math.ulp(0.0));
+		assertEquals(0.0,
+				ErrorFunctions.getInstance().meanSquaredError(v1, v2), Constants.TEN * Math.ulp(0.0));
 		
-		v1 = new Vector<Double>();
+		v1 = new ArrayList<Double>();
 		v1.add(D_0_03242);
 		v1.add(D_0_340);
 		v1.add(0.0);
 		v1.add(D_0_034321);
-		v2 = new Vector<Double>();
+		v2 = new ArrayList<Double>();
 		v2.add(D_0_01231);
 		v2.add(D_0_0002131);
 		v2.add(D_0_00002313);
 		v2.add(D_0_00342);
-		assertEquals(ErrorFunctions.getInstance().meanSquaredError(v1, v2),
-				D_0_029203605461901722,
+		assertEquals(D_0_029203605461901722,
+				ErrorFunctions.getInstance().meanSquaredError(v1, v2),
 				Constants.TEN * Math.ulp(D_0_029203605461901722));
 	}
 

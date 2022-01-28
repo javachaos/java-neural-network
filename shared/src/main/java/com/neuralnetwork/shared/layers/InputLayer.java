@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import java.util.Vector;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
@@ -62,7 +62,7 @@ public final class InputLayer extends Layer<IInputNeuron>
     }
     
     @Override
-    public void addValues(final Vector<Double> values) {
+    public void addValues(final List<Double> values) {
     	if (values == null) {
     		throw new NullPointerException("Values vector was null.");
     	}
@@ -80,10 +80,8 @@ public final class InputLayer extends Layer<IInputNeuron>
     @Override
     public IOutputLayer propagate(final INeuralNetContext nnctx) {
     	AtomicReference<Double> v = new AtomicReference<>(Double.MAX_VALUE);
-        IntStream.range(0, getSize()).parallel().forEach(i -> {
-            v.updateAndGet(v1 -> v1 + getNeuron(i).feedforward(nnctx));
-        });
-    	LOGGER.debug("Propagation Error: " + v);
+        IntStream.range(0, getSize()).parallel().forEach(i -> v.updateAndGet(v1 -> v1 + getNeuron(i).feedforward(nnctx)));
+    	LOGGER.debug("Propagation Error: {}", v);
         return nnctx.getNetwork().getOutputLayer();
     }
 

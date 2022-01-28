@@ -1,4 +1,4 @@
-package com.neuralnetwork.shared.tests.util;
+package com.neuralnetwork.shared.tests.values;
 
 import com.neuralnetwork.shared.values.Constants;
 

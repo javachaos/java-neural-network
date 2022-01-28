@@ -24,13 +24,13 @@ import com.neuralnetwork.shared.links.Link;
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
 import com.neuralnetwork.shared.neurons.IHiddenNeuron;
 import com.neuralnetwork.shared.neurons.INeuron;
-import com.neuralnetwork.shared.tests.util.TestConstants;
+import com.neuralnetwork.shared.tests.values.TestConstants;
 
 /**
  * @author Fred
  *
  */
-public class LinkTest {
+class LinkTest {
 	
     /**
      * Value used in testing.
@@ -54,7 +54,7 @@ public class LinkTest {
 	 * com.neuralnetwork.shared.values.IValue)}.
 	 */
 	@Test
-    public final void testLink() {
+    final void testLink() {
 		INeuron n = new HiddenNeuron();
 		ILink l = new Link(n, n, 1.0);
 		assertNotNull(l);
@@ -62,19 +62,19 @@ public class LinkTest {
 		try {
 			new Link(null, n, 1.0);
 		} catch (NeuronLinkException e) {
-			assertEquals(e.getMessage(), "Head link was null.");
+			assertEquals("Head link was null.", e.getMessage());
 		}
 		
 		try {
 			new Link(n, null, 1.0);
 		} catch (NeuronLinkException e) {
-			assertEquals(e.getMessage(), "Tail link was null.");
+			assertEquals("Tail link was null.", e.getMessage());
 		}
 		
 		l = new Link(n, n, null);
 
         //assertTrue(Math.abs(l.getNeuron(0).getValue() - 1.0) < EPSILON);
-		assertEquals(l.getWeight(), 0.0, TestConstants.DELTA);
+		assertEquals(0.0, l.getWeight(), TestConstants.DELTA);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class LinkTest {
 	 * .shared.links.Link#getHead()}.
 	 */
 	@Test
-	public final void testGetHead() {
+	final void testGetHead() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
 		ILink l = new Link(h, t, 1.0);
@@ -94,7 +94,7 @@ public class LinkTest {
 	 * .shared.links.Link#getTail()}.
 	 */
 	@Test
-    public final void testGetTail() {
+    final void testGetTail() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
 		ILink l = new Link(h, t, 1.0);
@@ -106,11 +106,11 @@ public class LinkTest {
 	 * .shared.links.Link#getWeight()}.
 	 */
 	@Test
-    public final void testGetWeight() {
+    final void testGetWeight() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
 		ILink l = new Link(h, t, 1.0);
-		assertEquals(l.getWeight(), 1.0, TestConstants.DELTA);
+		assertEquals(1.0, l.getWeight(), TestConstants.DELTA);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class LinkTest {
 	 * .shared.links.Link#setHead(com.neuralnetwork.shared.neurons.INeuron)}.
 	 */
 	@Test
-    public final void testSetHead() {
+    final void testSetHead() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
 		ILink l = new Link(h, t, 1.0);
@@ -128,7 +128,7 @@ public class LinkTest {
 		try {
 			l.setHead(null);
 		} catch (NeuronLinkException e) {
-			assertEquals(e.getMessage(), "Error cannot set null head.");
+			assertEquals("Error cannot set null head.", e.getMessage());
 		}
 	}
 
@@ -137,7 +137,7 @@ public class LinkTest {
 	 * .shared.links.Link#setTail(com.neuralnetwork.shared.neurons.INeuron)}.
 	 */
 	@Test
-    public final void testSetTail() {
+    final void testSetTail() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
 		ILink l = new Link(h, t, 1.0);
@@ -147,7 +147,7 @@ public class LinkTest {
 		try {
 			l.setTail(null);
 		} catch (NeuronLinkException e) {
-			assertEquals(e.getMessage(), "Error cannot set null tail.");
+			assertEquals("Error cannot set null tail.", e.getMessage());
 		}
 	}
 
@@ -157,7 +157,7 @@ public class LinkTest {
 	 * .shared.values.IValue)}.
 	 */
 	@Test
-    public final void testUpdateWeight() {
+    final void testUpdateWeight() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
 		ILink l = new Link(h, t, 0.0);
@@ -173,7 +173,7 @@ public class LinkTest {
 	 * .shared.values.IValue)}.
 	 */
 	@Test
-    public final void testSetWeight() {
+    final void testSetWeight() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
 		ILink l = new Link(h, t, 1.0);
@@ -186,7 +186,7 @@ public class LinkTest {
 	 * .shared.links.Link#getAge()}.
 	 */
 	@Test
-    public final void testGetAge() {
+    final void testGetAge() {
 		IHiddenNeuron h = new HiddenNeuron();
 		IHiddenNeuron t = new HiddenNeuron();
 		ILink l = new Link(h, t, 1.0);
@@ -195,14 +195,6 @@ public class LinkTest {
 		l.updateWeight(-WEIGHT_TEST_VALUE2);
 		l.updateWeight(-WEIGHT_TEST_VALUE2);
 		assertEquals(l.getAge(), 2 * 2);
-	}
-	
-	/**
-	 * Test equals.
-	 */
-	@Test
-	public final void equalsContract() {
-	  //  EqualsVerifier.simple().forClass(Link.class).verify();
 	}
 
 }

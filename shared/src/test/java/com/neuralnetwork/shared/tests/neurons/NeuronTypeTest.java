@@ -23,27 +23,27 @@ import org.junit.jupiter.api.Test;
  * @author Fred
  *
  */
-public class NeuronTypeTest {
+class NeuronTypeTest {
 
     /**
      * Test the NeuronType class.
      */
 	@Test
-	public final void test() {
+	final void test() {
 		NeuronType[] t = NeuronType.values();
 		
 		for (NeuronType n : t) {
 			assertNotNull(n);
 		}
 		
-		assertEquals(NeuronType.valueOf("HIDDEN"),
-				NeuronType.HIDDEN);
-		assertEquals(NeuronType.valueOf("INPUT"),
-				NeuronType.INPUT);
-		assertEquals(NeuronType.valueOf("OUTPUT"),
-				NeuronType.OUTPUT);
-		assertEquals(NeuronType.valueOf("SOM"),
-				NeuronType.SOM);
+		assertEquals(NeuronType.HIDDEN,
+				NeuronType.valueOf("HIDDEN"));
+		assertEquals(NeuronType.INPUT,
+				NeuronType.valueOf("INPUT"));
+		assertEquals(NeuronType.OUTPUT,
+				NeuronType.valueOf("OUTPUT"));
+		assertEquals(NeuronType.SOM,
+				NeuronType.valueOf("SOM"));
 	}
 
 }

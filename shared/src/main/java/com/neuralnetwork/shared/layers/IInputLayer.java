@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import java.util.Vector;
+import java.util.List;
 
 import com.neuralnetwork.shared.network.INeuralNetContext;
 import com.neuralnetwork.shared.neurons.IInputNeuron;
@@ -39,7 +39,7 @@ public interface IInputLayer extends ILayer<IInputNeuron>, IBuildable {
      * @param values
      *      the list of values to be added.
      */
-    void addValues(Vector<Double> values);
+    void addValues(final List<Double> values);
     
     /**
      * Propagate the values from this IInputLayer to the

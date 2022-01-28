@@ -66,16 +66,15 @@ public class TrainNetworkTask {
 				executorService.submit(
 						new TrainNetworkSubTask(network, 
 								trainStack.popSample())).get();
-			} catch (InterruptedException | ExecutionException e) {
+				executorService.awaitTermination(
+						Constants.TRAIN_TIMEOUT, TimeUnit.SECONDS);
+				executorService.shutdown();
+			} catch (ExecutionException e) {
 				LOGGER.error(e.getMessage());
+			} catch (InterruptedException e1) {
+				LOGGER.error(e1.getMessage());
+				Thread.currentThread().interrupt();
 			}
-		}
-		try {
-			executorService.awaitTermination(
-					Constants.TRAIN_TIMEOUT, TimeUnit.SECONDS);
-			executorService.shutdown();
-		} catch (InterruptedException e) {
-			LOGGER.error(e.getMessage());
 		}
 		return totalTrainError;
 	}

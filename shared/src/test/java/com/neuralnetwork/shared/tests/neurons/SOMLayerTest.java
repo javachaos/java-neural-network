@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Fred
  *
  */
-public class SOMLayerTest {
+class SOMLayerTest {
 
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -31,11 +31,11 @@ public class SOMLayerTest {
 	 * #SOMLayer()}.
 	 */
 	@Test
-	public final void testSOMLayer() {
+	final void testSOMLayer() {
 		SOMLayer l = new SOMLayer();
 
 		assertNotNull(l);
-		assertEquals(l.size(), 0);
+		assertEquals(0, l.size());
 	}
 
 	/**
@@ -44,11 +44,11 @@ public class SOMLayerTest {
 	 * #SOMLayer(int)}.
 	 */
 	@Test
-	public final void testSOMLayerInt() {
+	final void testSOMLayerInt() {
 		SOMLayer l = new SOMLayer(Constants.TEN);
 
 		assertNotNull(l);
-		assertEquals(l.size(), Constants.TEN);
+		assertEquals(Constants.TEN, l.size());
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class SOMLayerTest {
 	 * #dist(com.neuralnetwork.shared.neurons.SOMLayer)}.
 	 */
 	@Test
-	public final void testDist() {
+	final void testDist() {
 		SOMLayer l = new SOMLayer(Constants.FIVE);
 		SOMLayer l1 = new SOMLayer(Constants.FIVE);
 
@@ -80,7 +80,7 @@ public class SOMLayerTest {
 		assertEquals(0.0, l.dist(l1), Constants.TEN * Math.ulp(0));
 		
 		l1.add(Constants.TEN_D);
-		assertFalse(0.0 == l.dist(l1));
+		assertNotEquals(0.0, l.dist(l1));
 	}
 
 }

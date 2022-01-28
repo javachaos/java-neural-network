@@ -13,26 +13,29 @@
  */
 package com.neuralnetwork.shared.tests.training;
 
-import com.neuralnetwork.shared.neurons.SOMLattice;
-import com.neuralnetwork.shared.neurons.SOMLayer;
-import com.neuralnetwork.shared.training.SOMTrainer;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.Random;
+import java.util.Vector;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import java.util.Random;
-import java.util.Vector;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.neuralnetwork.shared.neurons.SOMLattice;
+import com.neuralnetwork.shared.neurons.SOMLayer;
+import com.neuralnetwork.shared.training.SOMTrainer;
 
 /**
  * @author Fred
  *
  */
 
-public class SOMTrainerTest {
+class SOMTrainerTest {
 
 	/**
 	 * Learning rate for SOMTrainer.
@@ -54,11 +57,6 @@ public class SOMTrainerTest {
      */
     private static final long SEED = 1234L;
 
-    /**
-     * Thread sleep time.
-     */
-	private static final long SLEEP_TIME = 100;
-
 	/**
 	 * Testing timeout.
 	 */
@@ -78,7 +76,7 @@ public class SOMTrainerTest {
 	 * Setup SOM Test.
 	 */
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
 		/**
 		 * The random number generator.
 		 */
@@ -106,7 +104,7 @@ public class SOMTrainerTest {
 	 * #SOMTrainer(double, int)}.
 	 */
 	@Test
-	public final void testSOMTrainer() {
+	final void testSOMTrainer() {
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		assertNotNull(s);
 	}
@@ -117,7 +115,7 @@ public class SOMTrainerTest {
 	 * com.neuralnetwork.shared.neurons.SOMLattice, java.util.Vector)}.
 	 */
 	@Test
-	public final void testSetTraining() {
+	final void testSetTraining() {
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s.setTraining(lattice, inData);
 		assertEquals(lattice, s.getLattice());
@@ -128,17 +126,18 @@ public class SOMTrainerTest {
 	 * .shared.training.SOMTrainer#start()}.
 	 */
 	@Test
-	public final void testStart() {
+	final void testStart() {
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s.setTraining(lattice, inData);
 		s.start();
-		while (s.isRunning()) {
-			try {
-				Thread.sleep(SLEEP_TIME);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		Awaitility.await().atMost(15, TimeUnit.SECONDS).until(done(s));
+//		while (s.isRunning()) {
+//			try {
+//				Thread.sleep(SLEEP_TIME);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		assertNotNull(s);
 	}
 
@@ -147,7 +146,7 @@ public class SOMTrainerTest {
 	 * .shared.training.SOMTrainer#getLattice()}.
 	 */
 	@Test
-	public final void testGetLattice() {
+	final void testGetLattice() {
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s.setTraining(lattice, inData);
 		assertEquals(lattice, s.getLattice());
@@ -159,29 +158,32 @@ public class SOMTrainerTest {
 	 */
 	@Test
 	@Timeout(value = TEST_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-	public final void testIsRunning() {	
+	final void testIsRunning() {	
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s.setTraining(lattice, inData);
 		s.start();
-		while (s.isRunning()) {
-			try {
-				Thread.sleep(SLEEP_TIME);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		Awaitility.await().atMost(15, TimeUnit.SECONDS).until(done(s));
+//		while (s.isRunning()) {
+//			try {
+//				Thread.sleep(SLEEP_TIME);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		assertNotNull(s);
 		
 		SOMTrainer s1 = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s1.setTraining(null, inData);
 		s1.start();
-		while (s1.isRunning()) {
-			try {
-				Thread.sleep(SLEEP_TIME);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+
+		Awaitility.await().atMost(15, TimeUnit.SECONDS).until(done(s));
+//		while (s1.isRunning()) {
+//			try {
+//				Thread.sleep(SLEEP_TIME);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		assertNotNull(s1);
 		
 	}
@@ -192,19 +194,20 @@ public class SOMTrainerTest {
 	 */
 	@Test
 	@Timeout(value = TEST_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-	public final void testStop() {
+	final void testStop() {
 		SOMTrainer s = new SOMTrainer(LEARN_RATE, ITERATIONS);
 		s.setTraining(lattice, inData);
-		s.start();		
-		while (s.isRunning()) {
-			try {
-				Thread.sleep(SLEEP_TIME);
-				s.stop();
-				s.getThread().interrupt();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		s.start();
+		Awaitility.await().atMost(15, TimeUnit.SECONDS).until(done(s));
+//		while (s.isRunning()) {
+//			try {
+//				Thread.sleep(SLEEP_TIME);
+//				s.stop();
+//				s.getThread().interrupt();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		assertNotNull(s);
 		
 		SOMTrainer s1 = new SOMTrainer(LEARN_RATE, ITERATIONS);
@@ -219,6 +222,14 @@ public class SOMTrainerTest {
 		s2.stop();
 		Thread.currentThread().interrupt();
 		assertNotNull(s1);
+	}
+	
+	private Callable<Boolean> done(final SOMTrainer s) {
+		return new Callable<Boolean>() {
+			public Boolean call() throws Exception {
+				return !s.isRunning();
+			}
+		};
 	}
 
 }

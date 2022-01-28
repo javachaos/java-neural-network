@@ -22,17 +22,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Fred
  *
  */
-public class HiddenNeuronTest {
+class HiddenNeuronTest {
 
 	/**
 	 * Test method for {@link com.neuralnetwork
 	 * .shared.neurons.HiddenNeuron#toString()}.
 	 */
 	@Test
-	public final void testToString() {
+	final void testToString() {
 		HiddenNeuron h = new HiddenNeuron();
 		h.setValue(1.0);
-		assertEquals(h.toString(), "HN(1.0) ");
+		assertEquals("HN(1.0) ", h.toString());
 	}
 
 }

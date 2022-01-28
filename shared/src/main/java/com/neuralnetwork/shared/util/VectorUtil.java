@@ -1,6 +1,7 @@
 package com.neuralnetwork.shared.util;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Vector Utils class.
@@ -22,8 +23,8 @@ public final class VectorUtil {
 	 * @return
 	 * 		vector of random values.
 	 */
-	public static Vector<Double> getRandomVector(final int featureSize) {
-		Vector<Double> randVector = new Vector<Double>(featureSize);
+	public static List<Double> getRandomVector(final int featureSize) {
+		ArrayList<Double> randVector = new ArrayList<>(featureSize);
 		for (int i = 0; i < featureSize; i++) {
 			randVector.add(Math.random());
 		}

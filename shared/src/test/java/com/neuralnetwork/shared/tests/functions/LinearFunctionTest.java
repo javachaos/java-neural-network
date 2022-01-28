@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Fred
  *
  */
-public class LinearFunctionTest {
+class LinearFunctionTest {
 
 	/**
 	 * Regression size.
@@ -41,19 +41,19 @@ public class LinearFunctionTest {
 	 * .shared.functions.LinearFunction#LinearFunction()}.
 	 */
 	@Test
-	public final void testLinearFunction() {
+	final void testLinearFunction() {
 		LinearFunction f = new LinearFunction();
 		assertNotNull(f);
 		for (int i = 0; i < NUM_ITER; i++) {
 			assertEquals(f.activate(i), i, ACCUR * Math.ulp(i));
-			assertEquals(f.derivative(i), 1, ACCUR * Math.ulp(i));
+			assertEquals(1, f.derivative(i), ACCUR * Math.ulp(i));
 		}
 
 		f.changeFunction(FunctionType.NULL);
 		
 		for (int i = 0; i < NUM_ITER; i++) {
-			assertEquals(f.activate(i), 0, ACCUR * Math.ulp(i));
-			assertEquals(f.derivative(i), 0, ACCUR * Math.ulp(i));
+			assertEquals(0, f.activate(i), ACCUR * Math.ulp(i));
+			assertEquals(0, f.derivative(i), ACCUR * Math.ulp(i));
 		}
 	}
 

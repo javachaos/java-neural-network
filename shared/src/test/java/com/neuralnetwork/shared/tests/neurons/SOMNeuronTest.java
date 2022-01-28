@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Fred
  *
  */
-public class SOMNeuronTest {
+class SOMNeuronTest {
 
 	/**
 	 * Expected distance value.
@@ -37,9 +37,9 @@ public class SOMNeuronTest {
 	 * #SOMNeuron(int)}.
 	 */
 	@Test
-	public final void testSOMNeuronInt() {
+	final void testSOMNeuronInt() {
 		SOMNeuron s = new SOMNeuron(1);
-		assertEquals(s.getWeights().size(), 1);
+		assertEquals(1, s.getWeights().size());
 	}
 
 	/**
@@ -48,11 +48,11 @@ public class SOMNeuronTest {
 	 * #SOMNeuron(int, int, int)}.
 	 */
 	@Test
-	public final void testSOMNeuronIntIntInt() {
+	final void testSOMNeuronIntIntInt() {
 		SOMNeuron s = new SOMNeuron(1, 2, 2);
-		assertEquals(s.getWeights().size(), 1);
-		assertEquals(s.getX(), 2);
-		assertEquals(s.getY(), 2);
+		assertEquals(1, s.getWeights().size());
+		assertEquals(2, s.getX());
+		assertEquals(2, s.getY());
 	}
 
 	/**
@@ -60,11 +60,11 @@ public class SOMNeuronTest {
 	 * .shared.neurons.SOMNeuron#setX(int)}.
 	 */
 	@Test
-	public final void testSetX() {
+	final void testSetX() {
 		SOMNeuron s = new SOMNeuron(1);
-		assertEquals(s.getWeights().size(), 1);
+		assertEquals(1, s.getWeights().size());
 		s.setX(2);
-		assertEquals(s.getX(), 2);
+		assertEquals(2, s.getX());
 	}
 
 	/**
@@ -72,11 +72,11 @@ public class SOMNeuronTest {
 	 * .shared.neurons.SOMNeuron#setY(int)}.
 	 */
 	@Test
-	public final void testSetY() {
+	final void testSetY() {
 		SOMNeuron s = new SOMNeuron(1);
-		assertEquals(s.getWeights().size(), 1);
+		assertEquals(1, s.getWeights().size());
 		s.setY(2);
-		assertEquals(s.getY(), 2);
+		assertEquals(2, s.getY());
 	}
 
 	/**
@@ -84,10 +84,10 @@ public class SOMNeuronTest {
 	 * .shared.neurons.SOMNeuron#getX()}.
 	 */
 	@Test
-	public final void testGetX() {
+	final void testGetX() {
 		SOMNeuron s = new SOMNeuron(1, 2, 2);
-		assertEquals(s.getWeights().size(), 1);
-		assertEquals(s.getX(), 2);
+		assertEquals(1, s.getWeights().size());
+		assertEquals(2, s.getX());
 	}
 
 	/**
@@ -95,10 +95,10 @@ public class SOMNeuronTest {
 	 * .shared.neurons.SOMNeuron#getY()}.
 	 */
 	@Test
-	public final void testGetY() {
+	final void testGetY() {
 		SOMNeuron s = new SOMNeuron(1, 2, 2);
-		assertEquals(s.getWeights().size(), 1);
-		assertEquals(s.getY(), 2);
+		assertEquals(1, s.getWeights().size());
+		assertEquals(2, s.getY());
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class SOMNeuronTest {
 	 * com.neuralnetwork.shared.neurons.SOMNeuron)}.
 	 */
 	@Test
-	public final void testDistanceTo() {
+	final void testDistanceTo() {
 		SOMNeuron s = new SOMNeuron(Constants.THREE, 
 		                            Constants.FIVE, Constants.TWO);
 		SOMNeuron s1 = new SOMNeuron(Constants.THREE,
@@ -122,7 +122,7 @@ public class SOMNeuronTest {
 	 * .shared.neurons.SOMNeuron#setWeight(int, double)}.
 	 */
 	@Test
-	public final void testSetWeight() {
+	final void testSetWeight() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
 	    double w1 = 1.0 / Constants.TEN_D;
@@ -139,8 +139,8 @@ public class SOMNeuronTest {
 		try {
 			s.setWeight(Constants.FOUR, 0.0);
 		} catch (IndexOutOfBoundsException e) {
-			assertEquals(e.getMessage(), 
-					"Weight index was out of bounds.");
+			assertEquals("Weight index was out of bounds.", 
+					e.getMessage());
 		}
 	}
 
@@ -149,7 +149,7 @@ public class SOMNeuronTest {
 	 * .shared.neurons.SOMNeuron#getWeight(int)}.
 	 */
 	@Test
-	public final void testGetWeight() {
+	final void testGetWeight() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
 	    
@@ -173,7 +173,7 @@ public class SOMNeuronTest {
 	 * .shared.neurons.SOMNeuron#getWeights()}.
 	 */
 	@Test
-	public final void testGetWeights() {
+	final void testGetWeights() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
 	    double w1 = 1.0 / Constants.TEN_D;
@@ -196,7 +196,7 @@ public class SOMNeuronTest {
 	 * com.neuralnetwork.shared.neurons.SOMLayer, double, double)}.
 	 */
 	@Test
-	public final void testUpdateWeights() {
+	final void testUpdateWeights() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
 	    double w1 = 1.0 / Constants.TEN_D;
@@ -224,7 +224,7 @@ public class SOMNeuronTest {
 	 * .shared.neurons.SOMNeuron#getNeuralnetwork()}.
 	 */
 	@Test
-	public final void testGetNeuralnetwork() {
+	final void testGetNeuralnetwork() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
 		assertNotNull(s.getNeuralnetwork());
@@ -235,7 +235,7 @@ public class SOMNeuronTest {
 	 * .shared.neurons.SOMNeuron#getType()}.
 	 */
 	@Test
-	public final void testGetType() {
+	final void testGetType() {
 	    SOMNeuron s = new SOMNeuron(Constants.THREE, 
 	                                Constants.FIVE, Constants.TWO);
 		assertEquals(NeuronType.SOM, s.getType());

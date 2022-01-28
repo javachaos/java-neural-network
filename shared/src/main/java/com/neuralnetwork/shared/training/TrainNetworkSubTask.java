@@ -1,6 +1,7 @@
 package com.neuralnetwork.shared.training;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ public final class TrainNetworkSubTask implements Callable<Double> {
 	/**
 	 * Training vector.
 	 */
-	private final Vector<Double> trainVector;
+	private final List<Double> trainVector;
 
 	/**
 	 * Neuron to do computation on.
@@ -42,7 +43,7 @@ public final class TrainNetworkSubTask implements Callable<Double> {
 	 * 
 	 */
 	public TrainNetworkSubTask(final INetwork n,
-			final Vector<Double> trainingVector) {
+			final List<Double> trainingVector) {
 		this.network = n;
 		this.trainVector = trainingVector;
 	}
@@ -51,8 +52,8 @@ public final class TrainNetworkSubTask implements Callable<Double> {
 	public Double call() throws Exception {
 		Double d = network.train(false,
 				trainVector, 0.00001);
-		LOGGER.debug(network.toString());
-		LOGGER.info("Mean squared error: " + d);
+		LOGGER.debug("{}", network);
+		LOGGER.info("Mean squared error: {}", d);
 		return d;
 	}
 

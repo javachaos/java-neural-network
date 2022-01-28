@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Fred
  *
  */
-public class PairTest {
+class PairTest {
 
 	/**
 	 * Testing constant.
@@ -45,7 +45,7 @@ public class PairTest {
 	 * .shared.util.Pair#hashCode()}.
 	 */
 	@Test
-	public final void testHashCode() {
+	final void testHashCode() {
 		Pair<Object, Object> p = new Pair<Object, Object>(null, null);
 		Pair<Object, Object> p1 = new Pair<Object, Object>(null, null);
 		
@@ -68,7 +68,7 @@ public class PairTest {
 	 * #Pair(java.lang.Object, java.lang.Object)}.
 	 */
 	@Test
-	public final void testPair() {
+	final void testPair() {
 		Pair<Object, Object> p = 
 				new Pair<Object, Object>(
 						D_0_1, D_0_1);
@@ -81,7 +81,7 @@ public class PairTest {
 	 * .shared.util.Pair#equals(java.lang.Object)}.
 	 */
 	@Test
-	public final void testEqualsObject() {
+	final void testEqualsObject() {
 		Pair<Object, Object> p = new Pair<Object, Object>(null, null);
 		Pair<Object, Object> p1 = new Pair<Object, Object>(null, null);
 		assertEquals(p, p1);
@@ -96,32 +96,32 @@ public class PairTest {
 		
 		p = new Pair<Object, Object>(D_0_1, null);
 		p1 = new Pair<Object, Object>(null, D_0_1);
-		assertFalse(p.equals(p1));
+		assertNotEquals(p, p1);
 		
 		p = new Pair<Object, Object>(D_0_1, null);
 		p1 = new Pair<Object, Object>(D_0_1, 
 				D_0_1);
-		assertFalse(p.equals(p1));
+		assertNotEquals(p, p1);
 		
 		p = new Pair<Object, Object>(D_0_1, 
 				D_2_1);
 		p1 = new Pair<Object, Object>(D_0_1, 
 				D_0_1);
-		assertFalse(p.equals(p1));
+		assertNotEquals(p, p1);
 
 		//Test (first == null)
 		p = new Pair<Object, Object>(null, D_0_1);
 		p1 = new Pair<Object, Object>(D_0_1, null);
-		assertFalse(p.equals(p1));
+		assertNotEquals(p, p1);
 		
 		//Test (obj == null)
 		p = new Pair<Object, Object>(D_0_1, null);
 		p1 = null;
-		assertFalse(p.equals(p1));
+		assertNotEquals(p, p1);
 		
 		p = new Pair<Object, Object>(D_0_1, null);
 		HiddenNeuron n = new HiddenNeuron();
-		assertFalse(p.equals(n));
+		assertNotEquals(p, n);
 		
 		p = new Pair<Object, Object>(D_0_1, null);
 		p1 = new Pair<Object, Object>(D_0_1, null);
@@ -134,7 +134,7 @@ public class PairTest {
 	 * .shared.util.Pair#getSecond()}.
 	 */
 	@Test
-	public final void testGetSecond() {
+	final void testGetSecond() {
 		Pair<Object, Object> p;
 		Pair<Object, Object> p1;
 		
@@ -148,7 +148,7 @@ public class PairTest {
 	 * .shared.util.Pair#setSecond(java.lang.Object)}.
 	 */
 	@Test
-	public final void testSetSecond() {
+	final void testSetSecond() {
 		Pair<Object, Object> p;
 		Pair<Object, Object> p1;
 		
@@ -159,8 +159,8 @@ public class PairTest {
 		p.setSecond(D_1_1);
 		p1.setSecond(D_1_1);
 		
-		assertEquals(p.getSecond(), D_1_1);
-		assertEquals(p1.getSecond(), D_1_1);
+		assertEquals(D_1_1, p.getSecond());
+		assertEquals(D_1_1, p1.getSecond());
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class PairTest {
 	 * .shared.util.Pair#getFirst()}.
 	 */
 	@Test
-	public final void testGetFirst() {
+	final void testGetFirst() {
 		Pair<Object, Object> p;
 		Pair<Object, Object> p1;
 		
@@ -182,7 +182,7 @@ public class PairTest {
 	 * .shared.util.Pair#setFirst(java.lang.Object)}.
 	 */
 	@Test
-	public final void testSetFirst() {
+	final void testSetFirst() {
 		Pair<Object, Object> p;
 		Pair<Object, Object> p1;
 		
@@ -193,8 +193,8 @@ public class PairTest {
 		p.setFirst(D_1_1);
 		p1.setFirst(D_1_1);
 		
-		assertEquals(p.getFirst(), D_1_1);
-		assertEquals(p1.getFirst(), D_1_1);
+		assertEquals(D_1_1, p.getFirst());
+		assertEquals(D_1_1, p1.getFirst());
 	}
 
 }

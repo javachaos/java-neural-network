@@ -23,13 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Fred
  *
  */
-public class LayerTypeTest {
+class LayerTypeTest {
 
     /**
      * Test the LayerType class.
      */
 	@Test
-	public final void test() {
+	final void test() {
 		LayerType[] t = LayerType.values();
 		
 		for (LayerType l : t) {

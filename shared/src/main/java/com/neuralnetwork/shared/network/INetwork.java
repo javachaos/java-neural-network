@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.network;
 
-import java.util.Vector;
+import java.util.List;
 
 import com.neuralnetwork.shared.layers.IHiddenLayer;
 import com.neuralnetwork.shared.layers.IInputLayer;
@@ -38,7 +38,7 @@ public interface INetwork {
      * @return
      *      the output values of the neural net
      */
-    Vector<Double> runInputs(Vector<Double> inputLayer);
+	List<Double> runInputs(final List<Double> inputLayer);
     
     /**
      * Reset the network effectively,
@@ -83,7 +83,7 @@ public interface INetwork {
      * @return
      *      the Mean squared error value
      */
-    Double train(boolean online, Vector<Double> trainingVector,
+    Double train(boolean online, final List<Double> trainingVector,
     		Double expectedError);
     
     /**

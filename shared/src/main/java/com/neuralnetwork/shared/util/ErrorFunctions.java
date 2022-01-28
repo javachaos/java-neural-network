@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.util;
 
-import java.util.Vector;
+import java.util.List;
 
 import com.neuralnetwork.shared.links.ILink;
 
@@ -44,8 +44,8 @@ public final class ErrorFunctions {
      * @return
      *      the MSE of v1 and v2
      */
-    public double meanSquaredError(final Vector<Double> v1, 
-        final Vector<Double> v2) {
+    public double meanSquaredError(final List<Double> v1, 
+        final List<Double> v2) {
         double n = v1.size();
         double error = 0;
         for (int i = 0; i < v1.size(); i++) {
@@ -67,8 +67,8 @@ public final class ErrorFunctions {
      * @return
      *      the MSE of v1 and v2
      */
-    public double meanSquaredErrorLink(final Vector<ILink> v1, 
-        final Vector<ILink> v2) {
+    public double meanSquaredErrorLink(final List<ILink> v1, 
+        final List<ILink> v2) {
         double n = v1.size();
         double error = 0;
         for (int i = 0; i < v1.size(); i++) {

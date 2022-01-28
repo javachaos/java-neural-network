@@ -20,12 +20,13 @@ import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Fred
  *
  */
-public class NeuralNetBuilderTest {
+class NeuralNetBuilderTest {
 
 	/**
 	 * Number of inputs for the network.
@@ -48,10 +49,10 @@ public class NeuralNetBuilderTest {
 	 * #NeuralNetBuilder(int, int)}.
 	 */
 	@Test
-	public final void testNeuralNetBuilderIntInt() {
+	final void testNeuralNetBuilderIntInt() {
 		NeuralNetBuilder b = new NeuralNetBuilder(NUM_INPUTS, NUM_OUTPUTS);
-		assertEquals(b.build().getInputLayer().getSize(), NUM_INPUTS);
-		assertEquals(b.build().getOutputLayer().getSize(), NUM_OUTPUTS);
+		assertEquals(NUM_INPUTS, b.build().getInputLayer().getSize());
+		assertEquals(NUM_OUTPUTS, b.build().getOutputLayer().getSize());
 	}
 
 	/**
@@ -60,11 +61,11 @@ public class NeuralNetBuilderTest {
 	 * #NeuralNetBuilder(com.neuralnetwork.shared.util.NetworkConfig)}.
 	 */
 	@Test
-	public final void testNeuralNetBuilderNetworkConfig() {
+	final void testNeuralNetBuilderNetworkConfig() {
 		NeuralNetBuilder b = new NeuralNetBuilder(
 				SimpleNetworkConfigs.CONFIG_5_4_3_4_5);
-		assertEquals(b.build().getInputLayer().getSize(), NUM_INPUTS);
-		assertEquals(b.build().getOutputLayer().getSize(), NUM_OUTPUTS);
+		assertEquals(NUM_INPUTS, b.build().getInputLayer().getSize());
+		assertEquals(NUM_OUTPUTS, b.build().getOutputLayer().getSize());
 	}
 
 	/**
@@ -73,13 +74,13 @@ public class NeuralNetBuilderTest {
 	 * #addHiddenLayer(com.neuralnetwork.shared.layers.IHiddenLayer)}.
 	 */
 	@Test
-	public final void testAddHiddenLayer() {
+	final void testAddHiddenLayer() {
 		NeuralNetBuilder b = new NeuralNetBuilder(NUM_INPUTS, NUM_OUTPUTS);
 		b.addHiddenLayer(new HiddenLayer(NUM_HIDDEN, 0));
 		b.build();
-		assertEquals(b.getNetwork().getHiddenLayer(0).getSize(), NUM_HIDDEN);
-		assertEquals(b.getNetwork()
-				.getHiddenLayer(0).getLayerType(), LayerType.HIDDEN);
+		assertEquals(NUM_HIDDEN, b.getNetwork().getHiddenLayer(0).getSize());
+		assertEquals(LayerType.HIDDEN, b.getNetwork()
+				.getHiddenLayer(0).getLayerType());
 	}
 
 	/**
@@ -87,13 +88,11 @@ public class NeuralNetBuilderTest {
 	 * .shared.util.NeuralNetBuilder#build()}.
 	 */
 	@Test
-	public final void testBuild() {
+	final void testBuild() {
 		NeuralNetBuilder b = new NeuralNetBuilder(NUM_INPUTS, NUM_OUTPUTS);
 		b.addHiddenLayer(new HiddenLayer(NUM_HIDDEN, 0));
 		b.build();
-		assertEquals(b.getNetwork().getHiddenLayer(0).getSize(), NUM_HIDDEN);
-		assertEquals(b.getNetwork()
-				.getHiddenLayer(0).getLayerType(), LayerType.HIDDEN);
+		assertNotNull(b);
 	}
 
 	/**
@@ -101,13 +100,13 @@ public class NeuralNetBuilderTest {
 	 * .shared.util.NeuralNetBuilder#getNetwork()}.
 	 */
 	@Test
-	public final void testGetNetwork() {
+	final void testGetNetwork() {
 		NeuralNetBuilder b = new NeuralNetBuilder(NUM_INPUTS, NUM_OUTPUTS);
 		b.addHiddenLayer(new HiddenLayer(NUM_HIDDEN, 0));
 		b.build();
-		assertEquals(b.getNetwork().getHiddenLayer(0).getSize(), NUM_HIDDEN);
-		assertEquals(b.getNetwork()
-				.getHiddenLayer(0).getLayerType(), LayerType.HIDDEN);
+		assertEquals(NUM_HIDDEN, b.getNetwork().getHiddenLayer(0).getSize());
+		assertEquals(LayerType.HIDDEN, b.getNetwork()
+				.getHiddenLayer(0).getLayerType());
 	}
 
 }

@@ -16,7 +16,8 @@ package com.neuralnetwork.shared.tests.neurons;
 import com.neuralnetwork.shared.neurons.AbstractOutputNeuron;
 import com.neuralnetwork.shared.neurons.NeuronType;
 import com.neuralnetwork.shared.neurons.OutputNeuron;
-import com.neuralnetwork.shared.tests.util.TestConstants;
+import com.neuralnetwork.shared.tests.values.TestConstants;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Fred
  *
  */
-public class AbstractOutputNeuronTest {
+class AbstractOutputNeuronTest {
     
 	/**
 	 * Test method for {@link com.neuralnetwork
@@ -33,10 +34,10 @@ public class AbstractOutputNeuronTest {
 	 * #AbstractOutputNeuron()}.
 	 */
 	@Test
-	public final void testAbstractOutputNeuron() {
+	final void testAbstractOutputNeuron() {
 		AbstractOutputNeuron ai = new OutputNeuron();
 		ai.setValue(0.0);
-		assertEquals(ai.getType(), NeuronType.OUTPUT);
+		assertEquals(NeuronType.OUTPUT, ai.getType());
 		assertEquals(0.0, ai.getValue(), TestConstants.DELTA);
 	}
 
@@ -46,12 +47,12 @@ public class AbstractOutputNeuronTest {
 	 * #getOutputValue()}.
 	 */
 	@Test
-	public final void testGetOutputValue() {
+	final void testGetOutputValue() {
 		AbstractOutputNeuron ai = new OutputNeuron();
 		ai.setValue(1.0);
-		assertEquals(ai.getType(), NeuronType.OUTPUT);
-		assertEquals(ai.getOutputValue(), 
-		             1.0, TestConstants.DELTA);
+		assertEquals(NeuronType.OUTPUT, ai.getType());
+		assertEquals(1.0, 
+		             ai.getOutputValue(), TestConstants.DELTA);
 	}
 
 }
