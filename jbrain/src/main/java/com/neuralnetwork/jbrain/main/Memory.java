@@ -1,7 +1,6 @@
 package com.neuralnetwork.jbrain.main;
 
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.*;
 
 import com.neuralnetwork.jbrain.sensors.camera.RGBData;
 import com.neuralnetwork.shared.network.INetwork;
@@ -13,8 +12,6 @@ import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
  * a memory consists of a related
  * collection of 2 or more data points from
  * various sensors.
- * 
- * @author fred
  *
  */
 public class Memory {
@@ -27,16 +24,19 @@ public class Memory {
 	/**
 	 * Visual data for this memory.
 	 */
-	private final Stack<ArrayList<RGBData>> visualData;
+	private final Deque<ArrayList<RGBData>> visualData;
 
 	/**
 	 * Audio data for this memory.
 	 */
-	private final Stack<ArrayList<Double>> audioData;
+	private final Deque<ArrayList<Double>> audioData;
 
+	/**
+	 * Memory
+	 */
 	public Memory() {
-		visualData = new Stack<ArrayList<RGBData>>();
-		audioData = new Stack<ArrayList<Double>>();
+		visualData = new ArrayDeque<>();
+		audioData = new ArrayDeque<>();
 		network = (new NeuralNetBuilder(SimpleNetworkConfigs.CONFIG_5_4_3_4_5)).build();
 	}
 
@@ -45,7 +45,7 @@ public class Memory {
 	 * @return
 	 * 		the latest audio sample from this memory.
 	 */
-	public ArrayList<Double> popAudioData() {
+	public List<Double> popAudioData() {
 		return audioData.pop();
 	}
 
@@ -54,8 +54,8 @@ public class Memory {
 	 * @param audioData
 	 * 		the new audio sample to be added to this memory.
 	 */
-	public void pushAudioData(final ArrayList<Double> audioData) {
-		this.audioData.push(audioData);
+	public void pushAudioData(final List<Double> audioData) {
+		this.audioData.push((ArrayList<Double>) audioData);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class Memory {
 	 * @return
 	 * 		the top of the visual data stack
 	 */
-	public ArrayList<RGBData> popVisualData() {
+	public List<RGBData> popVisualData() {
 		return visualData.pop();
 	}
 
@@ -85,7 +85,7 @@ public class Memory {
 	 * 		the new visual data element to be added to the top
 	 * 		of the stack.
 	 */
-	public void pushVisualData(ArrayList<RGBData> visualData) {
-		this.visualData.push(visualData);
+	public void pushVisualData(List<RGBData> visualData) {
+		this.visualData.push((ArrayList<RGBData>) visualData);
 	}
 }
