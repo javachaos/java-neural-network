@@ -8,49 +8,31 @@
  * Contributors:
  *     Fred Laderoute - initial API and implementation
  ******************************************************************************/
-/**
- * 
- */
 package com.neuralnetwork.shared.tests.neurons;
 
 import com.neuralnetwork.shared.neurons.BiasNeuron;
-import com.neuralnetwork.shared.values.Constants;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Fred
- *
- */
 class BiasNeuronTest {
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.BiasNeuron
-	 * #BiasNeuron()}.
-	 */
 	@Test
 	final void testBiasNeuron() {
 		assertEquals(
 				1.0, new BiasNeuron().getValue(),
-				Constants.TEN * Math.ulp(1.0));
+				10 * Math.ulp(1.0));
 	}
-	
-	/**
-	 * Test feedforward methods.
-	 */
+
 	@Test
 	final void testFeedForward() {
 		BiasNeuron bn = new BiasNeuron();
-		bn.feedforward(null);
-		bn.feedforward(1.0, null);
+		double v = bn.feedforward(null);
+		double u = bn.feedforward(1.0, null);
+		assertEquals(v, u, Math.ulp(1));
 		assertEquals(1, bn.getOutputValue(), Math.ulp(1));
 	}
-	
-	/**
-	 * Test toString.
-	 */
+
 	@Test
 	final void testToString() {
 		BiasNeuron bn = new BiasNeuron();

@@ -1,9 +1,7 @@
 *.log
 *.jar
-target/
 bin/
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak

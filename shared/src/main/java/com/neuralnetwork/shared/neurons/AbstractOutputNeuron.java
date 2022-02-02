@@ -25,8 +25,7 @@ public abstract class AbstractOutputNeuron
     /**
      * Construct a new Abstract output neuron.
      */
-    public AbstractOutputNeuron() {
-    	//TODO Fix random value
+    protected AbstractOutputNeuron() {
         super(NeuronType.OUTPUT, Math.random());
     }
 

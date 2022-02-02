@@ -10,25 +10,16 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.functions;
 
-/**
- * Abstract Function class.
- * @author fred
- *
- */
-public abstract class AbstractFunction implements
-    IActivationFunction {
-    
-    /**
-     * Default function id is Sigmoid.
-     */
-    private FunctionType defaultFunctionId = FunctionType.SIGMOID;
+public abstract class AbstractFunction implements IActivationFunction {
+
+    private FunctionType defaultFunctionId;
     
     /**
      * Create a new AbstractFunction.
      * @param f
      *      the function type to create.
      */
-    public AbstractFunction(final FunctionType f) {
+    protected AbstractFunction(final FunctionType f) {
         this.defaultFunctionId = f;
     }
     
@@ -39,37 +30,27 @@ public abstract class AbstractFunction implements
     
     @Override
     public final double activate(final double v) {
-        switch(defaultFunctionId) {
-            case LINEAR:
-                return v;
-            case SIGMOID:
-                return 1 / (1 + Math.exp(-v));
-            default:
-            	return 0;
-        }
+        return switch (defaultFunctionId) {
+            case LINEAR -> v;
+            case SIGMOID -> 1 / (1 + Math.exp(-v));
+            default -> 0;
+        };
     }
     
     @Override
     public final double derivative(final double v) {
-        switch(defaultFunctionId) {
-            case LINEAR:
-                return 1;
-            case SIGMOID:
-                return activate(v) * (1.0 - activate(v));
-            default:
-            	return 0;
-        }
+        return switch (defaultFunctionId) {
+            case LINEAR -> 1;
+            case SIGMOID -> activate(v) * (1.0 - activate(v));
+            default -> 0;
+        };
     }
     
     @Override
     public final FunctionType getFunctionType() {
         return defaultFunctionId;
     }
-    
-    
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
+
     @Override
     public final int hashCode() {
         final int prime = 31;
@@ -79,9 +60,6 @@ public abstract class AbstractFunction implements
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public final boolean equals(final Object obj) {
         if (this == obj) {
@@ -92,5 +70,4 @@ public abstract class AbstractFunction implements
         }
         return obj instanceof SigmoidFunction;
     }
-    
 }

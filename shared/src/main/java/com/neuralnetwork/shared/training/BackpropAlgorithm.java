@@ -26,42 +26,17 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
      */
     private static final Logger LOGGER = 
     		LoggerFactory.getLogger(BackpropAlgorithm.class);
-    
-	/**
-	 * Network to be trained.
-	 */
 	private final INetwork network;
-	
-	/**
-	 * Expected error value.
-	 */
 	private final Double expectedError;
-	
-	/**
-	 * Current error value.
-	 */
 	private Double currError;
-
-	/**
-	 * Training vector.
-	 */
-	private final List<Double> trainVector;
-	
-
-	/**
-	 * Training vector.
-	 */
-	private List<Double> desiredVector;
+	private final TrainSample trainSample;
 
 	/**
 	 * Create the backprop algorithm.
 	 * 
-	 * @param trainingVector
+	 * @param trainSample
 	 * 		the training vector.
-	 * 
-	 * @param dV
-	 * 		the desired output vector.
-	 * 
+	 *
 	 * @param net
 	 * 		the network to run the algorithm on.
 	 * 
@@ -69,14 +44,11 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 * 		desired error value.
 	 * 
 	 */
-	public BackpropAlgorithm(
-			final List<Double> trainingVector,
-			final List<Double> dV,
+	public BackpropAlgorithm(final TrainSample trainSample,
 			final INetwork net, final Double expErr) {
-		this.trainVector = trainingVector;
+		this.trainSample = trainSample;
 		this.network = net;
 		this.expectedError = expErr;
-		this.desiredVector = dV;
 	}
 
 	@Override
@@ -95,44 +67,22 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 * 		the mean squared error of the network.
 	 */
 	public synchronized Double compute() {
-		
-		List<Double> output = network.runInputs(trainVector);
+		List<Double> output = network.runInputs(trainSample.getInputs());
 		LOGGER.debug("Network output: {}", output);
 		currError =	ErrorFunctions.getInstance().meanSquaredError(
-						output, trainVector);
+						output, trainSample.getInputs());
 		Iterator<IOutputNeuron> iter = network.getOutputLayer().iterator();
-		LinkedBlockingDeque<Double> outputs = new LinkedBlockingDeque<>();
-		outputs.addAll(output);
+		LinkedBlockingDeque<Double> outputs = new LinkedBlockingDeque<>(output);
 		//Skip bias neuron.
 		iter.next();
 		while (iter.hasNext()) {
 			iter.next().propagateError(outputs.pop());
 		}
-		
 		List<Double> errVector = new ArrayList<>();
-		
-		Iterator<IInputNeuron> iterIn = network.getInputLayer().iterator();
-		
-		while (iterIn.hasNext()) {
-			errVector.add(iterIn.next().getValue());
+		for (IInputNeuron iInputNeuron : network.getInputLayer()) {
+			errVector.add(iInputNeuron.getValue());
 		}
-		
 		return MathTools.sum(errVector);
-		
-	}
-
-	/**
-	 * @return the desiredVector
-	 */
-	public List<Double> getDesiredVector() {
-		return desiredVector;
-	}
-
-	/**
-	 * @param dV the desiredVector to set
-	 */
-	public void setDesiredVector(final List<Double> dV) {
-		this.desiredVector = dV;
 	}
 
 }

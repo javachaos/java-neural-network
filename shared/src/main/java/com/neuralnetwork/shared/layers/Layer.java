@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -26,19 +27,14 @@ import com.neuralnetwork.shared.neurons.INeuron;
 public abstract class Layer<T extends INeuron> 
         extends ArrayList<T> implements ILayer<T> {
 
-    /**
-     * Generated Serial Version UID.
-     */
+    @Serial
     private static final long serialVersionUID = -94028484942015525L;
-    
+
     /**
-     * Represents the width of the layer.
+     * Represents the number of neurons in the layer.
      */
     private final int width;
-    
-    /**
-     * The layer type for this layer.
-     */
+
     private LayerType layerType;
     
     /**

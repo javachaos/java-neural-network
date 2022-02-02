@@ -11,6 +11,10 @@
 package com.neuralnetwork.core;
 
 import com.neuralnetwork.core.BackpropagationNetwork.TransferFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 /**
  * Main class.
@@ -20,6 +24,7 @@ import com.neuralnetwork.core.BackpropagationNetwork.TransferFunction;
  */
 public final class Main {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
     /**
      * Unused ctor.
      */
@@ -35,11 +40,11 @@ public final class Main {
 
         int[] layerSizes = new int[] { 10, 5, 2, 5, 10 };
         TransferFunction[] tFuncs = new TransferFunction[] {
-                TransferFunction.None,
-                TransferFunction.Sigmoid,
-                TransferFunction.Sigmoid,
-                TransferFunction.Sigmoid,
-                TransferFunction.Sigmoid };
+                TransferFunction.NONE,
+                TransferFunction.SIGMOID,
+                TransferFunction.SIGMOID,
+                TransferFunction.SIGMOID,
+                TransferFunction.SIGMOID};
         BackpropagationNetwork bpn = new BackpropagationNetwork(
                 layerSizes, tFuncs);
         double[][] input = new double[][] {
@@ -66,7 +71,15 @@ public final class Main {
                 { 0.4, 0.2, 0.1, 0.3, 0.8, 0.4, 0.2, 0.1, 0.3, 0.8}};
         double desiredError = 0.0000000000000000001;
         double learnRate = 0.61803398875;
-        bpn.train(input, desired, learnRate + 1, learnRate, desiredError);
+
+        LOGGER.debug("Desired Error: {}", desiredError);
+        LOGGER.debug("Learning Rate: {}", learnRate);
+        String inputStr = Arrays.deepToString(input);
+        LOGGER.debug("Input Values: {}", inputStr);
+        String desiredStr = Arrays.deepToString(desired);
+        LOGGER.debug("Desired Values: {}", desiredStr);
+        double error = bpn.train(input, desired, learnRate + 1, desiredError);
+        LOGGER.debug("Error: {}", error);
         bpn.saveNet(System.getProperty("user.home")+"/Documents/main.net");
     }
 }

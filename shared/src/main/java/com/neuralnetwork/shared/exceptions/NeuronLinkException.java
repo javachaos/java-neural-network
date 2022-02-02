@@ -10,25 +10,13 @@
 ******************************************************************************/
 package com.neuralnetwork.shared.exceptions;
 
-/**
- * NeuronLinkException runtime exception thrown when
- * there is an error linking two neurons.
- *
- * @author fredladeroute
- *
- */
+import java.io.Serial;
+
 public class NeuronLinkException extends RuntimeException {
-    /**
-     * Serial Version UID.
-     */
+
+    @Serial
     private static final long serialVersionUID = -8321102153473257324L;
 
-    /**
-     * Construct a new NeuronLinkException.
-     *
-     * @param msg
-     *      the message to display to the user.
-     */
     public NeuronLinkException(final String msg) {
         super(msg);
     }

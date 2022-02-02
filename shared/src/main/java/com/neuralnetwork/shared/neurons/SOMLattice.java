@@ -24,15 +24,9 @@ package com.neuralnetwork.shared.neurons;
  */
 public class SOMLattice implements ISOMLattice {
 
-    /**
-     * Width and height of the lattice.
-     */
 	private final int width;
     private final int height;
-	
-	/**
-	 * SOM Neuron lattice.
-	 */
+
 	private final SOMNeuron[][] lattice;
 	
 	/**

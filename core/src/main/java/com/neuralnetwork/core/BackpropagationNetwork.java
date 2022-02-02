@@ -1,11 +1,6 @@
 package com.neuralnetwork.core;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -16,47 +11,28 @@ import com.neuralnetwork.shared.functions.SigmoidFunction;
 
 /**
  * BackpropNetwork.
- * @author alfred
  *
  */
 public final class BackpropagationNetwork implements Serializable {
 
-
-    /**
-     * Logger instance.
-     */
     private static final transient Logger LOGGER =
             LoggerFactory.getLogger(BackpropagationNetwork.class);
 
-    /**
-     * Serial Version ID.
-     */
+    @Serial
     private static final long serialVersionUID = -8666581554984473793L;
 
-    /**
-     * TransferFunction Enum.
-     * @author alfred
-     *
-     */
     public enum TransferFunction {
-    	
-        /**
-         * No transfer function.
-         */
-        None,
-
-        /**
-         * Sigmoid transfer function.
-         */
-        Sigmoid
+        NONE,
+        SIGMOID
     }
 
     /**
      * Transfer functions.
-     * @author alfred
      *
      */
     static class TransferFunctions {
+
+        private TransferFunctions() {}
 
         /**
          * Evaluate the transfer function transferFunction.
@@ -74,9 +50,9 @@ public final class BackpropagationNetwork implements Serializable {
         		final TransferFunction transferFunction,
         		final double input) {
             switch (transferFunction) {
-                case Sigmoid:
+                case SIGMOID:
                     return new SigmoidFunction().activate(input);
-                case None:
+                case NONE:
                 default:
                     break;
             }
@@ -98,9 +74,9 @@ public final class BackpropagationNetwork implements Serializable {
                 final TransferFunction transferFunction,
                 final double input) {
             switch (transferFunction) {
-                case Sigmoid:
+                case SIGMOID:
                     return new SigmoidFunction().derivative(input);
-                case None:
+                case NONE:
                 default:
                     break;
             }
@@ -108,73 +84,20 @@ public final class BackpropagationNetwork implements Serializable {
         }
     }
 
-
-    /**
-     * Layer count.
-     */
     private int numLayers;
-
-    /**
-     * Input vector length.
-     */
     private int inputSize;
-
-    /**
-     * Layer size for each layer.
-     */
     private int[] layerSize;
-
-    /**
-     * Transfer function for each layer.
-     */
     private TransferFunction[] transferFunction;
 
-    /**
-     * LayerOutput values.
-     */
     private double[][] layerOutput;
-
-    /**
-     * Layer Input values.
-     */
     private double[][] layerInput;
-
-    /**
-     * Bias values.
-     */
     private double[][] bias;
-
-    /**
-     * Delta values.
-     */
     private double[][] delta;
-
-    /**
-     * Previous bias delta values.
-     */
     private double[][] previousBiasDelta;
-
-    /**
-     * Weight matrix.
-     */
     private double[][][] weight;
-
-    /**
-     * Previous weightDelta matrix.
-     */
     private double[][][] previousWeightDelta;
-
-    /**
-     * iteration counter.
-     */
     private int iter = 0;
-
-    /**
-     * How many times to run the network before printing output.
-     */
     private static final int UPDATE_EVERY = 1000;
-
-
 
     /**
      * Create and initialize new back-propagation network.
@@ -194,15 +117,9 @@ public final class BackpropagationNetwork implements Serializable {
         inputSize = layerSizes[0];
         layerSize = new int[numLayers];
 
-        for (int i = 0; i < numLayers; i++) {
-            layerSize[i] = layerSizes[i + 1];
-        }
-
+        System.arraycopy(layerSizes, 1, layerSize, 0, numLayers);
         transferFunction = new TransferFunction[numLayers];
-
-        for (int i = 0; i < numLayers; i++) {
-            transferFunction[i] = transferFunctions[i + 1];
-        }
+        System.arraycopy(transferFunctions, 1, transferFunction, 0, numLayers);
 
         bias = new double[numLayers][];
         previousBiasDelta = new double[numLayers][];
@@ -233,9 +150,6 @@ public final class BackpropagationNetwork implements Serializable {
 
         // Init weights and bias.
         for (int l = 0; l < numLayers; l++) {
-            /**
-             * Random generator.
-             */
             Random rand = new SecureRandom();
             for (int j = 0; j < layerSize[l]; j++) {
                 bias[l][j] = rand.nextGaussian();
@@ -299,9 +213,8 @@ public final class BackpropagationNetwork implements Serializable {
                         TransferFunctions.evaluate(transferFunction[l], sum);
             }
         }
-        for (int i = 0; i < layerSize[numLayers - 1]; i++) {
-            output[i] = layerOutput[numLayers - 1][i];
-        }
+        if (layerSize[numLayers - 1] >= 0)
+            System.arraycopy(layerOutput[numLayers - 1], 0, output, 0, layerSize[numLayers - 1]);
 
         return output;
     }
@@ -341,10 +254,7 @@ public final class BackpropagationNetwork implements Serializable {
      *         
      * @param trainingRate
      *         the training rate.
-     *         
-     * @param momentum
-     *         the momentum to avoid local minima.
-     *         
+     *
      * @param desiredError
      *         the desired network error.
      *         
@@ -353,7 +263,7 @@ public final class BackpropagationNetwork implements Serializable {
      */
     public double train(final double[][] trainingData,
             final double[][] desiredData,
-            final double trainingRate, final double momentum,
+            final double trainingRate,
             final double desiredError) {
         double error = 0.0;
         for (int i = 0; i < trainingData.length; i++) {
@@ -391,12 +301,48 @@ public final class BackpropagationNetwork implements Serializable {
         ||  desired.length != layerSize[numLayers - 1]) {
             throw new IllegalArgumentException();
         }
-
-        double error = 0.0, sum = 0.0, weightDelta = 0.0, biasDelta = 0.0;
-
-        // Forward pass.
+        double error = 0.0;
         double[] output = run(input);
+        error = backProp(output, desired, delta, error);
+        updateWeights(trainingRate, momentum, input);
+        updateBiases(trainingRate, momentum);
 
+        if (iter++ % UPDATE_EVERY  == 0) {
+            prettyPrint(input, output, error, iter);
+        }
+        return error;
+    }
+
+    private void updateBiases(double trainingRate, double momentum) {
+        double biasDelta;
+        for (int l = 0; l < numLayers; l++) {
+            for (int i = 0; i < layerSize[l]; i++) {
+                biasDelta = trainingRate * delta[l][i];
+                bias[l][i] -= biasDelta + momentum * previousBiasDelta[l][i];
+                previousBiasDelta[l][i] = biasDelta;
+            }
+        }
+    }
+
+    private void updateWeights(double trainingRate, double momentum, double[] input) {
+        double weightDelta;
+        // Update the weights and biases
+        for (int l = 0; l < numLayers; l++) {
+            for (int i = 0; i < getLayer(l); i++) {
+                for (int j = 0; j < layerSize[l]; j++) {
+                    weightDelta =
+                            trainingRate * delta[l][j]
+                                    * getValue(l, i, input);
+                    weight[l][i][j] -=
+                            weightDelta + momentum * previousWeightDelta[l][i][j];
+                    previousWeightDelta[l][i][j] = weightDelta;
+                }
+            }
+        }
+    }
+
+    private double backProp(double[] output, double[] desired, double[][] delta, double error) {
+        double sum;
         // Back-propagation pass.
         for (int l = numLayers - 1; l >= 0; l--) {
             // Output layer
@@ -418,32 +364,6 @@ public final class BackpropagationNetwork implements Serializable {
                     delta[l][i] = sum;
                 }
             }
-        }
-
-        // Update the weights and biases
-        for (int l = 0; l < numLayers; l++) {
-            for (int i = 0; i < getLayer(l); i++) {
-                for (int j = 0; j < layerSize[l]; j++) {
-                    weightDelta =
-                            trainingRate * delta[l][j]
-                                * getValue(l, i, input);
-                    weight[l][i][j] -=
-                        weightDelta + momentum * previousWeightDelta[l][i][j];
-                    previousWeightDelta[l][i][j] = weightDelta;
-                }
-            }
-        }
-
-        for (int l = 0; l < numLayers; l++) {
-            for (int i = 0; i < layerSize[l]; i++) {
-                biasDelta = trainingRate * delta[l][i];
-                bias[l][i] -= biasDelta + momentum * previousBiasDelta[l][i];
-                previousBiasDelta[l][i] = biasDelta;
-            }
-        }
-
-        if (iter++ % UPDATE_EVERY  == 0) {
-            prettyPrint(input, output, error, iter);
         }
         return error;
     }
@@ -475,19 +395,17 @@ public final class BackpropagationNetwork implements Serializable {
             final double[] output,
             final double error,
             final int i) {
-        StringBuffer sb = new StringBuffer();
-        StringBuffer ssb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
+        StringBuilder ssb = new StringBuilder();
         for (double d : input) {
-            ssb.append("[" + d + "] ");
+            ssb.append("[").append(d).append("] ");
         }
         for (double d : output) {
-            sb.append("[" + d + "] ");
+            sb.append("[").append(d).append("] ");
         }
-        LOGGER.info("Iteration " + i + ":\n\t\tInput "
-                + ssb + "\n\t\tOutput "
-                + sb + "\n\t\tError " + error);
-        sb = new StringBuffer();
-        ssb = new StringBuffer();
+        LOGGER.info(
+                "Iteration {}:\n\t\tInput {}\n\t\tOutput {}\n\t\tError {}",
+                i, ssb, sb, error);
     }
 
     /**
@@ -495,22 +413,15 @@ public final class BackpropagationNetwork implements Serializable {
      *
      * @param fileName
      *         the file path to store the network as.
-     *         
-     * @return
-     *         the file path
+     *
      */
-    public String saveNet(final String fileName) {
-        FileOutputStream fileOut;
-        try {
-            fileOut = new FileOutputStream(fileName);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+    public void saveNet(final String fileName) {
+        try (FileOutputStream fileOut = new FileOutputStream(fileName);
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(this);
-            out.close();
-            fileOut.close();
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
-        return fileName;
     }
 
     /**
@@ -527,9 +438,8 @@ public final class BackpropagationNetwork implements Serializable {
      */
     public BackpropagationNetwork loadNet(final String fileName) {
         BackpropagationNetwork net = null;
-        try {
-            FileInputStream fileIn = new FileInputStream(fileName);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
+        try(FileInputStream fileIn = new FileInputStream(fileName);
+            ObjectInputStream in = new ObjectInputStream(fileIn)) {
             net = (BackpropagationNetwork) in.readObject();
             this.bias = net.bias;
             this.delta = net.delta;
@@ -543,11 +453,7 @@ public final class BackpropagationNetwork implements Serializable {
             this.previousWeightDelta = net.previousWeightDelta;
             this.weight = net.weight;
             this.transferFunction = net.transferFunction;
-            in.close();
-            fileIn.close();
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             LOGGER.error(e.getMessage());
         }
         return net;

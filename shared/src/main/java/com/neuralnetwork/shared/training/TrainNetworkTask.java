@@ -5,11 +5,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.neuralnetwork.shared.network.BackPropNetworkTrainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.network.INetwork;
-import com.neuralnetwork.shared.values.Constants;
 
 /**
  * 
@@ -17,7 +17,6 @@ import com.neuralnetwork.shared.values.Constants;
  *
  */
 public class TrainNetworkTask {
-//TODO test
     /**
      * Logger instance.
      */
@@ -63,11 +62,15 @@ public class TrainNetworkTask {
 		while (!trainStack.getData().isEmpty()) {
 			try {
 				totalTrainError +=
-				executorService.submit(
-						new TrainNetworkSubTask(network, 
-								trainStack.popSample())).get();
-				executorService.awaitTermination(
-						Constants.TRAIN_TIMEOUT, TimeUnit.SECONDS);
+				executorService.submit(() -> new BackPropNetworkTrainer(network)
+						.train(new TrainSample(
+								trainStack.popSample(), trainStack.popSample()), 0.0001)).get();
+				if (executorService.awaitTermination(
+						10, TimeUnit.SECONDS)) {
+					LOGGER.debug("TRAINING COMPLETE!");
+				} else {
+					LOGGER.debug("TRAINING TIMED OUT.");
+				}
 				executorService.shutdown();
 			} catch (ExecutionException e) {
 				LOGGER.error(e.getMessage());

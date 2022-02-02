@@ -5,24 +5,12 @@ import java.util.List;
 
 /**
  * Vector Utils class.
- * @author alfred
- *
  */
-public final class VectorUtil {
+public final class ListUtils {
 
-	/**
-	 * Incarnation prohibited.
-	 */
-	private VectorUtil() {
+	private ListUtils() {
 	}
-	
-	/**
-	 * Get random vector of size featureSize.
-	 * @param featureSize
-	 * 		the size of the random vector.
-	 * @return
-	 * 		vector of random values.
-	 */
+
 	public static List<Double> getRandomVector(final int featureSize) {
 		ArrayList<Double> randVector = new ArrayList<>(featureSize);
 		for (int i = 0; i < featureSize; i++) {

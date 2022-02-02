@@ -56,7 +56,7 @@ public final class ErrorFunctions {
     }
     
     /**
-     * Calculate the mean squared error of vectors v1 and v2.
+     * Calculate the mean squared error of lists of links v1 and v2.
      * 
      * @param v1
      *      vector v1

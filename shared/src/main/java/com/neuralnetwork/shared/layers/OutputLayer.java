@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +27,7 @@ import com.neuralnetwork.shared.neurons.OutputNeuron;
  */
 public class OutputLayer extends Layer<IOutputNeuron> implements IOutputLayer {
 
-    /**
-     * Generated serial version UID.
-     */
+    @Serial
     private static final long serialVersionUID = -6278154162004288836L;
 
     /**

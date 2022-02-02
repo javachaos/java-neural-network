@@ -8,9 +8,6 @@
  * Contributors:
  *     Fred Laderoute - initial API and implementation
  ******************************************************************************/
-/**
- * 
- */
 package com.neuralnetwork.shared.tests.neurons;
 
 import com.neuralnetwork.shared.functions.SigmoidFunction;
@@ -19,7 +16,6 @@ import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.network.NeuralNetContext;
 import com.neuralnetwork.shared.neurons.*;
 import com.neuralnetwork.shared.tests.values.TestConstants;
-import com.neuralnetwork.shared.values.Constants;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,31 +30,13 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class NeuronTest {
 
-    /**
-     * Logger instance.
-     */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(NeuronTest.class);
-    
-    /**
-     * Value used for testing.
-     */
-    private static final double TEST_VALUE1 = 0.123;
-    
-    /**
-     * Number of times to fail before failing test case.
-     */
-    private static final int REGRESSION_LIMIT = 100;
 
-    /**
-     * Double value of 0.1.
-     */
+    private static final double TEST_VALUE1 = 0.123;
+    private static final int REGRESSION_LIMIT = 100;
     private static final double D_0_1 = 0.1;
-    
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#hashCode()}.
-	 */
+
 	@Test
 	final void testHashCode() {
 		HiddenNeuron n = new HiddenNeuron();
@@ -75,11 +53,6 @@ class NeuronTest {
 		assertEquals(v.hashCode(), v.hashCode());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#Neuron(
-	 * com.neuralnetwork.shared.neurons.NeuronType)}.
-	 */
 	@Test
 	final void testNeuronNeuronType() {
 
@@ -92,10 +65,6 @@ class NeuronTest {
 		assertEquals(NeuronType.HIDDEN, o.getType());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#Neuron()}.
-	 */
 	@Test
 	final void testNeuron() {
 		Neuron n = new InputNeuron(0.0);
@@ -107,12 +76,6 @@ class NeuronTest {
 		assertNotEquals(n, m);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#addInputLink(
-	 * com.neuralnetwork.shared.neurons.INeuron,
-	 * com.neuralnetwork.shared.values.IValue)}.
-	 */
 	@Test
 	final void testAddInputLinkINeuronIValueOfQ() {
 		Neuron n = new InputNeuron();
@@ -124,11 +87,6 @@ class NeuronTest {
 		assertEquals(l.getTail(), m);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#addInputLink(
-	 * com.neuralnetwork.shared.neurons.INeuron)}.
-	 */
 	@Test
 	final void testAddInputLinkINeuron() {
 		Neuron n = new InputNeuron();
@@ -139,10 +97,6 @@ class NeuronTest {
 		assertEquals(l.getTail(), m);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#getInputLink(int)}.
-	 */
 	@Test
 	final void testGetInputLink() {
 		Neuron n = new InputNeuron();
@@ -153,10 +107,6 @@ class NeuronTest {
 		assertEquals(l.getTail(), m);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#getInputLinks(int[])}.
-	 */
 	@Test
 	final void testGetInputLinks() {		
 		Neuron n = new InputNeuron();	
@@ -174,10 +124,6 @@ class NeuronTest {
 		assertEquals(l[1].getTail(), n1);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#getType()}.
-	 */
 	@Test
 	final void testGetType() {
 		Neuron n = new InputNeuron();
@@ -189,10 +135,6 @@ class NeuronTest {
 		assertEquals(NeuronType.HIDDEN, o.getType());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#getNextParent()}.
-	 */
 	@Test
 	final void testGetNextParent() {
 		Neuron n = new InputNeuron();	
@@ -209,10 +151,6 @@ class NeuronTest {
 		assertEquals(m.getNextParent(), n1);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#getNextChild()}.
-	 */
 	@Test
 	final void testGetNextChild() {		
 		Neuron n = new InputNeuron();	
@@ -229,12 +167,6 @@ class NeuronTest {
 		assertEquals(m.getNextChild(), o1);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#addOutputLink(
-	 * com.neuralnetwork.shared.neurons.INeuron, 
-	 * com.neuralnetwork.shared.values.IValue)}.
-	 */
 	@Test
 	final void testAddOutputLinkINeuronIValueOfQ() {
 		Neuron n = new InputNeuron();	
@@ -252,11 +184,6 @@ class NeuronTest {
 		m.addOutputLink(o1);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#addOutputLink(
-	 * com.neuralnetwork.shared.neurons.INeuron)}.
-	 */
 	@Test
 	final void testAddOutputLinkINeuron() {
 		Neuron n = new InputNeuron();	
@@ -275,10 +202,6 @@ class NeuronTest {
 		assertNotNull(m.getOutputLink(1));
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#getOutputLink(int)}.
-	 */
 	@Test
 	final void testGetOutputLink() {
 		Neuron n = new InputNeuron();	
@@ -295,10 +218,6 @@ class NeuronTest {
 		assertEquals(n1.getOutputLink(0).getTail(), m);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#getOutputLinks(int[])}.
-	 */
 	@Test
 	final void testGetOutputLinks() {
 		Neuron n = new InputNeuron();	
@@ -321,11 +240,7 @@ class NeuronTest {
 		assertEquals(l[0].getTail(), o);
 		assertEquals(l[1].getTail(), o1);
 	}
-	
-	/**
-     * Test method for {@link com.neuralnetwork
-     * .shared.neurons.Neuron#setOutputLink(int,ILink)}.
-     */
+
 	@Test
 	final void testSetOutputLinkIntILink() {
 	       Neuron n = new InputNeuron();   
@@ -344,11 +259,7 @@ class NeuronTest {
 	        assertEquals(l[0].getTail(), o);
 	        assertEquals(l[1].getTail(), o1);
 	}
-	
-	/**
-     * Test method for {@link com.neuralnetwork
-     * .shared.neurons.Neuron#setOutputLinks(ILink[])}.
-     */
+
     @Test
     final void testSetOutputLinkILinkArray() {
            Neuron n = new InputNeuron();   
@@ -372,11 +283,7 @@ class NeuronTest {
             assertEquals(l[0].getTail(), n);
             assertEquals(l[1].getTail(), n1);
     }
-    
-    /**
-     * Test method for {@link com.neuralnetwork
-     * .shared.neurons.Neuron#setInputLink(int, ILink)}.
-     */
+
     @Test
     final void testSetInputLink() {
     	Neuron n = new InputNeuron();   
@@ -396,11 +303,7 @@ class NeuronTest {
         assertEquals(l[0].getTail(), o);
         assertEquals(l[1].getTail(), o1);
     }
-    
-    /**
-     * Test method for {@link com.neuralnetwork
-     * .shared.neurons.Neuron#setInputs(Vector)}.
-     */
+
     @Test
     final void testInputs() {
     	Neuron n = new InputNeuron(); 
@@ -409,7 +312,7 @@ class NeuronTest {
 
         m.addInputLink(n);
         m.addInputLink(n1);
-        Vector<ILink> v = new Vector<ILink>();
+        Vector<ILink> v = new Vector<>();
         v.add(m.getInputLinks(0)[0]);
         v.add(m.getInputLinks(1)[0]);
         
@@ -425,10 +328,6 @@ class NeuronTest {
         assertEquals(0, m.getInputs().size());
     }
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#reset()}.
-	 */
 	@Test
 	final void testReset() {
 		int i = 0;
@@ -464,11 +363,6 @@ class NeuronTest {
 		return v.equals(v2) && v1.equals(v3);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#setActivationFunction(
-	 * com.neuralnetwork.shared.functions.IActivationFunction)}.
-	 */
 	@Test
 	final void testSetActivationFunction() {
 		Neuron m = new HiddenNeuron();
@@ -477,15 +371,11 @@ class NeuronTest {
 		m.addOutputLink(o);
 		m.addOutputLink(o1);
 		m.setActivationFunction(null);
-		assertEquals(null, m.getActivationFunction());
+		assertNull(m.getActivationFunction());
 		m.setActivationFunction(new SigmoidFunction());
 		assertEquals(m.getActivationFunction(), new SigmoidFunction());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#getActivationFunction()}.
-	 */
 	@Test
 	final void testGetActivationFunction() {
 		Neuron m = new HiddenNeuron();
@@ -494,15 +384,11 @@ class NeuronTest {
 		m.addOutputLink(o);
 		m.addOutputLink(o1);
 		m.setActivationFunction(null);
-		assertEquals(null, m.getActivationFunction());
+		assertNull(m.getActivationFunction());
 		m.setActivationFunction(new SigmoidFunction());
 		assertEquals(m.getActivationFunction(), new SigmoidFunction());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#getValue()}.
-	 */
 	@Test
 	final void testGetValue() {
 		Neuron n = new InputNeuron();	
@@ -511,11 +397,6 @@ class NeuronTest {
 		assertNotEquals(0.0, n1.getValue());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron#setValue(
-	 * com.neuralnetwork.shared.values.IValue)}.
-	 */
 	@Test
 	final void testSetValue() {
 		Neuron n = new InputNeuron();	
@@ -525,11 +406,7 @@ class NeuronTest {
 		assertEquals(1.0, n.getValue(), TestConstants.DELTA);
 		assertEquals(1.0, n1.getValue(), TestConstants.DELTA);
 	}
-	
-	/**
-     * Test method for {@link com.neuralnetwork
-     * .shared.neurons.Neuron#feedforward()}.
-     */
+
     @Test
     final void testFeedforward() {
         Neuron n = new InputNeuron(D_0_1);
@@ -552,7 +429,6 @@ class NeuronTest {
         
         n.feedforward(D_0_1,
         		new NeuralNetContext(null));
-        
         LOGGER.debug("======= After Feedforward =======");
         LOGGER.debug(n + " " + n1);
         LOGGER.debug(m.toString());
@@ -560,11 +436,6 @@ class NeuronTest {
         LOGGER.debug("=================================");
     }
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.Neuron
-	 * #equals(java.lang.Object)}.
-	 */
 	@Test
 	final void testEqualsObject() {
 		Double val = Math.random();
@@ -575,10 +446,8 @@ class NeuronTest {
 		n.setType(null);
 		n1.setType(null);
 		assertEquals(n, n1);
-		n1 = null;
-		assertNotEquals(n1, n);
+		assertNotEquals(null, n);
 		HiddenLayer n2 = new HiddenLayer(1, 0);
-		assertNotEquals(n2, n);
 		n.setActivationFunction(null);
 		n1 = new InputNeuron(val);
 		assertNotEquals(n1, n);
@@ -618,12 +487,12 @@ class NeuronTest {
 		Neuron p = new OutputNeuron();
 		p.setValue(1.0);
 		Neuron p1 = new OutputNeuron();
-		p1.setValue(Constants.TEN_D);
+		p1.setValue(10.0);
 
 		assertNotEquals(p, p1);
 		
 		p.setValue(null);
-		p1.setValue(Constants.ELEVEN_D);
+		p1.setValue(11.0);
 		assertNotEquals(p, p1);
 		
 		p.setValue(null);

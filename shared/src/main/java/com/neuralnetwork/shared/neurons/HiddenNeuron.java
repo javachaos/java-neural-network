@@ -46,10 +46,6 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
         for (ILink il : getInputs()) {
         	double val = il.getWeight();
             sum += val * v;
-
-            //Experimental learning method...
-            //TODO Experiment. :)
-            //TODO Test: When weight gets too large split weight into two and spawn new neuron. 
             il.setWeight(val + (v * LEARNING_FACTOR));
         }
         Double n = getActivationFunction().activate(sum);
@@ -62,7 +58,7 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
     }
 
 	@Override
-	public final Double propagateError(final Double e) {//TODO test
+	public final Double propagateError(final Double e) {
 		ILink[] ilinks = getInputLinks();
 		double error = e;
 		error = getActivationFunction().derivative(error);
@@ -73,11 +69,11 @@ public class HiddenNeuron extends Neuron implements IHiddenNeuron {
 	}
 
 	@Override
-	public final Double getError() {//TODO test
+	public final Double getError() {
 		ILink[] inWeights = getInputLinks();
 		double sumErr = 0;
-		for (int i = 0; i < inWeights.length; i++) {
-			double w = inWeights[i].getWeight();
+		for (ILink inWeight : inWeights) {
+			double w = inWeight.getWeight();
 			sumErr += (1.0 / 2) * Math.pow(Math.abs(
 					w - getValue()), 2);
 		}

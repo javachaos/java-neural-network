@@ -25,32 +25,15 @@ import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
  *
  */
 public class SOMNeuron implements ISOMNeuron {
-    
-    /**
-     * Logger instance.
-     */
+
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SOMNeuron.class);
-    
-    /**
-     * The weights for this Neuron.
-     */
+
     private SOMLayer weights;
-    
-    /**
-     * The type of this neuron.
-     */
-    private final NeuronType type = NeuronType.SOM;
-    
-    /**
-     * Neural network associated with this SOM Neuron.
-     */
+    private static final NeuronType TYPE = NeuronType.SOM;
     private final INetwork neuralNetwork;
-    
-    /**
-     * The x and y co ordinates of this Neuron within the Lattice.
-     */
-    private int xPos, yPos;
+    private int xPos;
+    private int yPos;
     
     /**
      * Creates a new SOM Neuron, initializing the 
@@ -76,7 +59,7 @@ public class SOMNeuron implements ISOMNeuron {
     	this(SimpleNetworkConfigs.CONFIG_5_4_3_4_5);
         weights = new SOMLayer();
         for (int x = 0; x < numWeights; x++) {
-            weights.addElement(Double.valueOf(Math.random()));
+            weights.add(Math.random());
         }
     }
     
@@ -96,20 +79,20 @@ public class SOMNeuron implements ISOMNeuron {
     	this(SimpleNetworkConfigs.CONFIG_5_4_3_4_5);
         weights = new SOMLayer();
         for (int i = 0; i < numWeights; i++) {
-            weights.addElement(Double.valueOf(Math.random()));
+            weights.add(Math.random());
         }
         setX(x);
         setY(y);
     }
     
     @Override
-    public final void setX(final int xpos) {
-        xPos = xpos;
+    public final void setX(final int xPosition) {
+        xPos = xPosition;
     }
 
     @Override
-    public final void setY(final int ypos) {
-        yPos = ypos;
+    public final void setY(final int yPosition) {
+        yPos = yPosition;
     }
     
     @Override
@@ -124,11 +107,12 @@ public class SOMNeuron implements ISOMNeuron {
     
     @Override
     public final double distanceTo(final SOMNeuron n) {
-        int x, y;
-        x = getX() - n.getX();
+        double x;
+        double y;
+        x = getX() - (double) n.getX();
         x = (int) Math.pow(x, 2);
-        y = getY() - n.getY();
-        y = (int) Math.pow(x, 2);
+        y = getY() - (double) n.getY();
+        y = (int) Math.pow(y, 2);
         return x + y;
     }
     
@@ -138,7 +122,7 @@ public class SOMNeuron implements ISOMNeuron {
             throw new IndexOutOfBoundsException(
             		"Weight index was out of bounds.");
         }
-        weights.setElementAt(Double.valueOf(value), wIndex);
+        weights.set(wIndex, value);
     }
     
     @Override
@@ -146,10 +130,9 @@ public class SOMNeuron implements ISOMNeuron {
         if (wIndex >= weights.size()) {
             LOGGER.warn("Weight index out of bounds. "
                     + "Returning (index MOD size).");
-            return weights.elementAt(wIndex % weights.size());
+            return weights.get(wIndex % weights.size());
         }
-        
-        return weights.elementAt(wIndex);
+        return weights.get(wIndex);
     }
     
     @Override
@@ -162,12 +145,13 @@ public class SOMNeuron implements ISOMNeuron {
             final SOMLayer input, 
             final double learningRate,
             final double distanceFalloff) {
-        double wt, vw;
+        double wt;
+        double vw;
         for (int i = 0; i < weights.size(); i++) {
-            wt = weights.elementAt(i);
-            vw = input.elementAt(i);
+            wt = weights.get(i);
+            vw = input.get(i);
             wt += distanceFalloff * learningRate * (vw - wt);
-            weights.setElementAt(Double.valueOf(wt), i);
+            weights.set(i, wt);
         }
     }
 
@@ -180,6 +164,6 @@ public class SOMNeuron implements ISOMNeuron {
 
     @Override
 	public final NeuronType getType() {
-		return type;
+		return TYPE;
 	}
 }

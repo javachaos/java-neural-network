@@ -17,19 +17,7 @@ package com.neuralnetwork.shared.network;
  *
  */
 public enum LayerType {
-    
-    /**
-     * Hidden layer.
-     */
     HIDDEN,
-    
-    /**
-     * Input layer.
-     */
     INPUT,
-    
-    /**
-     * Output layer.
-     */
     OUTPUT
 }

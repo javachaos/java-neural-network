@@ -10,20 +10,13 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Vector;
-
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 import com.neuralnetwork.shared.links.ILink;
 import com.neuralnetwork.shared.links.Link;
-import com.neuralnetwork.shared.network.INeuralNetContext;
 
 /**
  * An abstract Neuron class implements the INeuron interface.
@@ -53,12 +46,12 @@ public abstract class Neuron implements INeuron {
     /**
      * Array of all input links connected to this Neuron.
      */
-    private Vector<ILink> inputLinks;
+    private List<ILink> inputLinks;
     
     /**
      * Array of all ouput links connected to this Neuron.
      */
-    private Vector<ILink> outputLinks;
+    private List<ILink> outputLinks;
     
     /**
      * Current number of input links attached to this Neuron.
@@ -89,7 +82,7 @@ public abstract class Neuron implements INeuron {
     
     /**
      * Construct a new Neuron.
-     * With it's value set randomly.
+     * With its value set randomly.
      * 
      * @param t
      *      the type of this Neuron
@@ -97,22 +90,22 @@ public abstract class Neuron implements INeuron {
      *      the default value of the neuron
      *  
      */
-    public Neuron(final NeuronType t, final Double v) {
+    protected Neuron(final NeuronType t, final Double v) {
         this.type = t;
         this.value = v;
-        inputLinks = new Vector<ILink>();
-        setOutputs(new Vector<ILink>());
+        inputLinks = new ArrayList<>();
+        setOutputs(new ArrayList<>());
     }
     
     /**
      * Construct a new hidden Neuron.
-     * With it's value set randomly.
+     * With its value set randomly.
      */
-    public Neuron() {
+    protected Neuron() {
         this.type = NeuronType.HIDDEN;
         this.value = Math.random();
-        inputLinks = new Vector<ILink>();
-        setOutputs(new Vector<ILink>());
+        inputLinks = new ArrayList<>();
+        setOutputs(new ArrayList<>());
     }
     
     @Override
@@ -134,7 +127,7 @@ public abstract class Neuron implements INeuron {
 
     @Override
     public final ILink[] getInputLinks(final int... ids) {
-        ArrayList<ILink> temp = new ArrayList<ILink>();
+        ArrayList<ILink> temp = new ArrayList<>();
         
         for (int j : ids) {
             temp.add(getInputLink(j));
@@ -191,7 +184,7 @@ public abstract class Neuron implements INeuron {
 
     @Override
     public final ILink[] getOutputLinks(final int... ids) {
-        ArrayList<ILink> temp = new ArrayList<ILink>();
+        ArrayList<ILink> temp = new ArrayList<>();
         
         for (int j : ids) {
             temp.add(getOutputLink(j));
@@ -210,8 +203,7 @@ public abstract class Neuron implements INeuron {
 
     @Override
     public final ILink[] setInputLinks(final ILink[] links) {
-        ILink[] oldLinks = new ILink[inputLinks.size()];
-        inputLinks.copyInto(oldLinks);
+        ILink[] oldLinks = inputLinks.toArray(new ILink[0]);
         inputLinks.clear();
         Collection<ILink> c = Arrays.asList(links);
         inputLinks.addAll(c);
@@ -227,8 +219,7 @@ public abstract class Neuron implements INeuron {
 
     @Override
     public final ILink[] setOutputLinks(final ILink[] links) {
-        ILink[] oldLinks = new ILink[getOutputs().size()];
-        getOutputs().copyInto(oldLinks);
+        ILink[] oldLinks = getOutputs().toArray(new ILink[0]);
         getOutputs().clear();
         Collection<ILink> c = Arrays.asList(links);
         getOutputs().addAll(c);
@@ -267,12 +258,6 @@ public abstract class Neuron implements INeuron {
     public final void setValue(final Double v) {
         this.value = v;
     }
-    
-    @Override
-    public abstract Double feedforward(final Double v, 
-    		final INeuralNetContext nnctx);
-
-
 
 	@Override
 	public int hashCode() {
@@ -297,7 +282,7 @@ public abstract class Neuron implements INeuron {
 	/**
      * @return the inputLinks
      */
-    public final Vector<ILink> getInputs() {
+    public final List<ILink> getInputs() {
         return inputLinks;
     }
 
@@ -305,7 +290,7 @@ public abstract class Neuron implements INeuron {
      * @param inputLink
      *      the inputLinks to set
      */
-    public final void setInputs(final Vector<ILink> inputLink) {
+    public final void setInputs(final List<ILink> inputLink) {
     	if (inputLink == null || inputLink.isEmpty()) {
     		LOGGER.warn("Input link array is empty or null.");
     	}
@@ -315,7 +300,7 @@ public abstract class Neuron implements INeuron {
     /**
      * @return the outputLinks
      */
-    public final Vector<ILink> getOutputs() {
+    public final List<ILink> getOutputs() {
         return outputLinks;
     }
 
@@ -323,14 +308,7 @@ public abstract class Neuron implements INeuron {
      * @param outputLink
      *      the outputLinks to set
      */
-    public final void setOutputs(final Vector<ILink> outputLink) {
+    public final void setOutputs(final List<ILink> outputLink) {
         this.outputLinks = outputLink;
     }
-    
-	@Override
-	public abstract Double getError();
-
-	@Override
-	public abstract Double propagateError(Double e);
-
 }

@@ -17,7 +17,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.neuralnetwork.shared.util.VectorUtil;
+import com.neuralnetwork.shared.util.ListUtils;
 
 /**
  * Represents a Training data set.
@@ -120,7 +120,7 @@ public class TrainingStack {
 	 */
 	public final void generateRandomSamples(final int numberOfSamples) {
 		for (int i = 0; i < numberOfSamples; i++) {
-			addTrainingSample(VectorUtil.getRandomVector(featureSize));
+			addTrainingSample(ListUtils.getRandomVector(featureSize));
 		}
 	}
 

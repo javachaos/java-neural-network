@@ -8,28 +8,13 @@
  * Contributors:
  *     Fred Laderoute - initial API and implementation
  ******************************************************************************/
-/**
- * 
- */
 package com.neuralnetwork.shared.tests.neurons;
-
 import com.neuralnetwork.shared.neurons.SOMLayer;
-import com.neuralnetwork.shared.values.Constants;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * @author Fred
- *
- */
 class SOMLayerTest {
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.SOMLayer
-	 * #SOMLayer()}.
-	 */
 	@Test
 	final void testSOMLayer() {
 		SOMLayer l = new SOMLayer();
@@ -38,48 +23,38 @@ class SOMLayerTest {
 		assertEquals(0, l.size());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.SOMLayer
-	 * #SOMLayer(int)}.
-	 */
 	@Test
 	final void testSOMLayerInt() {
-		SOMLayer l = new SOMLayer(Constants.TEN);
+		SOMLayer l = new SOMLayer(10);
 
 		assertNotNull(l);
-		assertEquals(Constants.TEN, l.size());
+		assertEquals(10, l.size());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.neurons.SOMLayer
-	 * #dist(com.neuralnetwork.shared.neurons.SOMLayer)}.
-	 */
 	@Test
 	final void testDist() {
-		SOMLayer l = new SOMLayer(Constants.FIVE);
-		SOMLayer l1 = new SOMLayer(Constants.FIVE);
+		SOMLayer l = new SOMLayer(5);
+		SOMLayer l1 = new SOMLayer(5);
 
-		assertEquals(0.0, l.dist(l1), Constants.TEN * Math.ulp(0));
+		assertEquals(0.0, l.dist(l1), 10 * Math.ulp(0));
 		
 		l = new SOMLayer();
 		l1 = new SOMLayer();
 		
-		l.add(Constants.TEN_D);
-		l.add(Constants.TEN_D);
-		l.add(Constants.TEN_D);
-		l.add(Constants.TEN_D);
-		l.add(Constants.TEN_D);
-		l1.add(Constants.TEN_D);
-		l1.add(Constants.TEN_D);
-		l1.add(Constants.TEN_D);
-		l1.add(Constants.TEN_D);
-		l1.add(Constants.TEN_D);
+		l.add(10.0);
+		l.add(10.0);
+		l.add(10.0);
+		l.add(10.0);
+		l.add(10.0);
+		l1.add(10.0);
+		l1.add(10.0);
+		l1.add(10.0);
+		l1.add(10.0);
+		l1.add(10.0);
 		
-		assertEquals(0.0, l.dist(l1), Constants.TEN * Math.ulp(0));
+		assertEquals(0.0, l.dist(l1), 10 * Math.ulp(0));
 		
-		l1.add(Constants.TEN_D);
+		l1.add(10.0);
 		assertNotEquals(0.0, l.dist(l1));
 	}
 

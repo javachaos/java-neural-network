@@ -138,7 +138,7 @@ public class Link implements ILink {
 	}
 
 	@Override
-	public boolean equals(Object obj) {//TODO write test for coverage
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

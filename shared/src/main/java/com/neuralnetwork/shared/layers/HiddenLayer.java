@@ -15,6 +15,8 @@ import com.neuralnetwork.shared.neurons.BiasNeuron;
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
 import com.neuralnetwork.shared.neurons.IHiddenNeuron;
 
+import java.io.Serial;
+
 /**
  * Represents a hidden neural network layer.
  * 
@@ -24,9 +26,7 @@ import com.neuralnetwork.shared.neurons.IHiddenNeuron;
 public final class HiddenLayer 
         extends Layer<IHiddenNeuron> implements IHiddenLayer {
 
-    /**
-     * Generated Serial Version UID.
-     */
+    @Serial
     private static final long serialVersionUID = 5485729609664280674L;
 
     private final int index;
@@ -61,17 +61,29 @@ public final class HiddenLayer
     @Override
     public int compareTo(IHiddenLayer o) {
         int i = o.getIndex();
-        if (index > i) {
-            return 1;
-        } else if (index < i) {
-            return -1;
-        } else {
-            return 0;
-        }
+        return Integer.compare(index, i);
     }
 
     @Override
     public int getIndex() {
         return index;
+    }
+
+    @Override
+    public synchronized boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        HiddenLayer that = (HiddenLayer) o;
+
+        return index == that.index;
+    }
+
+    @Override
+    public synchronized int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + index;
+        return result;
     }
 }

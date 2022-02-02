@@ -25,4 +25,10 @@ public interface ITrainAlgorithm {
 	 * 		the error value.
 	 */
 	Double getErrorStatus();
+
+	/**
+	 * Compute a value using this algorithm
+	 * @return the computed value of this algorithm
+	 */
+    Double compute();
 }

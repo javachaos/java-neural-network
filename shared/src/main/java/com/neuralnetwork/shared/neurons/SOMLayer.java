@@ -10,8 +10,8 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import java.util.Vector;
-
+import java.io.Serial;
+import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,17 +21,15 @@ import org.slf4j.LoggerFactory;
  * @author fredladeroute
  *
  */
-public class SOMLayer extends Vector<Double> implements ISOMLayer {
+public class SOMLayer extends ArrayList<Double> implements ISOMLayer {
     
     /**
      * Logger instance.
      */
     private static final Logger LOGGER =
     		LoggerFactory.getLogger(SOMLayer.class);
-    
-    /**
-     * Generated Serial Version UID.
-     */
+
+    @Serial
     private static final long serialVersionUID = -8674168620850601954L;
 
    /** 
@@ -65,7 +63,7 @@ public class SOMLayer extends Vector<Double> implements ISOMLayer {
        double temp;
        
        for (int i = 0; i < size(); i++) {
-           temp = elementAt(i) - layer.elementAt(i);
+           temp = get(i) - layer.get(i);
            temp = Math.pow(temp, 2);
            distance += temp;
        }

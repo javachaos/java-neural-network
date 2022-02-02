@@ -8,18 +8,12 @@
  * Contributors:
  *     Fred Laderoute - initial API and implementation
  ******************************************************************************/
-/**
- * 
- */
 package com.neuralnetwork.shared.tests.network;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 import java.util.ArrayList;
+import java.util.Objects;
 
+import com.neuralnetwork.shared.training.TrainType;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,190 +27,119 @@ import com.neuralnetwork.shared.network.LayerType;
 import com.neuralnetwork.shared.network.Network;
 import com.neuralnetwork.shared.neurons.NeuronType;
 
-/**
- * @author Fred
- *
- */
+import static org.junit.jupiter.api.Assertions.*;
+
 class NetworkTest {
 
-    /**
-     * Logger instance.
-     */
     private static final Logger LOGGER = 
             LoggerFactory.getLogger(NetworkTest.class);
-    
-    /**
-     * One value.
-     */
-    private static final int ONE = 1;
-    
-    /**
-     * Two value.
-     */
-    private static final int TWO = 2;
-    
-    /**
-     * Three value.
-     */
-    private static final int THREE = 3;
-    
-    /**
-     * Four value.
-     */
-    private static final int FOUR = 4;
-    
-    /**
-     * Five value.
-     */
-    private static final int FIVE = 5;
-    
-    /**
-     * Input values for testing the network.
-     */
     private static final double NN_INPUT_VALUE = 0.0321;
-    
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#Network(int, int, int)}.
-	 */
+
+	@Test
+	final void testCreate() {
+		Network network = new Network(
+				3, 3,2, new int[] {3, 3},
+		        TrainType.BACKPROP);
+		assertNotNull(network);
+		Network n = new Network(3, 3, TrainType.BACKPROP);
+		assertNotNull(n);
+	}
+
 	@Test
     final void testNetworkIntIntIntIntArray() {
-		INetwork n = new Network(TWO, THREE, ONE, new int[] {THREE});
+		INetwork n = new Network(2, 3, 1, new int[] {3});
 		n.build();
 		assertNotNull(n);
-		
-		try {
-			n = new Network(TWO, THREE, -ONE, new int[] {THREE});
-		} catch (IllegalArgumentException e) {
-			assertEquals("Error cannot have negative amount of hidden layers.", 
-					e.getMessage());
-		}
-		
-		try {
-			n = new Network(TWO, -THREE, ONE, new int[] {THREE});
-		} catch (IllegalArgumentException e) {
-			assertEquals("Error cannot have negative amount of output layers.", 
-					e.getMessage());
-		}
-		
-		try {
-			n = new Network(-TWO, THREE, ONE, new int[] {THREE});
-		} catch (IllegalArgumentException e) {
-			assertEquals("Error cannot have negative amount of input layers.", 
-					e.getMessage());
-		}
+		Exception ex = assertThrows(IllegalArgumentException.class,
+				() -> new Network(2, 3, -1, new int[] {3}));
+		assertEquals("Error cannot have negative amount of hidden layers.", ex.getMessage());
+		ex = assertThrows(IllegalArgumentException.class,
+				() -> new Network(2, -3, 1, new int[] {3}));
+		assertEquals("Error cannot have negative amount of output layers.", ex.getMessage());
+		ex = assertThrows(IllegalArgumentException.class,
+				() -> new Network(-2, 3, 1, new int[] {3}));
+		assertEquals("Error cannot have negative amount of input layers.", ex.getMessage());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#Network(int, int)}.
-	 */
 	@Test
     final void testNetworkIntInt() {
-		INetwork n = new Network(FIVE, FIVE);
+		INetwork n = new Network(5, 5);
 		n.build();
 		assertNotNull(n);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#getNeuron(int, int)}.
-	 */
 	@Test
     final void testGetNeuron() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
 		n.build();
 		assertNotNull(n);
 		assertNotNull(n.getNeuron(0, 0));
-		assertNotNull(n.getNeuron(ONE, 0));
-		assertNotNull(n.getNeuron(TWO, 0));
-		assertNotNull(n.getNeuron(THREE, 0));
-		assertNotNull(n.getNeuron(FOUR, 0));
-		assertNotNull(n.getNeuron(0, ONE));
-		assertNotNull(n.getNeuron(ONE, ONE));
-		assertNotNull(n.getNeuron(TWO, ONE));
-		assertNotNull(n.getNeuron(THREE, ONE));
-		assertNotNull(n.getNeuron(0, TWO));
-		assertNotNull(n.getNeuron(ONE, TWO));
-		assertNotNull(n.getNeuron(0, THREE));
-		assertNotNull(n.getNeuron(ONE, THREE));
-		assertNotNull(n.getNeuron(TWO, THREE));
-		assertNotNull(n.getNeuron(THREE, THREE));
-		assertNotNull(n.getNeuron(0, FOUR));
-		assertNotNull(n.getNeuron(ONE, FOUR));
-		assertNotNull(n.getNeuron(TWO, FOUR));
-		assertNotNull(n.getNeuron(THREE, FOUR));
-		assertNotNull(n.getNeuron(FOUR, FOUR));
+		assertNotNull(n.getNeuron(1, 0));
+		assertNotNull(n.getNeuron(2, 0));
+		assertNotNull(n.getNeuron(3, 0));
+		assertNotNull(n.getNeuron(4, 0));
+		assertNotNull(n.getNeuron(0, 1));
+		assertNotNull(n.getNeuron(1, 1));
+		assertNotNull(n.getNeuron(2, 1));
+		assertNotNull(n.getNeuron(3, 1));
+		assertNotNull(n.getNeuron(0, 2));
+		assertNotNull(n.getNeuron(1, 2));
+		assertNotNull(n.getNeuron(0, 3));
+		assertNotNull(n.getNeuron(1, 3));
+		assertNotNull(n.getNeuron(2, 3));
+		assertNotNull(n.getNeuron(3, 3));
+		assertNotNull(n.getNeuron(0, 4));
+		assertNotNull(n.getNeuron(1, 4));
+		assertNotNull(n.getNeuron(2, 4));
+		assertNotNull(n.getNeuron(3, 4));
+		assertNotNull(n.getNeuron(4, 4));
 
 		assertNull(n.getNeuron(Integer.MAX_VALUE, 0));
-
-//		assertNull(n.getNeuron(-TWO, 0));
-//		assertNull(n.getNeuron(0, -TWO));
-//		assertNull(n.getNeuron(ONE, -TWO));
-//		assertNull(n.getNeuron(0, THREE * TWO));
-//		assertNull(n.getNeuron(-ONE, -ONE));
-//		assertNull(n.getNeuron(-ONE, THREE * TWO));
 		
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#getOutputNeuron(int)}.
-	 */
 	@Test
     final void testGetOutputNeuron() {
-		INetwork n = new Network(FIVE, FIVE, THREE,
-				new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
 		n.build();
-		assertEquals(NeuronType.OUTPUT, n.getOutputNeuron(0).getType());
-		assertEquals(NeuronType.OUTPUT, n.getOutputNeuron(ONE).getType());
-		assertEquals(NeuronType.OUTPUT, n.getOutputNeuron(TWO).getType());
-		assertEquals(NeuronType.OUTPUT, n.getOutputNeuron(THREE).getType());
-		assertEquals(NeuronType.OUTPUT, n.getOutputNeuron(FOUR).getType());
-		assertNull(n.getOutputNeuron(-TWO));
+		assertEquals(NeuronType.OUTPUT, Objects.requireNonNull(n.getOutputNeuron(0)).getType());
+		assertEquals(NeuronType.OUTPUT, Objects.requireNonNull(n.getOutputNeuron(1)).getType());
+		assertEquals(NeuronType.OUTPUT, Objects.requireNonNull(n.getOutputNeuron(2)).getType());
+		assertEquals(NeuronType.OUTPUT, Objects.requireNonNull(n.getOutputNeuron(3)).getType());
+		assertEquals(NeuronType.OUTPUT, Objects.requireNonNull(n.getOutputNeuron(4)).getType());
+		assertNull(n.getOutputNeuron(-2));
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#getInputNeuron(int)}.
-	 */
 	@Test
     final void testGetInputNeuron() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
 		n.build();
-		assertEquals(NeuronType.INPUT, n.getInputNeuron(0).getType());
-		assertEquals(NeuronType.INPUT, n.getInputNeuron(ONE).getType());
-		assertEquals(NeuronType.INPUT, n.getInputNeuron(TWO).getType());
-		assertEquals(NeuronType.INPUT, n.getInputNeuron(THREE).getType());
-		assertEquals(NeuronType.INPUT, n.getInputNeuron(FOUR).getType());
-		assertNull(n.getInputNeuron(-TWO));
+		assertEquals(NeuronType.INPUT, Objects.requireNonNull(n.getInputNeuron(0)).getType());
+		assertEquals(NeuronType.INPUT, Objects.requireNonNull(n.getInputNeuron(1)).getType());
+		assertEquals(NeuronType.INPUT, Objects.requireNonNull(n.getInputNeuron(2)).getType());
+		assertEquals(NeuronType.INPUT, Objects.requireNonNull(n.getInputNeuron(3)).getType());
+		assertEquals(NeuronType.INPUT, Objects.requireNonNull(n.getInputNeuron(4)).getType());
+		assertNull(n.getInputNeuron(-2));
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#getHeight()}.
-	 */
 	@Test
     final void testGetHeight() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
 		n.build();
-		assertEquals(FIVE, n.getHeight());
+		assertEquals(5, n.getHeight());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#runInputs(java.util.Vector)}.
-	 */
 	@Test
     final void testRunInputs() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
 		n.build();
-		assertEquals(n.getHeight(), THREE + 2);
-		ArrayList<Double> values = new ArrayList<Double>();
+		assertEquals(n.getHeight(), 3 + 2);
+		ArrayList<Double> values = new ArrayList<>();
 		values.add(NN_INPUT_VALUE);
         values.add(NN_INPUT_VALUE);
         values.add(NN_INPUT_VALUE);
@@ -226,155 +149,101 @@ class NetworkTest {
 		
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#reset()}.
-	 */
 	@Test
     final void testReset() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
-		assertEquals(n.getHeight(), THREE + 2);
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
+		assertEquals(n.getHeight(), 3 + 2);
 		n.build();
 		n.reset();
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#train(java.util.Vector)}.
-	 */
 	@Test
     final void testTrainVectorOfDouble() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
-		assertEquals(n.getHeight(), THREE + 2);
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
+		assertEquals(n.getHeight(), 3 + 2);
 		n.build();
-		//n.train(false, null);
-		//n.train(true, null);
-		//TODO Complete.
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#train(com.neuralnetwork
-	 * .shared.training.TrainingStack, com.neuralnetwork
-	 * .shared.values.ErrorValue)}.
-	 */
 	@Test
     final void testTrainTrainingStackErrorValue() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
-		assertEquals(n.getHeight(), THREE + 2);
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
+		assertEquals(n.getHeight(), 3 + 2);
 		n.build();
-		//n.train(null, null);
-		//TODO Complete.
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#getOutputLayer()}.
-	 */
 	@Test
     final void testGetOutputLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
-		assertEquals(n.getHeight(), THREE + 2);
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
+		assertEquals(n.getHeight(), 3 + 2);
 		n.build();
 		assertEquals(LayerType.OUTPUT, n.getOutputLayer().getLayerType());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#setOutputLayer(com.neuralnetwork
-	 * .shared.layers.IOutputLayer)}.
-	 */
 	@Test
     final void testSetOutputLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
-		n.setOutputLayer(new OutputLayer(THREE));
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
+		n.setOutputLayer(new OutputLayer(3));
 		n.build();
 		assertEquals(LayerType.OUTPUT, n.getOutputLayer().getLayerType());
-		assertEquals(THREE, n.getOutputLayer().getSize());
+		assertEquals(3, n.getOutputLayer().getSize());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#addHiddenLayer(com.neuralnetwork
-	 * .shared.layers.IHiddenLayer)}.
-	 */
 	@Test
     final void testAddHiddenLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
-		n.addHiddenLayer(new HiddenLayer(THREE * TWO, THREE));
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
+		n.addHiddenLayer(new HiddenLayer(3 * 2, 3));
 		n.build();
-		IHiddenLayer h = n.getHiddenLayer(THREE);
+		IHiddenLayer h = n.getHiddenLayer(3);
 		assertEquals(LayerType.HIDDEN, h.getLayerType());
-		assertEquals(THREE * TWO, h.getSize());
+		assertEquals(3 * 2, h.getSize());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#getHiddenLayer(int)}.
-	 */
 	@Test
     final void testGetHiddenLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
 		n.build();
 		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(0).getLayerType());
 		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(1).getLayerType());
 		assertEquals(LayerType.HIDDEN, n.getHiddenLayer(2).getLayerType());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#getInputLayer()}.
-	 */
 	@Test
     final void testGetInputLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
 		n.build();
 		assertEquals(LayerType.INPUT, n.getInputLayer().getLayerType());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#setInputLayer(com.neuralnetwork
-	 * .shared.layers.IInputLayer)}.
-	 */
 	@Test
     final void testSetInputLayer() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
-		n.setInputLayer(new InputLayer(THREE * TWO));
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
+		n.setInputLayer(new InputLayer(3 * 2));
 		n.build();
 		assertEquals(LayerType.INPUT, n.getInputLayer().getLayerType());
-		assertEquals(THREE * TWO, n.getInputLayer().getSize());
+		assertEquals(3 * 2, n.getInputLayer().getSize());
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#build()}.
-	 */
 	@Test
     final void testBuild() {
-		INetwork n = new Network(FIVE, FIVE, THREE, 
-				new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
 		n.build();
 		assertNotNull(n);
 	}
 
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.network.Network#toString()}.
-	 */
 	@Test
     final void testToString() {
-		INetwork n = new Network(FIVE, FIVE, THREE,
-				new int[] {FOUR, TWO, FOUR});
+		INetwork n = new Network(5, 5, 3,
+				new int[] {4, 2, 4});
 		n.build();
 		LOGGER.debug(n.toString());
 		assertNotEquals("IN(0.0) IN(0.0) IN(0.0) IN(0.0) IN(0.0)",

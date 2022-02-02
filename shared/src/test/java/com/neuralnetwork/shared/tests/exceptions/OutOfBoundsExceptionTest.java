@@ -24,21 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  */
 class OutOfBoundsExceptionTest {
-    
-    /**
-     * Logger instance.
-     */
+
     private static final Logger LOGGER = 
             LoggerFactory.getLogger(OutOfBoundsExceptionTest.class);
-    
-    /**
-     * Exception message used for testing exception.
-     */
+
     private static final String EXCEPTION_MSG = "Test exception.";
-    
-    /**
-     * Test the out of bounds exception.
-     */
+
     @Test
     final void test() {
         try {

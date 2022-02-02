@@ -67,26 +67,6 @@ public interface INetwork {
     IHiddenLayer getHiddenLayer(int i);
     
     /**
-     * Trains this network on one vector.
-     * 
-     * @param online
-     * 		true if you wish to train online.
-     * 
-     * @param trainingVector
-     * 		a pair of 2 vectors used to train the network.
-     * 		the first vector is the hypothesis vector
-     * 		the second is the training vector.
-     *      
-     * @param expectedError
-     *      the expected error rate to stop training at
-     *      
-     * @return
-     *      the Mean squared error value
-     */
-    Double train(boolean online, final List<Double> trainingVector,
-    		Double expectedError);
-    
-    /**
      * Get the output layer of this network.
      * 
      * @return
@@ -177,12 +157,5 @@ public interface INetwork {
      * 2. Construct all the links connecting all layers
      */
     void build();
-    
-    /**
-     * Get the learning rate for the network.
-     * 
-	 * @return the learning rate
-	 */
-    double getLearnRate();
 
 }

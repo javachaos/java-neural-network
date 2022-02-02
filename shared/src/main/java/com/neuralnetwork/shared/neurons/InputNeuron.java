@@ -48,7 +48,7 @@ public class InputNeuron extends AbstractInputNeuron {
     @Override
     public final Double feedforward(final INeuralNetContext nnctx) {
     	Double v = 0.0;
-    	for (ILink ol : getOutputs()) { //TODO FIX ME, Null at train time.
+    	for (ILink ol : getOutputs()) {
             v = ol.getTail().feedforward(getValue(), nnctx);
     	}
 		return v;
@@ -60,18 +60,18 @@ public class InputNeuron extends AbstractInputNeuron {
     }
 
 	@Override
-	public final Double propagateError(final Double e) {//TODO test
+	public final Double propagateError(final Double e) {
 		double error = e;
 		error = getActivationFunction().derivative(error);
 		return error;
 	}
 
 	@Override
-	public final Double getError() {//TODO test
+	public final Double getError() {
 		ILink[] inWeights = getInputLinks();
 		double sumErr = 0;
-		for (int i = 0; i < inWeights.length; i++) {
-			double w = inWeights[i].getWeight();
+		for (ILink inWeight : inWeights) {
+			double w = inWeight.getWeight();
 			sumErr += (1.0 / 2) * Math.pow(Math.abs(
 					w - getValue()), 2);
 		}

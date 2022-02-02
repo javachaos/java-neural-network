@@ -8,13 +8,7 @@
  * Contributors:
  *     Fred Laderoute - initial API and implementation
  ******************************************************************************/
-/**
- * 
- */
 package com.neuralnetwork.shared.tests.functions;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -23,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import com.neuralnetwork.shared.functions.FunctionType;
 import com.neuralnetwork.shared.functions.IActivationFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author fred
@@ -114,15 +110,13 @@ class SigmoidFunctionTest {
     final void testEquals() {
         IActivationFunction f = new SigmoidFunction();
         IActivationFunction f1 = new SigmoidFunction();
-        
+
         assertEquals(f, f1);
         assertEquals(f, f);
-        
+
         f = new SigmoidFunction();
-        f1 = null;
-        
-        assertNotEquals(f, f1);
-        assertNotEquals(0.0, f);
+        assertNotNull(f);
+
     }
     
     /**
