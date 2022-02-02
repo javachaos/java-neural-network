@@ -10,11 +10,9 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.training;
 
-import java.util.Vector;
-
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.neuralnetwork.shared.neurons.SOMLattice;
 import com.neuralnetwork.shared.neurons.SOMLayer;
 import com.neuralnetwork.shared.neurons.SOMNeuron;
@@ -22,56 +20,20 @@ import com.neuralnetwork.shared.neurons.SOMNeuron;
 /**
  * SOM Trainer responsible for training a SOM
  * neural network.
- * 
- * @author fredladeroute
  *
  */
 public class SOMTrainer implements Runnable {
-    
-    /**
-     * Logger instance.
-     */
+	
     private static final Logger LOGGER = 
             LoggerFactory.getLogger(SOMTrainer.class);
-    
-    /**
-     * Initial learning rate.
-     */
+	
 	private final double initialLearningRate;
-	
-	/**
-	 * The number of iterations to perform.
-	 */
-	private final int	numIterations;
-	
-	/**
-	 * The radius of the lattice.
-	 */
+	private final int numIterations;
 	private double latticeRadius;
-	
-	/**
-	 * Time constant.
-	 */
 	private double timeConstant;
-	
-	/**
-	 * The lattice object.
-	 */
 	private SOMLattice lattice;
-	
-	/**
-	 * Input vector.
-	 */
-	private Vector<SOMLayer> inputs;
-	
-	/**
-	 * Running flag.
-	 */
+	private List<SOMLayer> inputs;
 	private boolean running = false;
-	
-	/**
-	 * Execution thread to run the training on.
-	 */
 	private Thread runner = null;
 	
 	/**
@@ -129,7 +91,7 @@ public class SOMTrainer implements Runnable {
 	 *         the input vector to the lattice
 	 */
 	public final void setTraining(
-	        final SOMLattice trainLattice, final Vector<SOMLayer> in) {
+	        final SOMLattice trainLattice, final List<SOMLayer> in) {
 		lattice = trainLattice;
 		inputs = in;
 	}
@@ -148,71 +110,77 @@ public class SOMTrainer implements Runnable {
 	
 	@Override
     public final void run() {
-
         LOGGER.debug("Training started.");
 		int latticeWidth = lattice.getWidth();
 		int latticeHeight = lattice.getHeight();
-		int xstart, ystart, xend, yend;
-		double dist, dFalloff;
-		// These two values are used in the training algorithm
-		latticeRadius = Math.max(latticeWidth, latticeHeight) / 2;
+		latticeRadius = Math.max(latticeWidth, latticeHeight) / 2.0;
 		timeConstant = numIterations / Math.log(latticeRadius);
 		
 		int iteration = 0;
 		double nbhRadius;
-		SOMNeuron bmu = null, temp = null;
-		SOMLayer curInput = null;
-		double learningRate = initialLearningRate;
+		double learningRate = 0.0;
+		SOMNeuron bmu;
+		SOMLayer curInput;
 		
 		while (iteration < numIterations && running) {
-
-	        LOGGER.debug("Training, iteration: " + iteration);
+	        LOGGER.debug("Training, iteration: {}", iteration);
 			nbhRadius = getNeighborhoodRadius(iteration);
 			// For each of the input vectors, look for the best matching
 			// unit, then adjust the weights for the BMU's neighborhood
-			for (int i = 0; i < inputs.size(); i++) {
-				curInput = inputs.elementAt(i);
+			for (SOMLayer input : inputs) {
+				curInput = input;
 				bmu = lattice.getBMU(curInput);
-				// We have the BMU for this input now, so adjust everything in
-				// it's neighborhood
-				
-				// Optimization:  Only go through the X/Y values that 
-				// fall within
-				// the radius
-				xstart = (int) (bmu.getX() - nbhRadius - 1);
-				ystart = (int) (bmu.getY() - nbhRadius - 1);
-				xend = (int) (xstart + (nbhRadius * 2) + 1);
-				yend = (int) (ystart + (nbhRadius * 2) + 1);
-				if (xend > latticeWidth) {
-                    xend = latticeWidth;
-                }
-				if (xstart < 0) {
-                    xstart = 0;
-                }
-				if (yend > latticeHeight) {
-                    yend = latticeHeight;
-                }
-				if (ystart < 0) {
-                    ystart = 0;
-                }
-				
-				for (int x = xstart; x < xend; x++) {
-					for (int y = ystart; y < yend; y++) {
-						temp = lattice.getNeuron(x, y);
-							dist = bmu.distanceTo(temp);
-							if (dist <= (nbhRadius * nbhRadius)) {
-								dFalloff = getDistanceFalloff(dist, nbhRadius);
-								temp.updateWeights(curInput, 
-								                   learningRate, dFalloff);
-							}
-					}
-				}
+				updateWeights(curInput, bmu, nbhRadius, learningRate);
 			}
 			iteration++;
 			learningRate = initialLearningRate 
 			        * Math.exp(-(double) iteration / numIterations);
 		}
 		running = false;
+	}
+
+	private void updateWeights(SOMLayer curInput, SOMNeuron bmu, double nbhRadius, double learningRate) {
+		int latticeWidth = lattice.getWidth();
+		int latticeHeight = lattice.getHeight();
+		latticeRadius = Math.max(latticeWidth, latticeHeight) / 2.0;
+		timeConstant = numIterations / Math.log(latticeRadius);
+		int xstart;
+		int ystart;
+		int xend;
+		int yend;
+		double dist;
+		double dFalloff;
+		SOMNeuron temp;
+		// Optimization:  Only go through the X/Y values that 
+		// fall within
+		// the radius
+		xstart = (int) (bmu.getX() - nbhRadius - 1);
+		ystart = (int) (bmu.getY() - nbhRadius - 1);
+		xend = (int) (xstart + (nbhRadius * 2) + 1);
+		yend = (int) (ystart + (nbhRadius * 2) + 1);
+		if (xend > latticeWidth) {
+			xend = latticeWidth;
+		}
+		if (xstart < 0) {
+			xstart = 0;
+		}
+		if (yend > latticeHeight) {
+			yend = latticeHeight;
+		}
+		if (ystart < 0) {
+			ystart = 0;
+		}
+		for (int x = xstart; x < xend; x++) {
+			for (int y = ystart; y < yend; y++) {
+				temp = lattice.getNeuron(x, y);
+				dist = bmu.distanceTo(temp);
+				if (dist <= (nbhRadius * nbhRadius)) {
+					dFalloff = getDistanceFalloff(dist, nbhRadius);
+					temp.updateWeights(curInput,
+							learningRate, dFalloff);
+				}
+			}
+		}
 	}
 	
 	/**
