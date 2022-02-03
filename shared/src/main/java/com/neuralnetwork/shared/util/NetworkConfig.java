@@ -78,7 +78,8 @@ public class NetworkConfig {
     }
 
     /**
-     * @return the layerSizes
+     * Return the hidden layer sizes of this network
+     * (Note: excluding input and output layers)
      */
     public final int[] getLayerSizes() {
         return layerSizes;

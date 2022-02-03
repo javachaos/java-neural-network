@@ -22,14 +22,7 @@ package com.neuralnetwork.shared.util;
  *
  */
 public final class SimpleNetworkConfigs {
-    
-    static {
-        new SimpleNetworkConfigs();
-    }
-    
-    /**
-     * Unused Ctor.
-     */
+
     private SimpleNetworkConfigs() {
     }
 	
