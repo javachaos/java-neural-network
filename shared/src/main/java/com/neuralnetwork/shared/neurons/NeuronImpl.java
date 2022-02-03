@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
@@ -21,7 +21,7 @@ import com.neuralnetwork.shared.links.BasicLink;
 /**
  * An abstract Neuron class implements the INeuron interface.
  * 
- * @author fredladeroute
+ * 
  *
  */
 public abstract class NeuronImpl implements Neuron {
@@ -34,7 +34,7 @@ public abstract class NeuronImpl implements Neuron {
     /**
      * The value for this neuron.
      */
-    private Double value;
+    private double value;
     
     /**
      * The activation function for this INeuron.
@@ -90,7 +90,7 @@ public abstract class NeuronImpl implements Neuron {
      *      the default value of the neuron
      *  
      */
-    protected NeuronImpl(final NeuronType t, final Double v) {
+    protected NeuronImpl(final NeuronType t, final double v) {
         this.type = t;
         this.value = v;
         inputLinks = new ArrayList<>();
@@ -110,7 +110,7 @@ public abstract class NeuronImpl implements Neuron {
     
     @Override
     public final Link addInputLink(
-            final Neuron inode, final Double weight) {
+            final Neuron inode, final double weight) {
         this.inputLinks.add(++numInputLinks, new BasicLink(this, inode, weight));
         return inputLinks.get(numInputLinks);
     }
@@ -165,7 +165,7 @@ public abstract class NeuronImpl implements Neuron {
 
     @Override
     public final Link addOutputLink(
-            final Neuron inode, final Double weight) {
+            final Neuron inode, final double weight) {
         Link l = new BasicLink(this, inode, weight);
         this.getOutputs().add(++numOutputLinks, l);
         inode.addInputLink(this, weight);
@@ -250,12 +250,12 @@ public abstract class NeuronImpl implements Neuron {
     }
 
     @Override
-    public final Double getValue() {
+    public final double getValue() {
         return value;
     }
 
     @Override
-    public final void setValue(final Double v) {
+    public final void setValue(final double v) {
         this.value = v;
     }
 

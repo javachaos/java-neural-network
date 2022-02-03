@@ -1,22 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.links;
 
 import com.neuralnetwork.shared.neurons.Neuron;
 
 /**
- * Represents the link between to INode classes.
- * 
- * @author fredladeroute
- *
+ * Represents the link between two neuron classes.
  */
 public interface Link {
     
@@ -37,21 +34,21 @@ public interface Link {
     Neuron getTail();
     
     /**
-     * Set the head INode of this ILink.
+     * Set the head neuron of this link.
      *  
-     * @param ihead
-     *      the INode to set as head for this link
+     * @param head
+     *      the neuron to set as head for this link
      * 
      */
-    void setHead(Neuron ihead);
+    void setHead(Neuron head);
     
     /**
-     * Set the tail INode of this ILink.
+     * Set the tail neuron of this link.
      *  
-     * @param itail
-     *      the INode to set as tail for this link
+     * @param tail
+     *      the neuron to set as tail for this link
      */
-    void setTail(Neuron itail);
+    void setTail(Neuron tail);
     
     
     /**
@@ -61,7 +58,7 @@ public interface Link {
      * @return 
      *      the weight of this link.
      */
-    Double getWeight();
+    double getWeight();
     
     /**
      * Update the weight of this link. If the value pushes the weight beyond the
@@ -71,24 +68,24 @@ public interface Link {
      *      the amount to update the weight by.
      * 
      */
-    void updateWeight(Double value);
+    void updateWeight(double value);
     
     /**
-     * Change the weight of this ILink to weightValue.
+     * Change the weight of this link to weightValue.
      * 
      * @param weightValue
      *      the value of the new weight for this link.
      */
-    void setWeight(Double weightValue);
+    void setWeight(double weightValue);
     
     /**
      * Returns the age of this link.
      * 
      * <pre>
-     * age - The number of times this link is
-     *      updated. During training if the age of a link
-     *      is less than 3 for 100 training samples the
-     *      link dies.
+     * The number of times this link is
+     * updated. During training if the age of a link
+     * is greater than 10000 the link dies.
+     * (loses its previous weight value a sort of amnesia factor)
      * </pre>
      * @return 
      *      the age of this link

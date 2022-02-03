@@ -1,6 +1,6 @@
 package com.neuralnetwork.shared.network;
 
-import com.neuralnetwork.shared.training.BackpropAlgorithm;
+import com.neuralnetwork.shared.training.BackpropagationAlgorithm;
 import com.neuralnetwork.shared.training.TrainSample;
 
 public class BackPropNetworkTrainer {
@@ -30,8 +30,8 @@ public class BackPropNetworkTrainer {
                                      final Double expectedError) {
         Double errorValue;
         toggleTraining();
-        BackpropAlgorithm algo =
-                new BackpropAlgorithm(
+        BackpropagationAlgorithm algo =
+                new BackpropagationAlgorithm(
                         trainingSample,
                         networkUnderTrain,
                         expectedError);

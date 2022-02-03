@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
@@ -15,10 +15,10 @@ import com.neuralnetwork.shared.layers.Lattice;
 /**
  * Represents an SOM Lattice.
  * 
- * @author fredladeroute
+ * 
  *
  */
-public interface SOMLattice extends Lattice {
+public interface SOMLattice extends Lattice<SOMNeuron> {
     
     /**
      * Return the neuron at x,y of this lattice.
@@ -32,11 +32,11 @@ public interface SOMLattice extends Lattice {
      * @return
      *         the neuron at position x,y in the lattice
      */
-    SOMNeuronImpl getNeuron(int x, int y);
+    SOMNeuron getNeuron(int x, int y);
     
     /**
      * Return the width of the lattice.
-     * As the number of neurons along the x axis.
+     * As the number of neurons along the x-axis.
      * 
      * @return
      *         the width of the lattice
@@ -60,5 +60,5 @@ public interface SOMLattice extends Lattice {
      * @return
      *     the best matching neuron
      */
-    SOMNeuronImpl getBMU(SOMLayerImpl inputVector);
+    SOMNeuron getBMU(SOMLayerImpl inputVector);
 }

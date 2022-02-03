@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.network;
 
@@ -37,7 +37,6 @@ import com.neuralnetwork.shared.util.Connections;
 
 /**
  * Represents a neural network structure.
- *
  */
 public final class NeuralNetwork implements Network {
 
@@ -72,7 +71,6 @@ public final class NeuralNetwork implements Network {
      */
     public NeuralNetwork(final int numIn, final int numOut,
                          final int numHide, final int[] sizes) {
-        
     	if (numHide < 0) {
         	throw new IllegalArgumentException(
         			"Error cannot have negative amount of hidden layers.");
@@ -161,7 +159,6 @@ public final class NeuralNetwork implements Network {
 
     @Override
     public Neuron getNeuron(final int x, final int y) {
-
         if (x < 0 || y < 0 || x == Integer.MAX_VALUE || y == Integer.MAX_VALUE) {
             return null;
         }
@@ -173,7 +170,6 @@ public final class NeuralNetwork implements Network {
         } else if (y == getHeight() - 1) {
             return getOutputNeuron(x);
         }
-        
         return null;
     }
 
@@ -215,7 +211,6 @@ public final class NeuralNetwork implements Network {
     @Override
     public void reset() {
         LOGGER.debug("Resetting the network.");
-
         for (Layer<HiddenNeuron> l : layers.values()) {
             for (HiddenNeuron iHiddenNeuron : l) {
                 iHiddenNeuron.reset();
@@ -223,20 +218,10 @@ public final class NeuralNetwork implements Network {
         }
     }
 
-    /**
-     * Get the training algorithm.
-	 * @return the trainAlgorithm
-	 */
 	public TrainType getTrainAlgorithm() {
 		return trainAlgorithm;
 	}
 
-	/**
-	 * Set the training algorithm.
-	 * 
-	 * @param t 
-	 * 		the trainAlgorithm to set
-	 */
 	public void setTrainingAlgorithm(
 			final TrainType t) {
 		this.trainAlgorithm = t;
@@ -276,29 +261,19 @@ public final class NeuralNetwork implements Network {
     @Override
     public void build() {
     	Connections c = Connections.getInstance();
-		Deque<HiddenLayer> temp = new LinkedBlockingDeque<>();
-        for (HiddenLayer hiddenNeurons : layers.values()) {
-            temp.push(hiddenNeurons);
-        }
-        IntStream.range(0, numHidden).parallel().forEach(i -> {
-            HiddenLayer h = new HiddenNeuronLayer(layerSizes[i], i);
-            h.build();
-            layers.put(h.getIndex(), h);
-        });
-		while (!temp.isEmpty()) {
-            HiddenLayer l = temp.pop();
-            layers.put(l.getIndex(), l);
-		}
+        Deque<HiddenLayer> temp = getHiddenLayers();
         inputLayer.build();
-        for (HiddenLayer iHiddenNeurons : layers.values()) {
-            iHiddenNeurons.build();
-        }
+        buildHiddenLayers();
+        linkHiddenLayers(temp);
         outputLayer.build();
-        
+        connectAllLayers(c);
+    }
+
+    private void connectAllLayers(Connections c) {
         if (!layers.isEmpty()) {
 	        //Connect input layer to first hidden layer.
 	        c.create(inputLayer, layers.get(0));
-	        
+
 	        //Connect each hidden layer to its child hidden layer.
 	        if (layers.size() >= 2) {
                 Iterator<HiddenLayer> i = layers.values().iterator();
@@ -315,7 +290,30 @@ public final class NeuralNetwork implements Network {
         	c.create(inputLayer, outputLayer);
         }
     }
-    
+
+    private void linkHiddenLayers(Deque<HiddenLayer> temp) {
+        while (!temp.isEmpty()) {
+            HiddenLayer l = temp.pop();
+            layers.put(l.getIndex(), l);
+		}
+    }
+
+    private void buildHiddenLayers() {
+        IntStream.range(0, numHidden).parallel().forEach(i -> {
+            HiddenLayer h = new HiddenNeuronLayer(layerSizes[i], i);
+            h.build();
+            layers.put(h.getIndex(), h);
+        });
+    }
+
+    private Deque<HiddenLayer> getHiddenLayers() {
+        Deque<HiddenLayer> temp = new LinkedBlockingDeque<>();
+        for (HiddenLayer hiddenNeurons : layers.values()) {
+            temp.push(hiddenNeurons);
+        }
+        return temp;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

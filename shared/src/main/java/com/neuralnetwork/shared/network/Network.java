@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.network;
 
@@ -21,11 +21,7 @@ import com.neuralnetwork.shared.neurons.OutputNeuron;
 import com.neuralnetwork.shared.training.TrainType;
 
 /**
- * Represents an Artificial neural network of INodes.
- * 
- * @author fredladeroute
- * 
- *
+ * Represents an Artificial neural network of neurons.
  */
 public interface Network {
     
@@ -47,7 +43,7 @@ public interface Network {
     void reset();
     
     /**
-     * Adds a hidden layer to the network at l.getIntex()
+     * Adds a hidden layer to the network at l.getIndex()
      * 
      * @param l
      *      the layer to be added to the network
@@ -62,7 +58,7 @@ public interface Network {
      * @param i
      *      the index to the hidden layer to get
      * @return
-     *      the IHiddenLayer at index i
+     *      the HiddenLayer at index i
      */
     HiddenLayer getHiddenLayer(int i);
     

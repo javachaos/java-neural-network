@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.util;
 
@@ -22,21 +22,13 @@ import java.util.stream.IntStream;
 
 /**
  * Class to build neural network data structures.
- * 
- * @author fredladeroute
  *
  */
 public final class NeuralNetBuilder {
-    
-    /**
-     * Logger instance.
-     */
+
     private static final Logger LOGGER = 
             LoggerFactory.getLogger(NeuralNetBuilder.class);
-    
-    /**
-     * Network instance.
-     */
+
     private Network network;
     
     /**
@@ -84,7 +76,7 @@ public final class NeuralNetBuilder {
      * 
      * @param l
      *      the hidden layer to be added to the network
-     * 
+     *
      * @return
      *      the neural net builder instance
      */

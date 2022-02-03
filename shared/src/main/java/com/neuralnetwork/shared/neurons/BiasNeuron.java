@@ -1,42 +1,36 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
 import com.neuralnetwork.shared.network.NeuralNetContext;
 
 /**
- * Represents a bias neuron who's value is always 1.
+ * Represents a bias neuron whose value is always 1.
  * But the weights can vary.
- * 
- * @author fredladeroute
- *
  */
 public class BiasNeuron extends NeuronImpl
         implements InputNeuron, HiddenNeuron, OutputNeuron {
 
-    /**
-     * Constructs a new bias neuron.
-     */
     public BiasNeuron() {
         super(NeuronType.BIAS, 1.0);
     }
 
     @Override
-	public final Double feedforward(final NeuralNetContext nnctx) {
+	public final double feedforward(final NeuralNetContext neuralNetContext) {
 		return 0.0;        
     }
 
     @Override
-	public final Double feedforward(final Double v,
-    		final NeuralNetContext nnctx) {
+	public final double feedforward(final double v,
+    		final NeuralNetContext neuralNetContext) {
 	    return 0.0;
     }
 
@@ -51,13 +45,13 @@ public class BiasNeuron extends NeuronImpl
     }
 
 	@Override
-	public final Double getError() {
+	public final double getError() {
 		//Bias has no input
 		return 0.0;
 	}
 
 	@Override
-	public final Double propagateError(final Double e) {
+	public final double propagateError(final double e) {
 		return 0.0;
 	}
 

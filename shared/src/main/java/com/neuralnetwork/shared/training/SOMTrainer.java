@@ -1,21 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.training;
 
 import java.util.List;
+
+import com.neuralnetwork.shared.neurons.SOMNeuron;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.neuralnetwork.shared.neurons.SOMLatticeImpl;
 import com.neuralnetwork.shared.neurons.SOMLayerImpl;
-import com.neuralnetwork.shared.neurons.SOMNeuronImpl;
 
 /**
  * SOM Trainer responsible for training a SOM
@@ -119,7 +120,7 @@ public class SOMTrainer implements Runnable {
 		int iteration = 0;
 		double nbhRadius;
 		double learningRate = 0.0;
-		SOMNeuronImpl bmu;
+		SOMNeuron bmu;
 		SOMLayerImpl curInput;
 		
 		while (iteration < numIterations && running) {
@@ -139,7 +140,7 @@ public class SOMTrainer implements Runnable {
 		running = false;
 	}
 
-	private void updateWeights(SOMLayerImpl curInput, SOMNeuronImpl bmu, double nbhRadius, double learningRate) {
+	private void updateWeights(SOMLayerImpl curInput, SOMNeuron bmu, double nbhRadius, double learningRate) {
 		int latticeWidth = lattice.getWidth();
 		int latticeHeight = lattice.getHeight();
 		latticeRadius = Math.max(latticeWidth, latticeHeight) / 2.0;
@@ -150,7 +151,7 @@ public class SOMTrainer implements Runnable {
 		int yend;
 		double dist;
 		double dFalloff;
-		SOMNeuronImpl temp;
+		SOMNeuron temp;
 		// Optimization:  Only go through the X/Y values that 
 		// fall within
 		// the radius

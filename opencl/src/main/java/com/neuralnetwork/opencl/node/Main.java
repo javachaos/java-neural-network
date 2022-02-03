@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2013 Fred Laderoute.
+ * Copyright (c) 2013 Fred .
  * All rights reserved. This program and the accompanying
  * materials are made available under the terms of the GNU
  * Public License v3.0 which accompanies this distribution,
  * and is available at http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *      Fred Laderoute - initial API and implementation
+ *      Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.opencl.node;
 
@@ -27,7 +27,7 @@ import static org.jocl.CL.*;
 
 /**
  * Main class.
- * @author fredladeroute
+ * 
  *
  */
 public final class Main {
@@ -57,7 +57,7 @@ public final class Main {
     /**
      * The source code of the OpenCL program to execute.
      */
-    private static final String programSource =
+    private static final String PROGRAM_SOURCE =
         "__kernel void "
         + "sampleKernel(__global const float *a,"
         + "             __global const float *b,"
@@ -90,9 +90,6 @@ public final class Main {
         final int platformIndex = 0;
         final long deviceType = CL_DEVICE_TYPE_ALL;
         final int deviceIndex = 0;
-
-        // Enable exceptions and subsequently omit error checks in this sample
-        //CL.setExceptionsEnabled(true);
 
         // Obtain the number of platforms
         int[] numPlatformsArray = new int[1];
@@ -141,7 +138,7 @@ public final class Main {
 
         // Create the program from the source code
         cl_program program = clCreateProgramWithSource(context,
-            1, new String[] {programSource} , null, null);
+            1, new String[] {PROGRAM_SOURCE} , null, null);
 
         // Build the program
         clBuildProgram(program, 0, null, null, null, null);
@@ -174,7 +171,8 @@ public final class Main {
         clReleaseProgram(program);
         clReleaseCommandQueue(commandQueue);
         clReleaseContext(context);
-
-        LOGGER.info(dstArray[0] + " " + dstArray[dstArray.length - 1]);
+        float first = dstArray[0];
+        float last = dstArray[dstArray.length - 1];
+        LOGGER.info("{} {}", first, last);
     }
 }

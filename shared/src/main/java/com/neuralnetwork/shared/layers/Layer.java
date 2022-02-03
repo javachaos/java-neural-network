@@ -1,43 +1,42 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
 import com.neuralnetwork.shared.network.LayerType;
+import com.neuralnetwork.shared.neurons.Neuron;
 
 /**
- * Represents a Layer class.
+ * Represents a Layer of Neurons.
  * 
- * @author fredladeroute
- *
  *@param <T>
- *      the type of Layer this 
+ *      the type of this Layer
  */
-public interface Layer<T> extends Iterable<T> {
+public interface Layer<T extends Neuron> extends Iterable<T> {
     
     /**
-     * Get a node from this layer.
+     * Get a neuron from this layer.
      * 
      * @param idx
      *      the index to the node
      *
      * @return
-     *      the INode at index idx
+     *      the neuron at index idx
      */
     T getNeuron(int idx);
     
     /**
-     * Returns the layer type of this ILayer.
+     * Returns the layer type of this Layer.
      * 
      * @return
-     *      the layer type of this ILayer
+     *      the layer type of this Layer
      */
     LayerType getLayerType();
     

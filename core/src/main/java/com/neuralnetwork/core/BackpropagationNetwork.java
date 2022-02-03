@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 
 /**
- * BackpropNetwork.
+ * Backpropagation Network.
  *
  */
 public final class BackpropagationNetwork implements Serializable {
@@ -37,7 +37,7 @@ public final class BackpropagationNetwork implements Serializable {
         /**
          * Evaluate the transfer function transferFunction.
          * @param transferFunction
-         *         the transfer fuction to use.
+         *         the transfer function to use.
          *         
          * @param input
          *         the input data.
@@ -60,17 +60,17 @@ public final class BackpropagationNetwork implements Serializable {
         }
 
         /**
-         * Evaluate the derivitive of the transfer function.
+         * Evaluate the derivative of the transfer function.
          * @param transferFunction
-         *         the transfer fuction to use.
+         *         the transfer function to use.
          *         
          * @param input
          *         the input data.
          *         
          * @return
-         *         the derivitive of the transfer function.
+         *         the derivative of the transfer function.
          */
-        public static double evaluateDerivitive(
+        public static double evaluateDerivative(
                 final TransferFunction transferFunction,
                 final double input) {
             switch (transferFunction) {
@@ -96,7 +96,7 @@ public final class BackpropagationNetwork implements Serializable {
     private double[][] previousBiasDelta;
     private double[][][] weight;
     private double[][][] previousWeightDelta;
-    private int iter = 0;
+    private int iterations = 0;
     private static final int UPDATE_EVERY = 1000;
 
     /**
@@ -307,8 +307,8 @@ public final class BackpropagationNetwork implements Serializable {
         updateWeights(trainingRate, momentum, input);
         updateBiases(trainingRate, momentum);
 
-        if (iter++ % UPDATE_EVERY  == 0) {
-            prettyPrint(input, output, error, iter);
+        if (iterations++ % UPDATE_EVERY  == 0) {
+            prettyPrint(input, output, error, iterations);
         }
         return error;
     }
@@ -350,7 +350,7 @@ public final class BackpropagationNetwork implements Serializable {
                 for (int k = 0; k < layerSize[l]; k++) {
                     delta[l][k] = output[k] - desired[k];
                     error += Math.pow(delta[l][k], 2);
-                    delta[l][k] *= TransferFunctions.evaluateDerivitive(
+                    delta[l][k] *= TransferFunctions.evaluateDerivative(
                             transferFunction[l], layerInput[l][k]);
                 }
             } else { // Hidden Layer
@@ -359,7 +359,7 @@ public final class BackpropagationNetwork implements Serializable {
                     for (int j = 0; j < layerSize[l + 1]; j++) {
                         sum += weight[l + 1][i][j] * delta[l + 1][j];
                     }
-                    sum += TransferFunctions.evaluateDerivitive(
+                    sum += TransferFunctions.evaluateDerivative(
                             transferFunction[l], layerInput[l][i]);
                     delta[l][i] = sum;
                 }
@@ -372,7 +372,7 @@ public final class BackpropagationNetwork implements Serializable {
      * Clear the iteration counter.
      */
     public void clearIterationCounter() {
-        iter = 0;
+        iterations = 0;
     }
 
     /**
@@ -388,7 +388,7 @@ public final class BackpropagationNetwork implements Serializable {
      *         the error value.
      *         
      * @param i
-     *         the interation number.
+     *         the iteration number.
      *         
      */
     private void prettyPrint(final double[] input,
@@ -409,7 +409,7 @@ public final class BackpropagationNetwork implements Serializable {
     }
 
     /**
-     * Save the neuralnet to file.
+     * Save the neural network to file.
      *
      * @param fileName
      *         the file path to store the network as.
@@ -425,7 +425,7 @@ public final class BackpropagationNetwork implements Serializable {
     }
 
     /**
-     * Load the neuralnet from file and
+     * Load the neural network from file and
      * update all references in the current instance
      * of the class.
      *
@@ -444,7 +444,7 @@ public final class BackpropagationNetwork implements Serializable {
             this.bias = net.bias;
             this.delta = net.delta;
             this.inputSize = net.inputSize;
-            this.iter = net.iter;
+            this.iterations = net.iterations;
             this.layerInput = net.layerInput;
             this.layerOutput = net.layerOutput;
             this.layerSize = net.layerSize;

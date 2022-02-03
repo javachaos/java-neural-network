@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.tests.neurons;
 
@@ -36,18 +36,19 @@ class NeuronImplTest {
     private static final double TEST_VALUE1 = 0.123;
     private static final int REGRESSION_LIMIT = 100;
     private static final double D_0_1 = 0.1;
+	private static final double NULL = 0.0;
 
 	@Test
 	final void testHashCode() {
 		HiddenNeuronImpl n = new HiddenNeuronImpl();
 		assertEquals(n.hashCode(), n.hashCode());
 	
-		n.setValue(null);
+		n.setValue(NULL);
 		n.setType(null);
 		n.addOutputLink(new HiddenNeuronImpl());
 		assertEquals(n.hashCode(), n.hashCode());
 		OutputNeuronImpl v = new OutputNeuronImpl();
-		v.setValue(null);
+		v.setValue(NULL);
 		v.setType(null);
 		v.setActivationFunction(null);
 		assertEquals(v.hashCode(), v.hashCode());
@@ -352,15 +353,15 @@ class NeuronImplTest {
 		m.addOutputLink(o1);
 		
 		Link[] l = m.getOutputLinks(0, 1);
-		Double v = l[0].getWeight();
-		Double v1 = l[1].getWeight();
+		double v = l[0].getWeight();
+		double v1 = l[1].getWeight();
 		
 		m.reset();
 		
 		Link[] l1 = m.getOutputLinks(0, 1);
-		Double v2 = l1[0].getWeight();
-		Double v3 = l1[1].getWeight();
-		return v.equals(v2) && v1.equals(v3);
+		double v2 = l1[0].getWeight();
+		double v3 = l1[1].getWeight();
+		return Double.compare(v, v2) == 0 && Double.compare(v1, v3) == 0;
 	}
 
 	@Test
@@ -438,7 +439,7 @@ class NeuronImplTest {
 
 	@Test
 	final void testEqualsObject() {
-		Double val = Math.random();
+		double val = Math.random();
 		NeuronImpl n = new InputNeuronImpl(val);
 		NeuronImpl n1 = new InputNeuronImpl(val);
 
@@ -491,12 +492,12 @@ class NeuronImplTest {
 
 		assertNotEquals(p, p1);
 		
-		p.setValue(null);
+		p.setValue(NULL);
 		p1.setValue(11.0);
 		assertNotEquals(p, p1);
 		
-		p.setValue(null);
-		p1.setValue(null);
+		p.setValue(NULL);
+		p1.setValue(NULL);
 		assertEquals(p, p1);
 		
 	}

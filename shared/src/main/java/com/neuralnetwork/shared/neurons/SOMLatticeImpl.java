@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 /*
  * SOMLattice.java
@@ -21,7 +21,7 @@ import com.neuralnetwork.shared.layers.Layer;
 /**
  * Represents a SOM Lattice.
  * 
- * @author fredladeroute
+ * 
  *
  */
 public class SOMLatticeImpl implements SOMLattice {
@@ -58,17 +58,12 @@ public class SOMLatticeImpl implements SOMLattice {
 	}
 	
 	@Override
-	public final SOMNeuronImpl getNeuron(final int x, final int y) {
+	public final SOMNeuron getNeuron(final int x, final int y) {
 		return lattice[x][y];
 	}
 
 	@Override
-	public Layer<Neuron> getLayer(int idx) {
-		return null;
-	}
-
-	@Override
-	public Neuron getNode(int x, int y) {
+	public Layer<SOMNeuron> getLayer(int idx) {
 		return null;
 	}
 
@@ -88,7 +83,7 @@ public class SOMLatticeImpl implements SOMLattice {
 	}
 
 	@Override
-	public final SOMNeuronImpl getBMU(final SOMLayerImpl inputVector) {
+	public final SOMNeuron getBMU(final SOMLayerImpl inputVector) {
 	    
 	    SOMNeuronImpl bmu = lattice[0][0];
 		double bestDist = inputVector.dist(bmu.getWeights());

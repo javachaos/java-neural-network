@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
@@ -17,13 +17,11 @@ import com.neuralnetwork.shared.neurons.InputNeuron;
 
 /**
  * Represents an InputLayer class.
- * @author fredladeroute
- *
  */
 public interface InputLayer extends Layer<InputNeuron>, Buildable {
 
     /**
-     * Add a value to this IInputLayer.
+     * Add a value to this InputLayer.
      * 
      * @param v
      *      the value to add to the input layer
@@ -34,7 +32,7 @@ public interface InputLayer extends Layer<InputNeuron>, Buildable {
     void addValue(Double v, int index);
     
     /**
-     * Add a list of values to this IInputLayer.
+     * Add a list of values to this InputLayer.
      * 
      * @param values
      *      the list of values to be added.
@@ -42,8 +40,8 @@ public interface InputLayer extends Layer<InputNeuron>, Buildable {
     void addValues(final List<Double> values);
     
     /**
-     * Propagate the values from this IInputLayer to the
-     * next ILayer.
+     * Propagate the values from this InputLayer to the
+     * next Layer.
      * 
      * @param nnctx
      *      neural net context parameter
@@ -53,7 +51,7 @@ public interface InputLayer extends Layer<InputNeuron>, Buildable {
     OutputLayer propagate(NeuralNetContext nnctx);
 
     /**
-     * Build the input layer using INeurons.
+     * Build the input layer using Neurons.
      */
     void build();
 }

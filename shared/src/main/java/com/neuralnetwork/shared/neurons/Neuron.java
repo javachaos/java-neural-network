@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
@@ -15,11 +15,7 @@ import com.neuralnetwork.shared.links.Link;
 import com.neuralnetwork.shared.network.NeuralNetContext;
 
 /**
- * INeuron interface for the Nodes of the network.
- * 
- * @author fredladeroute
- *
- *
+ * Neuron interface for the neurons of the network.
  */
 public interface Neuron {
     
@@ -29,7 +25,7 @@ public interface Neuron {
      * @return
      *      the value that this neuron holds
      */
-	Double getValue();
+	double getValue();
     
     /**
      * Set the value that this neuron will hold.
@@ -37,33 +33,33 @@ public interface Neuron {
      * @param v
      *      the value to set for this neuron
      */
-    void setValue(Double v);
+    void setValue(double v);
     
     /**
-     * Adds a link from this node to ineuron
-     * with weight weight and return the ILink.
+     * Adds a link from this neuron to neuron
+     * with weight and return the link.
      * 
-     * @param ineuron 
-     *      the node to connect to.
+     * @param n
+     *      the neuron to connect to.
      *      
      * @param weight 
      *      the weight value of this connection.
      * 
-     * @return a new ILink.
+     * @return a new link.
      */
-    Link addInputLink(Neuron ineuron, Double weight);
+    Link addInputLink(Neuron n, double weight);
     
     /**
-     * Adds a link from this node to ineuron
+     * Adds a link from this neuron tp neuron n
      * with a random weight (uniformly distributed) value in range [0-1]
-     * and return the ILink.
+     * and return the link.
      * 
-     * @param ineuron
-     *      the node to connect to.
+     * @param n
+     *      the neuron to connect to.
      * 
-     * @return a new ILink.
+     * @return a new link.
      */
-    Link addInputLink(Neuron ineuron);
+    Link addInputLink(Neuron n);
     
     /**
      * Set the input link at i to be l.
@@ -87,22 +83,22 @@ public interface Neuron {
     Link[] setInputLinks(Link[] links);
     
     /**
-     * Get a ILink by the id of the other INeuron.
+     * Get a link by the id of the other neuron.
      * 
      * @param linkId 
      *      the id of the node to get the link of.
      *      
-     * @return the ILink
+     * @return the link
      */
     Link getInputLink(int linkId);
     
     /**
-     * Get ILinks by the id of the other INeuron ids.
+     * Get link by the id of the other neuron ids.
      * 
      * @param ids 
      *      the ids of the nodes to get the links of.
      *      
-     * @return the ILink.
+     * @return the link.
      */
     Link[] getInputLinks(int... ids);
     
@@ -114,35 +110,35 @@ public interface Neuron {
     Link[] getInputLinks();
     
     /**
-     * Adds a link from this node to ineuron
-     * with weight weight and return the ILink.
+     * Adds a link from this neuron to neuron n
+     * with weight and return the link.
      * 
-     * Also adds the input link for the ineuron neuron.
+     * Also adds the input link for the n neuron.
      * Thus created a full 2 way connection between
-     * this neuron and ineuron.
+     * this neuron and n.
      * 
-     * @param ineuron 
+     * @param n
      *      the node to connect to.
      *      
-     * @param weight 
+     * @param weight
      *      the weight value of this connection.
      * 
-     * @return a new ILink.
+     * @return a new link.
      */
-    Link addOutputLink(Neuron ineuron, Double weight);
+    Link addOutputLink(Neuron n, double weight);
     
     /**
-     * Adds a link from this node to ineuron
+     * Adds a link from this neuron to n
      * with a random weight (uniformly distributed) value in range [0-1]
-     * and return the ILink.
+     * and return the link.
      * 
-     * @param ineuron
+     * @param n
      *      the node to connect to.
      * 
-     * @return a new ILink.
+     * @return a new link.
      * 
      */
-    Link addOutputLink(Neuron ineuron);
+    Link addOutputLink(Neuron n);
     
     /**
      * Set the output link at i to be l.
@@ -169,43 +165,43 @@ public interface Neuron {
     Link[] setOutputLinks(Link[] links);
     
     /**
-     * Get a ILink by the id of the other INeuron.
+     * Get a link by the id of the other neuron.
      * 
      * @param linkId 
      *      the id of the node to get the link of.
      *      
-     * @return the ILink
+     * @return the link
      */
     Link getOutputLink(int linkId);
     
     /**
-     * Get ILinks by the id of the other INeuron ids.
+     * Get links by the id of the other neuron ids.
      * 
      * @param ids 
      *      the ids of the nodes to get the links of.
      *      
-     * @return the ILink.
+     * @return the link.
      */
     Link[] getOutputLinks(int... ids);
     
     /**
-     * Get all ILinks.
+     * Get all links.
      * 
-     * @return the ILinks.
+     * @return the links.
      */
     Link[] getOutputLinks();
     
     /**
-     * Return the type of this INeuron.
+     * Return the type of this neuron.
      * 
      * @return
-     *      the id of this INeuron
+     *      the id of this neuron
      */
     NeuronType getType();
     
     /**
      * Sets the type of neuron. In the rare event that one needs
-     * to change the type of a neuron this must be called.
+     * to change the type of neuron this must be called.
      * 
      * @param t
      * 		the type of the neuron
@@ -213,19 +209,19 @@ public interface Neuron {
 	void setType(NeuronType t);
     
     /**
-     * Return the next child INeuron.
+     * Return the next child neuron.
      * 
      * @return
-     *      the next child INeuron
+     *      the next child neuron
      *      and increment the child id counter.
      */
     Neuron getNextChild();
 
     /**
-     * Return the next parent INeuron.
+     * Return the next parent neuron.
      * 
      * @return
-     *      the next parent INeuron 
+     *      the next parent neuron
      *      and increment the parent id counter
      */
     Neuron getNextParent();
@@ -241,31 +237,31 @@ public interface Neuron {
      * will use.
      * 
      * @param f
-     *      the IActivationFunction to use
+     *      the ActivationFunction to use
      */
     void setActivationFunction(ActivationFunction f);
     
     /**
-     * Get the activation function for this INeuron.
+     * Get the activation function for this neuron.
      * 
      * @return
-     *      the IActivationFunction of this INeuron
+     *      the ActivationFunction of this neuron
      */
     ActivationFunction getActivationFunction();
 
     /**
      * Cause this neuron to activate,
      * sum up all the inputs * weights, and then
-     * run them through the IActivationFunction finally
+     * run them through the ActivationFunction finally
      * update the weights of the output links.
      * 
      * @param v
      *      the value to be fed forward to the next neuron
-     * @param nnctx
+     * @param neuralNetContext
      * 		the neural network context to be passed along.
      * @return output value.
      */
-    Double feedforward(Double v, NeuralNetContext nnctx);
+    double feedforward(double v, NeuralNetContext neuralNetContext);
 
     /**
      * Calculate the error.
@@ -273,7 +269,7 @@ public interface Neuron {
      * @return
      * 		the 1/2 MSE.
      */
-	Double getError();
+	double getError();
 
 	/**
 	 * Propagate the error of this node to all its children.
@@ -283,7 +279,7 @@ public interface Neuron {
 	 * @return
 	 * 		propagated error value.
 	 */
-	Double propagateError(Double error);
+	double propagateError(double error);
 	
 	@Override
 	int hashCode();

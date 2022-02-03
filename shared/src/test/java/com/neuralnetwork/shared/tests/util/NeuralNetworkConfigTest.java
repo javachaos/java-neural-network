@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2014 Fred Laderoute.
+ * Copyright (c) 2014 Fred .
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Fred Laderoute - initial API and implementation
+ *     Fred  - initial API and implementation
  ******************************************************************************/
 package com.neuralnetwork.shared.tests.util;
 
@@ -19,7 +19,7 @@ class NeuralNetworkConfigTest {
 
 	@Test
 	final void testNetworkConfig() {
-		int numIn = 0;
+		int numIn;
 		NetworkConfig conf = new NetworkConfig(5, 5,
 				new int[]{3, 2, 3});
 		numIn = conf.getNumInputs();

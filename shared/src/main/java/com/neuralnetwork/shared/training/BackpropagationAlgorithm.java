@@ -16,16 +16,13 @@ import com.neuralnetwork.shared.util.MathTools;
 
 /**
  * Backpropagation algorithm implementation.
- * 
- * @author alfred
- *
  */
-public final class BackpropAlgorithm implements ITrainAlgorithm {
+public final class BackpropagationAlgorithm implements ITrainAlgorithm {
     /**
      * Logger instance.
      */
     private static final Logger LOGGER = 
-    		LoggerFactory.getLogger(BackpropAlgorithm.class);
+    		LoggerFactory.getLogger(BackpropagationAlgorithm.class);
 	private final Network network;
 	private final Double expectedError;
 	private Double currError;
@@ -44,8 +41,8 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 * 		desired error value.
 	 * 
 	 */
-	public BackpropAlgorithm(final TrainSample trainSample,
-                             final Network net, final Double expErr) {
+	public BackpropagationAlgorithm(final TrainSample trainSample,
+									final Network net, final Double expErr) {
 		this.trainSample = trainSample;
 		this.network = net;
 		this.expectedError = expErr;
@@ -71,12 +68,12 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 		LOGGER.debug("Network output: {}", output);
 		currError =	ErrorFunctions.getInstance().meanSquaredError(
 						output, trainSample.getInputs());
-		Iterator<OutputNeuron> iter = network.getOutputLayer().iterator();
+		Iterator<OutputNeuron> iterator = network.getOutputLayer().iterator();
 		LinkedBlockingDeque<Double> outputs = new LinkedBlockingDeque<>(output);
 		//Skip bias neuron.
-		iter.next();
-		while (iter.hasNext()) {
-			iter.next().propagateError(outputs.pop());
+		iterator.next();
+		while (iterator.hasNext()) {
+			iterator.next().propagateError(outputs.pop());
 		}
 		List<Double> errVector = new ArrayList<>();
 		for (InputNeuron iInputNeuron : network.getInputLayer()) {

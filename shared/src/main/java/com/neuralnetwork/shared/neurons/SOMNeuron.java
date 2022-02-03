@@ -15,10 +15,10 @@ import com.neuralnetwork.shared.network.Network;
 /**
  * Represents a SOM Neuron.
  * 
- * @author fredladeroute
+ * 
  *
  */
-public interface SOMNeuron {
+public interface SOMNeuron extends Neuron {
 
     /**
      * Get the network for this neuron.
@@ -69,7 +69,7 @@ public interface SOMNeuron {
      * @return
      *      the square of the distance
      */
-    double distanceTo(final SOMNeuronImpl n);
+    double distanceTo(final SOMNeuron n);
     
     /**
      * Set the weight for the weight at w.
@@ -113,7 +113,7 @@ public interface SOMNeuron {
      * @param distanceFalloff
      *      the threshold fall off value
      */
-     void updateWeights(final SOMLayerImpl input,
+     void updateWeights(final SOMLayer input,
              final double learningRate, final double distanceFalloff);
 
      /**
