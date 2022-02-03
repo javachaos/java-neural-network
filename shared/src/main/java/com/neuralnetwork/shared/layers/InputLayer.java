@@ -11,90 +11,49 @@
 package com.neuralnetwork.shared.layers;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.IntStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.neuralnetwork.shared.network.INeuralNetContext;
-import com.neuralnetwork.shared.network.LayerType;
-import com.neuralnetwork.shared.neurons.BiasNeuron;
-import com.neuralnetwork.shared.neurons.IInputNeuron;
+import com.neuralnetwork.shared.network.NeuralNetContext;
 import com.neuralnetwork.shared.neurons.InputNeuron;
 
 /**
- * Represents an Input layer to the network.
- * 
+ * Represents an InputLayer class.
  * @author fredladeroute
  *
  */
-public final class InputLayer extends Layer<IInputNeuron> 
-        implements IInputLayer {
+public interface InputLayer extends Layer<InputNeuron>, Buildable {
 
     /**
-     * Logger instance.
-     */
-    private static final Logger LOGGER =
-    		LoggerFactory.getLogger(InputLayer.class);
-    
-    /**
-     * Generated Serial Version UID. 
-     */
-    private static final long serialVersionUID = 7502031311250577255L;
-    
-    /**
-     * Constructs a new input layer of length w.
+     * Add a value to this IInputLayer.
      * 
-     * @param w
-     *      the length of the input layer.
+     * @param v
+     *      the value to add to the input layer
+     *      
+     * @param index
+     *      which INode to insert the IValue at
      */
-    public InputLayer(final int w) {
-        super(w + 1);
-        add(new BiasNeuron());
-        setLayerType(LayerType.INPUT);
-        build();
-    }
-
-    @Override
-    public void addValue(final Double v, final int index) {
-        set(index + 1, new InputNeuron(v));
-    }
+    void addValue(Double v, int index);
     
-    @Override
-    public void addValues(final List<Double> values) {
-    	if (values == null) {
-    		throw new NullPointerException("Values vector was null.");
-    	}
-    	if (values.size() != this.size() - 1) {
-    		throw new IllegalArgumentException(
-    				"Values is not the correct dimension. Values: "
-    		        + values.size()
-    				+ ", InputLayer: " + size());
-    	}
-        for (int i = 0; i < values.size(); i++) {
-            set(i + 1, new InputNeuron(values.get(i)));
-        }
-    }
+    /**
+     * Add a list of values to this IInputLayer.
+     * 
+     * @param values
+     *      the list of values to be added.
+     */
+    void addValues(final List<Double> values);
+    
+    /**
+     * Propagate the values from this IInputLayer to the
+     * next ILayer.
+     * 
+     * @param nnctx
+     *      neural net context parameter
+     * @return
+     *      the output layer of the network
+     */
+    OutputLayer propagate(NeuralNetContext nnctx);
 
-    @Override
-    public IOutputLayer propagate(final INeuralNetContext nnctx) {
-    	AtomicReference<Double> v = new AtomicReference<>(Double.MAX_VALUE);
-        IntStream.range(0, getSize()).parallel().forEach(i -> v.updateAndGet(v1 -> v1 + getNeuron(i).feedforward(nnctx)));
-    	LOGGER.debug("Propagation Error: {}", v);
-        return nnctx.getNetwork().getOutputLayer();
-    }
-
-    @Override
-    public void build() {
-        while (size() < getWidth()) {
-            add(new InputNeuron());
-        }
-    }
-
-	@Override
-	public int getSize() {
-		return size() - 1;
-	}
-
+    /**
+     * Build the input layer using INeurons.
+     */
+    void build();
 }

@@ -8,52 +8,33 @@
  * Contributors:
  *     Fred Laderoute - initial API and implementation
  ******************************************************************************/
-/**
- * 
- */
 package com.neuralnetwork.shared.tests.functions;
 
-import com.neuralnetwork.shared.functions.FunctionType;
-import com.neuralnetwork.shared.functions.LinearFunction;
+import com.neuralnetwork.shared.functions.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-/**
- * @author Fred
- *
- */
+
 class LinearFunctionTest {
 
-	/**
-	 * Regression size.
-	 */
 	private static final int NUM_ITER = 1000;
-	
-	/**
-	 * The amount of accuracy to be used.
-	 */
-	private static final int ACCUR = 10;
-	
-	/**
-	 * Test method for {@link com.neuralnetwork
-	 * .shared.functions.LinearFunction#LinearFunction()}.
-	 */
+	private static final int ACCURACY = 10;
+
 	@Test
 	final void testLinearFunction() {
-		LinearFunction f = new LinearFunction();
+		BaseFunction f = new LinearFunction();
 		assertNotNull(f);
 		for (int i = 0; i < NUM_ITER; i++) {
-			assertEquals(f.activate(i), i, ACCUR * Math.ulp(i));
-			assertEquals(1, f.derivative(i), ACCUR * Math.ulp(i));
+			assertEquals(f.activate(i), i, ACCURACY * Math.ulp(i));
+			assertEquals(1, f.derivative(i), ACCURACY * Math.ulp(i));
 		}
-
-		f.changeFunction(FunctionType.NULL);
+		f = new NullFunction();
 		
 		for (int i = 0; i < NUM_ITER; i++) {
-			assertEquals(0, f.activate(i), ACCUR * Math.ulp(i));
-			assertEquals(0, f.derivative(i), ACCUR * Math.ulp(i));
+			assertEquals(0, f.activate(i), ACCURACY * Math.ulp(i));
+			assertEquals(0, f.derivative(i), ACCURACY * Math.ulp(i));
 		}
 	}
 

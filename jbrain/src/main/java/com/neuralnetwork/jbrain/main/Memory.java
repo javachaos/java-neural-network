@@ -3,7 +3,7 @@ package com.neuralnetwork.jbrain.main;
 import java.util.*;
 
 import com.neuralnetwork.jbrain.sensors.camera.RGBData;
-import com.neuralnetwork.shared.network.INetwork;
+import com.neuralnetwork.shared.network.Network;
 import com.neuralnetwork.shared.util.NeuralNetBuilder;
 import com.neuralnetwork.shared.util.SimpleNetworkConfigs;
 
@@ -19,7 +19,7 @@ public class Memory {
 	/**
 	 * The network for this memory.
 	 */
-	private final INetwork network;
+	private final Network network;
 
 	/**
 	 * Visual data for this memory.
@@ -63,7 +63,7 @@ public class Memory {
 	 * @return
 	 * 		the neural network for this memory.
 	 */
-	public INetwork getNetwork() {
+	public Network getNetwork() {
 		return network;
 	}
 

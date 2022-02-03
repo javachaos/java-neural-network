@@ -10,90 +10,46 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.Objects;
-
 import com.neuralnetwork.shared.network.LayerType;
-import com.neuralnetwork.shared.neurons.INeuron;
 
 /**
- * Represents a Layer of INeurons.
+ * Represents a Layer class.
+ * 
  * @author fredladeroute
  *
  *@param <T>
- *      the type of Layer this is
+ *      the type of Layer this 
  */
-public abstract class Layer<T extends INeuron> 
-        extends ArrayList<T> implements ILayer<T> {
-
-    @Serial
-    private static final long serialVersionUID = -94028484942015525L;
-
-    /**
-     * Represents the number of neurons in the layer.
-     */
-    private final int width;
-
-    private LayerType layerType;
+public interface Layer<T> extends Iterable<T> {
     
     /**
-     * Construct a new Layer of width w.
+     * Get a node from this layer.
      * 
-     * @param w
-     *      the width of the Layer to be created
+     * @param idx
+     *      the index to the node
+     *
+     * @return
+     *      the INode at index idx
      */
-	Layer(final int w) {
-        super(w);
-        this.width = w;
-    }
-
-    @Override
-    public final T getNeuron(final int idx) {
-        return get(idx);
-    }
-
-    @Override
-    public final LayerType getLayerType() {
-        return layerType;
-    }
-
+    T getNeuron(int idx);
+    
     /**
-     * Set the layer type for this layer.
+     * Returns the layer type of this ILayer.
      * 
-     * @param t
-     *      the layerType to set
+     * @return
+     *      the layer type of this ILayer
      */
-    protected final void setLayerType(final LayerType t) {
-        this.layerType = t;
-    }
-
+    LayerType getLayerType();
+    
     /**
-     * @return the width
+     * Returns the size of this layer.
+     * (Without bias neuron) so [size() - 1]
+     * such that size() is the true size of the layer including
+     * the bias term.
+     * 
+     * @return
+     * 		the number of neurons in this layer.
      */
-    public final int getWidth() {
-        return width;
-    }
-
-	@Override
-	public synchronized int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + Objects.hash(layerType, width);
-		return result;
-	}
-
-	@Override
-	public synchronized boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Layer<?> other = (Layer<?>) obj;
-		return layerType == other.layerType && width == other.width;
-	}
-
+    int getSize();
     
 }

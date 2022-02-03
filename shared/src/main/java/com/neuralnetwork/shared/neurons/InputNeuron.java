@@ -10,71 +10,26 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import com.neuralnetwork.shared.links.ILink;
-import com.neuralnetwork.shared.network.INeuralNetContext;
+import com.neuralnetwork.shared.network.NeuralNetContext;
 
 /**
- * Implementation of an Input neuron.
+ * Represents an input neuron.
+ * 
  * @author fredladeroute
  *
  */
-public class InputNeuron extends AbstractInputNeuron {
-    
+public interface InputNeuron extends Neuron {
+
     /**
-     * Constructs a new input value with value v.
+     * Cause this neuron to activate,
+     * sum up all the inputs * weights, and then
+     * run them through the IActivationFunction finally
+     * update the weights of the output links.
      * 
-     * @param v
-     *      the initial input value
+     * @param nnctx 
+     * 		the neural network context to be passed along.
+     * @return 
+     * 		ErrorValue
      */
-    public InputNeuron(final Double v) {
-        super(v);
-    }
-    
-    /**
-     * Constructs a new input value with value
-     * RandomValue.
-     */
-    public InputNeuron() {
-        super();
-        setValue(Math.random());
-    }
-    
-    @Override
-    public final Double feedforward(final Double v,
-    		final INeuralNetContext nnctx) {
-        return feedforward(nnctx);
-    }
-    
-    @Override
-    public final Double feedforward(final INeuralNetContext nnctx) {
-    	Double v = 0.0;
-    	for (ILink ol : getOutputs()) {
-            v = ol.getTail().feedforward(getValue(), nnctx);
-    	}
-		return v;
-    }
-    
-    @Override
-    public final String toString() {
-        return "IN(" + getValue() + ") ";
-    }
-
-	@Override
-	public final Double propagateError(final Double e) {
-		double error = e;
-		error = getActivationFunction().derivative(error);
-		return error;
-	}
-
-	@Override
-	public final Double getError() {
-		ILink[] inWeights = getInputLinks();
-		double sumErr = 0;
-		for (ILink inWeight : inWeights) {
-			double w = inWeight.getWeight();
-			sumErr += (1.0 / 2) * Math.pow(Math.abs(
-					w - getValue()), 2);
-		}
-		return sumErr;
-	}
+	Double feedforward(NeuralNetContext nnctx);
 }

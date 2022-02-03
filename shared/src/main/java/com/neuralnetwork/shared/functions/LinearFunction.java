@@ -12,16 +12,21 @@ package com.neuralnetwork.shared.functions;
 
 /**
  * Linear activation function.
- * @author fredladeroute
- *
  */
-public final class LinearFunction extends 
-        AbstractFunction implements IActivationFunction {
+public final class LinearFunction extends BaseFunction {
 
-    /**
-     * Construct a new Sigmoid function.
-     */
     public LinearFunction() {
-        super(FunctionType.LINEAR);
+        super(new Function(), FunctionType.LINEAR);
     }
+
+    @Override
+    public double derivative(double v) {
+        return 1.0;
+    }
+
+    @Override
+    public double activate(double v) {
+        return v;
+    }
+
 }

@@ -7,7 +7,7 @@
   </parent>
   <artifactId>core</artifactId>
   <name>Core</name>
-  <description>The core of the neural network software.</description>
+  <description>The core of the neural neuralNetwork software.</description>
   <dependencies>
   	<dependency>
   		<groupId>com.neuralnetwork</groupId>

@@ -19,8 +19,8 @@ package com.neuralnetwork.shared.neurons;
  * @author fredladeroute
  *
  */
-public abstract class AbstractOutputNeuron 
-        extends Neuron implements IOutputNeuron {
+public abstract class AbstractOutputNeuron
+        extends NeuronImpl implements OutputNeuron {
 
     /**
      * Construct a new Abstract output neuron.

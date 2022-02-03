@@ -10,9 +10,9 @@
  ******************************************************************************/
 package com.neuralnetwork.opencl.node;
 
-import com.neuralnetwork.shared.network.INeuralNetContext;
-import com.neuralnetwork.shared.neurons.INeuron;
+import com.neuralnetwork.shared.network.NeuralNetContext;
 import com.neuralnetwork.shared.neurons.Neuron;
+import com.neuralnetwork.shared.neurons.NeuronImpl;
 import com.neuralnetwork.shared.neurons.NeuronType;
 
 /**
@@ -21,7 +21,7 @@ import com.neuralnetwork.shared.neurons.NeuronType;
  * @author fredladeroute
  *
  */
-public class OpenCLNode extends Neuron implements INeuron {
+public class OpenCLNode extends NeuronImpl implements Neuron {
 
     /**
      * Construct a new OpenCL Node.
@@ -35,20 +35,17 @@ public class OpenCLNode extends Neuron implements INeuron {
 
     @Override
     public final Double feedforward(final Double v,
-            final INeuralNetContext nnctx) {
+            final NeuralNetContext nnctx) {
            return null;
-        //TODO improve.
     }
 
     @Override
     public final Double getError() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public final Double propagateError(final Double e) {
-        // TODO Auto-generated method stub
         return null;
     }
 }

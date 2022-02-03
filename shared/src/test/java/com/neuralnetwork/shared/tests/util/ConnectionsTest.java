@@ -8,22 +8,19 @@
  * Contributors:
  *     Fred Laderoute - initial API and implementation
  ******************************************************************************/
-/**
- * 
- */
 package com.neuralnetwork.shared.tests.util;
 
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
-import com.neuralnetwork.shared.layers.IInputLayer;
-import com.neuralnetwork.shared.layers.IOutputLayer;
 import com.neuralnetwork.shared.layers.InputLayer;
 import com.neuralnetwork.shared.layers.OutputLayer;
-import com.neuralnetwork.shared.links.ILink;
-import com.neuralnetwork.shared.neurons.IInputNeuron;
-import com.neuralnetwork.shared.neurons.INeuron;
-import com.neuralnetwork.shared.neurons.IOutputNeuron;
+import com.neuralnetwork.shared.layers.InputNeuronLayer;
+import com.neuralnetwork.shared.layers.OutputNeuronLayer;
+import com.neuralnetwork.shared.links.Link;
+import com.neuralnetwork.shared.neurons.InputNeuron;
+import com.neuralnetwork.shared.neurons.Neuron;
+import com.neuralnetwork.shared.neurons.OutputNeuron;
 import com.neuralnetwork.shared.util.Connections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -55,18 +52,18 @@ class ConnectionsTest {
 	@Test
 	@Timeout(value = TIMEOUT, unit = TimeUnit.MILLISECONDS)
 	final void testCreate() {
-		IInputLayer l1 = new InputLayer(LAYER_SIZE);
+		InputLayer l1 = new InputNeuronLayer(LAYER_SIZE);
 		l1.build();
-		IOutputLayer l2 = new OutputLayer(LAYER_SIZE);
+		OutputLayer l2 = new OutputNeuronLayer(LAYER_SIZE);
 		l2.build();
 		Connections.getInstance().create(l1, l2);
 		
-		Iterator<IInputNeuron> iter1 = l1.iterator();
-        INeuron tmp = null;
+		Iterator<InputNeuron> iter1 = l1.iterator();
+        Neuron tmp;
         while (iter1.hasNext()) {
             tmp = iter1.next();
-            Iterator<IOutputNeuron> iter2 = l2.iterator();
-            for (ILink l : tmp.getOutputLinks()) {
+            Iterator<OutputNeuron> iter2 = l2.iterator();
+            for (Link l : tmp.getOutputLinks()) {
             	if (iter2.hasNext()) {
                     assertEquals(l.getTail(), iter2.next());
             	}

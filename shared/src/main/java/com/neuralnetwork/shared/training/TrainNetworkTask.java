@@ -9,7 +9,7 @@ import com.neuralnetwork.shared.network.BackPropNetworkTrainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.neuralnetwork.shared.network.INetwork;
+import com.neuralnetwork.shared.network.Network;
 
 /**
  * 
@@ -26,7 +26,7 @@ public class TrainNetworkTask {
 	/**
 	 * Network reference.
 	 */
-	private final INetwork network;
+	private final Network network;
 
 	/**
 	 * Training stack.
@@ -45,7 +45,7 @@ public class TrainNetworkTask {
 	 * @param ts
 	 * 		the training data.
 	 */
-	public TrainNetworkTask(final INetwork net, final TrainingStack ts) {
+	public TrainNetworkTask(final Network net, final TrainingStack ts) {
 		this.network = net;
 		this.trainStack = ts;
 		executorService = Executors.newSingleThreadExecutor();

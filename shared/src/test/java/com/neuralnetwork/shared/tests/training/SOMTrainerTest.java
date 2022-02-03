@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -25,8 +24,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import com.neuralnetwork.shared.neurons.SOMLattice;
-import com.neuralnetwork.shared.neurons.SOMLayer;
+import com.neuralnetwork.shared.neurons.SOMLatticeImpl;
+import com.neuralnetwork.shared.neurons.SOMLayerImpl;
 import com.neuralnetwork.shared.training.SOMTrainer;
 
 class SOMTrainerTest {
@@ -36,23 +35,23 @@ class SOMTrainerTest {
 	private static final int INPUT_SIZE = 10;
     private static final long SEED = 1234L;
 	private static final long TEST_TIMEOUT = 2000;
-	private static List<SOMLayer> inData;
-	private static SOMLattice lattice;
+	private static List<SOMLayerImpl> inData;
+	private static SOMLatticeImpl lattice;
 
     @BeforeAll
     static void setUp() {
 		Random r = new Random(SEED);
         inData = new ArrayList<>(INPUT_SIZE);
-		SOMLayer input;
+		SOMLayerImpl input;
         
         for (int i = 0; i < INPUT_SIZE; i++) {
-        	input = new SOMLayer();
+        	input = new SOMLayerImpl();
         	for (int j = 0; j < INPUT_SIZE; j++) {
         		input.add(r.nextDouble());
         	}
         	inData.add(input);
         }
-        lattice = new SOMLattice(
+        lattice = new SOMLatticeImpl(
         		INPUT_SIZE, INPUT_SIZE, INPUT_SIZE);
     }
 

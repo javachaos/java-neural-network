@@ -8,9 +8,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.neuralnetwork.shared.network.INetwork;
-import com.neuralnetwork.shared.neurons.IInputNeuron;
-import com.neuralnetwork.shared.neurons.IOutputNeuron;
+import com.neuralnetwork.shared.network.Network;
+import com.neuralnetwork.shared.neurons.InputNeuron;
+import com.neuralnetwork.shared.neurons.OutputNeuron;
 import com.neuralnetwork.shared.util.ErrorFunctions;
 import com.neuralnetwork.shared.util.MathTools;
 
@@ -26,7 +26,7 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
      */
     private static final Logger LOGGER = 
     		LoggerFactory.getLogger(BackpropAlgorithm.class);
-	private final INetwork network;
+	private final Network network;
 	private final Double expectedError;
 	private Double currError;
 	private final TrainSample trainSample;
@@ -45,7 +45,7 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 	 * 
 	 */
 	public BackpropAlgorithm(final TrainSample trainSample,
-			final INetwork net, final Double expErr) {
+                             final Network net, final Double expErr) {
 		this.trainSample = trainSample;
 		this.network = net;
 		this.expectedError = expErr;
@@ -71,7 +71,7 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 		LOGGER.debug("Network output: {}", output);
 		currError =	ErrorFunctions.getInstance().meanSquaredError(
 						output, trainSample.getInputs());
-		Iterator<IOutputNeuron> iter = network.getOutputLayer().iterator();
+		Iterator<OutputNeuron> iter = network.getOutputLayer().iterator();
 		LinkedBlockingDeque<Double> outputs = new LinkedBlockingDeque<>(output);
 		//Skip bias neuron.
 		iter.next();
@@ -79,7 +79,7 @@ public final class BackpropAlgorithm implements ITrainAlgorithm {
 			iter.next().propagateError(outputs.pop());
 		}
 		List<Double> errVector = new ArrayList<>();
-		for (IInputNeuron iInputNeuron : network.getInputLayer()) {
+		for (InputNeuron iInputNeuron : network.getInputLayer()) {
 			errVector.add(iInputNeuron.getValue());
 		}
 		return MathTools.sum(errVector);

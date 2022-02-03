@@ -13,9 +13,9 @@ package com.neuralnetwork.shared.training;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.neuralnetwork.shared.neurons.SOMLattice;
-import com.neuralnetwork.shared.neurons.SOMLayer;
-import com.neuralnetwork.shared.neurons.SOMNeuron;
+import com.neuralnetwork.shared.neurons.SOMLatticeImpl;
+import com.neuralnetwork.shared.neurons.SOMLayerImpl;
+import com.neuralnetwork.shared.neurons.SOMNeuronImpl;
 
 /**
  * SOM Trainer responsible for training a SOM
@@ -31,8 +31,8 @@ public class SOMTrainer implements Runnable {
 	private final int numIterations;
 	private double latticeRadius;
 	private double timeConstant;
-	private SOMLattice lattice;
-	private List<SOMLayer> inputs;
+	private SOMLatticeImpl lattice;
+	private List<SOMLayerImpl> inputs;
 	private boolean running = false;
 	private Thread runner = null;
 	
@@ -91,7 +91,7 @@ public class SOMTrainer implements Runnable {
 	 *         the input vector to the lattice
 	 */
 	public final void setTraining(
-	        final SOMLattice trainLattice, final List<SOMLayer> in) {
+			final SOMLatticeImpl trainLattice, final List<SOMLayerImpl> in) {
 		lattice = trainLattice;
 		inputs = in;
 	}
@@ -119,15 +119,15 @@ public class SOMTrainer implements Runnable {
 		int iteration = 0;
 		double nbhRadius;
 		double learningRate = 0.0;
-		SOMNeuron bmu;
-		SOMLayer curInput;
+		SOMNeuronImpl bmu;
+		SOMLayerImpl curInput;
 		
 		while (iteration < numIterations && running) {
 	        LOGGER.debug("Training, iteration: {}", iteration);
 			nbhRadius = getNeighborhoodRadius(iteration);
 			// For each of the input vectors, look for the best matching
 			// unit, then adjust the weights for the BMU's neighborhood
-			for (SOMLayer input : inputs) {
+			for (SOMLayerImpl input : inputs) {
 				curInput = input;
 				bmu = lattice.getBMU(curInput);
 				updateWeights(curInput, bmu, nbhRadius, learningRate);
@@ -139,7 +139,7 @@ public class SOMTrainer implements Runnable {
 		running = false;
 	}
 
-	private void updateWeights(SOMLayer curInput, SOMNeuron bmu, double nbhRadius, double learningRate) {
+	private void updateWeights(SOMLayerImpl curInput, SOMNeuronImpl bmu, double nbhRadius, double learningRate) {
 		int latticeWidth = lattice.getWidth();
 		int latticeHeight = lattice.getHeight();
 		latticeRadius = Math.max(latticeWidth, latticeHeight) / 2.0;
@@ -150,7 +150,7 @@ public class SOMTrainer implements Runnable {
 		int yend;
 		double dist;
 		double dFalloff;
-		SOMNeuron temp;
+		SOMNeuronImpl temp;
 		// Optimization:  Only go through the X/Y values that 
 		// fall within
 		// the radius
@@ -188,7 +188,7 @@ public class SOMTrainer implements Runnable {
 	 * @return
 	 * 		the trained SOM Lattice.
 	 */
-	public final SOMLattice getLattice() {
+	public final SOMLatticeImpl getLattice() {
 		return lattice;
 	}
 	

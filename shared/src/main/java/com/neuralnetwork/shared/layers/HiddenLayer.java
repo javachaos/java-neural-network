@@ -10,80 +10,13 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import com.neuralnetwork.shared.network.LayerType;
-import com.neuralnetwork.shared.neurons.BiasNeuron;
 import com.neuralnetwork.shared.neurons.HiddenNeuron;
-import com.neuralnetwork.shared.neurons.IHiddenNeuron;
-
-import java.io.Serial;
 
 /**
- * Represents a hidden neural network layer.
- * 
+ * Interface for an IHiddenLayer.
  * @author fredladeroute
  *
  */
-public final class HiddenLayer 
-        extends Layer<IHiddenNeuron> implements IHiddenLayer {
-
-    @Serial
-    private static final long serialVersionUID = 5485729609664280674L;
-
-    private final int index;
-
-    /**
-     * Constructs a new hidden layer.
-     * 
-     * @param w
-     *      the length of this hidden layer
-     * @param index
-     *      the index of this hidden layer
-     */
-    public HiddenLayer(final int w, final int index) {
-        super(w + 1);
-        add(new BiasNeuron());
-        super.setLayerType(LayerType.HIDDEN);
-        this.index = index;
-    }
-
-    @Override
-    public void build() {
-        while (size() != getWidth()) {
-            add(new HiddenNeuron());
-        }
-    }
-
-	@Override
-	public int getSize() {
-		return size() - 1;
-	}
-
-    @Override
-    public int compareTo(IHiddenLayer o) {
-        int i = o.getIndex();
-        return Integer.compare(index, i);
-    }
-
-    @Override
-    public int getIndex() {
-        return index;
-    }
-
-    @Override
-    public synchronized boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        HiddenLayer that = (HiddenLayer) o;
-
-        return index == that.index;
-    }
-
-    @Override
-    public synchronized int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + index;
-        return result;
-    }
+public interface HiddenLayer extends Layer<HiddenNeuron>, Buildable, Comparable<HiddenLayer> {
+    int getIndex();
 }

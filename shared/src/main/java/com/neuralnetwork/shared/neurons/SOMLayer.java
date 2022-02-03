@@ -10,65 +10,24 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import java.io.Serial;
-import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
- * A SOM Layer.
+ * Represents a SOM Layer.
  * 
  * @author fredladeroute
  *
  */
-public class SOMLayer extends ArrayList<Double> implements ISOMLayer {
-    
-    /**
-     * Logger instance.
+public interface SOMLayer {
+
+    /** 
+     *  Calculates the euclidean distance between this vector and 
+     *  vector v.
+     *  
+     *  @param v
+     *       the vector to calculate the distance to
+     *       
+     *  @return
+     *       Integer.MIN_VALUE if the vectors are not the same length,
+     *       otherwise returns the square of the distance.
      */
-    private static final Logger LOGGER =
-    		LoggerFactory.getLogger(SOMLayer.class);
-
-    @Serial
-    private static final long serialVersionUID = -8674168620850601954L;
-
-   /** 
-    * Creates a new instance of a SOM Layer.
-    */
-   public SOMLayer() {
-   }
-   
-   /**
-    * Create a new instance of a SOM Layer
-    * with initial size of size.
-    * @param size
-    * 		the initial size of the SOM Layer.
-    */
-   public SOMLayer(final int size) {
-	   super(size);
-	   for (int i = 0; i < size; i++) {
-		   add(0.0);
-	   }
-   }
-   
-   @Override
-   public final double dist(final SOMLayer layer) {
-       if (layer.size() != super.size()) {
-           LOGGER.warn("Cannot compute distance, "
-                   + "vector lengths are not the equal.");
-           return Integer.MIN_VALUE;
-       }
-       
-       double distance = 0;
-       double temp;
-       
-       for (int i = 0; i < size(); i++) {
-           temp = get(i) - layer.get(i);
-           temp = Math.pow(temp, 2);
-           distance += temp;
-       }
-       
-       return distance;
-   }
-   
+    double dist(SOMLayerImpl v);
 }

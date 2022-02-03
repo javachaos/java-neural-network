@@ -10,305 +10,284 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.neuralnetwork.shared.functions.IActivationFunction;
-import com.neuralnetwork.shared.functions.SigmoidFunction;
-import com.neuralnetwork.shared.links.ILink;
+import com.neuralnetwork.shared.functions.ActivationFunction;
 import com.neuralnetwork.shared.links.Link;
+import com.neuralnetwork.shared.network.NeuralNetContext;
 
 /**
- * An abstract Neuron class implements the INeuron interface.
+ * INeuron interface for the Nodes of the network.
  * 
  * @author fredladeroute
  *
+ *
  */
-public abstract class Neuron implements INeuron {
+public interface Neuron {
     
     /**
-     * Logger instance.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Neuron.class);
-    
-    /**
-     * The value for this neuron.
-     */
-    private Double value;
-    
-    /**
-     * The activation function for this INeuron.
+     * Get the value that this neuron holds.
      * 
-     * Default: SigmoidFunction
+     * @return
+     *      the value that this neuron holds
      */
-    private SigmoidFunction function = new SigmoidFunction();
+	Double getValue();
     
     /**
-     * Array of all input links connected to this Neuron.
+     * Set the value that this neuron will hold.
+     * 
+     * @param v
+     *      the value to set for this neuron
      */
-    private List<ILink> inputLinks;
+    void setValue(Double v);
     
     /**
-     * Array of all ouput links connected to this Neuron.
+     * Adds a link from this node to ineuron
+     * with weight weight and return the ILink.
+     * 
+     * @param ineuron 
+     *      the node to connect to.
+     *      
+     * @param weight 
+     *      the weight value of this connection.
+     * 
+     * @return a new ILink.
      */
-    private List<ILink> outputLinks;
+    Link addInputLink(Neuron ineuron, Double weight);
     
     /**
-     * Current number of input links attached to this Neuron.
+     * Adds a link from this node to ineuron
+     * with a random weight (uniformly distributed) value in range [0-1]
+     * and return the ILink.
+     * 
+     * @param ineuron
+     *      the node to connect to.
+     * 
+     * @return a new ILink.
      */
-    private int numInputLinks = -1;
+    Link addInputLink(Neuron ineuron);
     
     /**
-     * Current number of output links attached to this Neuron.
+     * Set the input link at i to be l.
+     * @param i
+     *      the index of the link to be set
+     * @param l
+     *      the new link to be set
+     * @return
+     *      the old link.
      */
-    private int numOutputLinks = -1;
+    Link setInputLink(int i, Link l);
     
     /**
-     * The type of this Neuron.
+     * Set the input links for this neuron.
+     * 
+     * @param links
+     *      the links to be set
+     * @return
+     *      the old input links
      */
-    private NeuronType type;
-
-    /**
-     * The counter used in the getNextParent method for
-     * keeping track of which parent neuron to get.
-     */
-    private int idParentCounter = -1;
-
-    /**
-     * The counter used in the getNextChild method
-     * for keeping track of which child neuron to get.
-     */
-    private int idChildCounter = -1;
+    Link[] setInputLinks(Link[] links);
     
     /**
-     * Construct a new Neuron.
-     * With its value set randomly.
+     * Get a ILink by the id of the other INeuron.
+     * 
+     * @param linkId 
+     *      the id of the node to get the link of.
+     *      
+     * @return the ILink
+     */
+    Link getInputLink(int linkId);
+    
+    /**
+     * Get ILinks by the id of the other INeuron ids.
+     * 
+     * @param ids 
+     *      the ids of the nodes to get the links of.
+     *      
+     * @return the ILink.
+     */
+    Link[] getInputLinks(int... ids);
+    
+    /**
+     * Get the input links to this neuron.
+     * @return
+     *      the input links to this neuron
+     */
+    Link[] getInputLinks();
+    
+    /**
+     * Adds a link from this node to ineuron
+     * with weight weight and return the ILink.
+     * 
+     * Also adds the input link for the ineuron neuron.
+     * Thus created a full 2 way connection between
+     * this neuron and ineuron.
+     * 
+     * @param ineuron 
+     *      the node to connect to.
+     *      
+     * @param weight 
+     *      the weight value of this connection.
+     * 
+     * @return a new ILink.
+     */
+    Link addOutputLink(Neuron ineuron, Double weight);
+    
+    /**
+     * Adds a link from this node to ineuron
+     * with a random weight (uniformly distributed) value in range [0-1]
+     * and return the ILink.
+     * 
+     * @param ineuron
+     *      the node to connect to.
+     * 
+     * @return a new ILink.
+     * 
+     */
+    Link addOutputLink(Neuron ineuron);
+    
+    /**
+     * Set the output link at i to be l.
+     * 
+     * @param i
+     *      the index to the output link to be set
+     * 
+     * @param l
+     *      the new link to be set
+     * 
+     * @return
+     *      the old output link
+     */
+    Link setOutputLink(int i, Link l);
+    
+    /**
+     * Set the output links of this neuron.
+     * @param links
+     *      the new links to be set
+     *      
+     * @return
+     *      the old output links array
+     */
+    Link[] setOutputLinks(Link[] links);
+    
+    /**
+     * Get a ILink by the id of the other INeuron.
+     * 
+     * @param linkId 
+     *      the id of the node to get the link of.
+     *      
+     * @return the ILink
+     */
+    Link getOutputLink(int linkId);
+    
+    /**
+     * Get ILinks by the id of the other INeuron ids.
+     * 
+     * @param ids 
+     *      the ids of the nodes to get the links of.
+     *      
+     * @return the ILink.
+     */
+    Link[] getOutputLinks(int... ids);
+    
+    /**
+     * Get all ILinks.
+     * 
+     * @return the ILinks.
+     */
+    Link[] getOutputLinks();
+    
+    /**
+     * Return the type of this INeuron.
+     * 
+     * @return
+     *      the id of this INeuron
+     */
+    NeuronType getType();
+    
+    /**
+     * Sets the type of neuron. In the rare event that one needs
+     * to change the type of a neuron this must be called.
      * 
      * @param t
-     *      the type of this Neuron
-     * @param v
-     *      the default value of the neuron
-     *  
+     * 		the type of the neuron
      */
-    protected Neuron(final NeuronType t, final Double v) {
-        this.type = t;
-        this.value = v;
-        inputLinks = new ArrayList<>();
-        setOutputs(new ArrayList<>());
-    }
+	void setType(NeuronType t);
     
     /**
-     * Construct a new hidden Neuron.
-     * With its value set randomly.
+     * Return the next child INeuron.
+     * 
+     * @return
+     *      the next child INeuron
+     *      and increment the child id counter.
      */
-    protected Neuron() {
-        this.type = NeuronType.HIDDEN;
-        this.value = Math.random();
-        inputLinks = new ArrayList<>();
-        setOutputs(new ArrayList<>());
-    }
+    Neuron getNextChild();
+
+    /**
+     * Return the next parent INeuron.
+     * 
+     * @return
+     *      the next parent INeuron 
+     *      and increment the parent id counter
+     */
+    Neuron getNextParent();
+
+    /**
+     * Reset the weights of all OUTPUT weight values to
+     * a uniform randomly distributed value between [-1,1].
+     */
+    void reset();
     
-    @Override
-    public final ILink addInputLink(
-            final INeuron inode, final Double weight) {
-        this.inputLinks.add(++numInputLinks, new Link(this, inode, weight));
-        return inputLinks.get(numInputLinks);
-    }
-
-    @Override
-    public final ILink addInputLink(final INeuron inode) {
-        return addInputLink(inode, Math.random());
-    }
-
-    @Override
-    public final ILink getInputLink(final int linkId) {
-        return inputLinks.get(linkId);
-    }
-
-    @Override
-    public final ILink[] getInputLinks(final int... ids) {
-        ArrayList<ILink> temp = new ArrayList<>();
-        
-        for (int j : ids) {
-            temp.add(getInputLink(j));
-        }
-        
-        ILink[] t = new ILink[0];
-        return temp.toArray(t);
-    }
+    /**
+     * Sets the activation function which this neuron
+     * will use.
+     * 
+     * @param f
+     *      the IActivationFunction to use
+     */
+    void setActivationFunction(ActivationFunction f);
     
-    @Override
-    public final ILink[] getInputLinks() {
-        ILink[] t = new ILink[0];
-        return inputLinks.toArray(t);
-    }
-    
-    @Override
-    public final NeuronType getType() {
-        return type;
-    }
-    
-    @Override
-    public final void setType(final NeuronType t) {
-        this.type = t;
-    }
-    
-    @Override
-    public final INeuron getNextParent() {
-        return getInputLink(++idParentCounter).getTail();
-    }
-    
-    @Override
-    public final INeuron getNextChild() {
-        return getOutputLink(++idChildCounter).getTail();
-    }
+    /**
+     * Get the activation function for this INeuron.
+     * 
+     * @return
+     *      the IActivationFunction of this INeuron
+     */
+    ActivationFunction getActivationFunction();
 
-    @Override
-    public final ILink addOutputLink(
-            final INeuron inode, final Double weight) {
-        ILink l = new Link(this, inode, weight);
-        this.getOutputs().add(++numOutputLinks, l);
-        inode.addInputLink(this, weight);
-        return getOutputs().get(numOutputLinks);
-    }
+    /**
+     * Cause this neuron to activate,
+     * sum up all the inputs * weights, and then
+     * run them through the IActivationFunction finally
+     * update the weights of the output links.
+     * 
+     * @param v
+     *      the value to be fed forward to the next neuron
+     * @param nnctx
+     * 		the neural network context to be passed along.
+     * @return output value.
+     */
+    Double feedforward(Double v, NeuralNetContext nnctx);
 
-    @Override
-    public final ILink addOutputLink(final INeuron inode) {
-        return addOutputLink(inode, Math.random());
-    }
-
-    @Override
-    public final ILink getOutputLink(final int linkId) {
-        return getOutputs().get(linkId);
-    }
-
-    @Override
-    public final ILink[] getOutputLinks(final int... ids) {
-        ArrayList<ILink> temp = new ArrayList<>();
-        
-        for (int j : ids) {
-            temp.add(getOutputLink(j));
-        }
-        
-        ILink[] t = new ILink[0];
-        return temp.toArray(t);
-    }
-    
-    @Override
-    public final ILink setInputLink(final int i, final ILink l) {
-        ILink r = getInputLink(i);
-        inputLinks.set(i, l);
-        return r;
-    }
-
-    @Override
-    public final ILink[] setInputLinks(final ILink[] links) {
-        ILink[] oldLinks = inputLinks.toArray(new ILink[0]);
-        inputLinks.clear();
-        Collection<ILink> c = Arrays.asList(links);
-        inputLinks.addAll(c);
-        return oldLinks;
-    }
-
-    @Override
-    public final ILink setOutputLink(final int i, final ILink l) {
-        ILink r = getOutputLink(i);
-        getOutputs().set(i, l);
-        return r;
-    }
-
-    @Override
-    public final ILink[] setOutputLinks(final ILink[] links) {
-        ILink[] oldLinks = getOutputs().toArray(new ILink[0]);
-        getOutputs().clear();
-        Collection<ILink> c = Arrays.asList(links);
-        getOutputs().addAll(c);
-        return oldLinks;
-    }
-    
-    @Override
-    public final ILink[] getOutputLinks() {
-        ILink[] t = new ILink[0];
-        return getOutputs().toArray(t);
-    }
-
-    @Override
-    public final void reset() {
-        for (ILink i : getOutputs()) {
-            i.setWeight(Math.random());
-        }
-    }
-
-    @Override
-    public final void setActivationFunction(final IActivationFunction f) {
-        this.function = (SigmoidFunction) f;
-    }
-
-    @Override
-    public final IActivationFunction getActivationFunction() {
-        return function;
-    }
-
-    @Override
-    public final Double getValue() {
-        return value;
-    }
-
-    @Override
-    public final void setValue(final Double v) {
-        this.value = v;
-    }
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(function, inputLinks, numInputLinks, numOutputLinks, outputLinks, type, value);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Neuron other = (Neuron) obj;
-		return Objects.equals(function, other.function) && Objects.equals(inputLinks, other.inputLinks)
-				&& numInputLinks == other.numInputLinks && numOutputLinks == other.numOutputLinks
-				&& Objects.equals(outputLinks, other.outputLinks) && type == other.type
-				&& Objects.equals(value, other.value);
-	}
+    /**
+     * Calculate the error.
+     * 
+     * @return
+     * 		the 1/2 MSE.
+     */
+	Double getError();
 
 	/**
-     * @return the inputLinks
-     */
-    public final List<ILink> getInputs() {
-        return inputLinks;
-    }
-
-    /**
-     * @param inputLink
-     *      the inputLinks to set
-     */
-    public final void setInputs(final List<ILink> inputLink) {
-    	if (inputLink == null || inputLink.isEmpty()) {
-    		LOGGER.warn("Input link array is empty or null.");
-    	}
-        this.inputLinks = inputLink;
-    }
-
-    /**
-     * @return the outputLinks
-     */
-    public final List<ILink> getOutputs() {
-        return outputLinks;
-    }
-
-    /**
-     * @param outputLink
-     *      the outputLinks to set
-     */
-    public final void setOutputs(final List<ILink> outputLink) {
-        this.outputLinks = outputLink;
-    }
+	 * Propagate the error of this node to all its children.
+	 * 
+	 * @param error
+	 * 		the error to propagate.
+	 * @return
+	 * 		propagated error value.
+	 */
+	Double propagateError(Double error);
+	
+	@Override
+	int hashCode();
+	
+	@Override
+	boolean equals(Object o);
 }

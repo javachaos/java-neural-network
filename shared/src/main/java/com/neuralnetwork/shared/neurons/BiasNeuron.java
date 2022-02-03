@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.neurons;
 
-import com.neuralnetwork.shared.network.INeuralNetContext;
+import com.neuralnetwork.shared.network.NeuralNetContext;
 
 /**
  * Represents a bias neuron who's value is always 1.
@@ -19,8 +19,8 @@ import com.neuralnetwork.shared.network.INeuralNetContext;
  * @author fredladeroute
  *
  */
-public class BiasNeuron extends Neuron 
-        implements IInputNeuron, IHiddenNeuron, IOutputNeuron {
+public class BiasNeuron extends NeuronImpl
+        implements InputNeuron, HiddenNeuron, OutputNeuron {
 
     /**
      * Constructs a new bias neuron.
@@ -30,13 +30,13 @@ public class BiasNeuron extends Neuron
     }
 
     @Override
-	public final Double feedforward(final INeuralNetContext nnctx) {
+	public final Double feedforward(final NeuralNetContext nnctx) {
 		return 0.0;        
     }
 
     @Override
 	public final Double feedforward(final Double v,
-    		final INeuralNetContext nnctx) {
+    		final NeuralNetContext nnctx) {
 	    return 0.0;
     }
 

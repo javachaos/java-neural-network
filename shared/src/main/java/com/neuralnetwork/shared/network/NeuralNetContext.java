@@ -10,45 +10,35 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.network;
 
+
 /**
- * Neural network context, stores a reference to the network.
- * Intended to be pass around during training.
- * @author fred
- *
+ * Represents a NeuralNetContext which stores a reference to the network.
+ * 
+ * @author fredladeroute
+ * 
  */
-public class NeuralNetContext implements INeuralNetContext {
+public interface NeuralNetContext {
+
+    /**
+     * Get a reference to the network.
+     * @return
+     *      a reference to the network
+     */
+    Network getNetwork();
     
     /**
-     * The network reference.
+     * Return true if is processing.
+     * 
+     * @return
+     * 		true if is running.
      */
-    private final INetwork network;
-    
+    boolean isRunning();
+
     /**
-     * True if the network is processing.
+     * Set isRunning marker.
+     * 
+     * @param b
+     * 		the boolean value to set isRunning to.
      */
-    private boolean isRunning;
-    
-    /**
-     * Create a new neuralnet context with network n.
-     * @param n
-     *      the network for this context.
-     */
-    public NeuralNetContext(final INetwork n) {
-        this.network = n;
-    }
-
-    @Override
-    public final INetwork getNetwork() {
-        return network;
-    }
-
-	@Override
-	public final boolean isRunning() {
-		return isRunning;
-	}
-
-	@Override
-	public final void setRunning(final boolean running) {
-		this.isRunning = running;
-	}
+	void setRunning(boolean b);
 }

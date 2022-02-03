@@ -5,10 +5,10 @@ import com.neuralnetwork.shared.training.TrainSample;
 
 public class BackPropNetworkTrainer {
 
-    private final INetwork networkUnderTrain;
+    private final Network networkUnderTrain;
     private boolean isTraining;
 
-    public BackPropNetworkTrainer(final INetwork n) {
+    public BackPropNetworkTrainer(final Network n) {
         this.networkUnderTrain = n;
     }
 

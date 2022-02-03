@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.functions.FunctionType;
-import com.neuralnetwork.shared.functions.IActivationFunction;
+import com.neuralnetwork.shared.functions.BaseFunction;
 import com.neuralnetwork.shared.functions.SigmoidFunction;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -97,8 +97,8 @@ class SigmoidFunctionTest {
      */
     @Test
     final void testGetFunctionType() {
-        IActivationFunction f = new SigmoidFunction();
-        FunctionType t = f.getFunctionType();
+        BaseFunction f = new SigmoidFunction();
+        FunctionType t = f.getType();
         assertEquals(FunctionType.SIGMOID, t);
     }
     
@@ -108,8 +108,8 @@ class SigmoidFunctionTest {
      */
     @Test
     final void testEquals() {
-        IActivationFunction f = new SigmoidFunction();
-        IActivationFunction f1 = new SigmoidFunction();
+        BaseFunction f = new SigmoidFunction();
+        BaseFunction f1 = new SigmoidFunction();
 
         assertEquals(f, f1);
         assertEquals(f, f);
@@ -125,8 +125,8 @@ class SigmoidFunctionTest {
      */
     @Test
     final void testHashCode() {
-        IActivationFunction f = new SigmoidFunction();
-        IActivationFunction f1 = new SigmoidFunction();
+        BaseFunction f = new SigmoidFunction();
+        BaseFunction f1 = new SigmoidFunction();
         
         assertEquals(f.hashCode(), f1.hashCode());
         assertEquals(f.hashCode(), f.hashCode());
@@ -142,7 +142,7 @@ class SigmoidFunctionTest {
      */
     private void testValue(final double input, final double expected) {
         LOGGER.debug("===== Sigmoid Function Test. =====");
-        IActivationFunction f = new SigmoidFunction();
+        BaseFunction f = new SigmoidFunction();
         double v = f.activate(input);
         LOGGER.debug(" Input: " + input);
         LOGGER.debug(" Value: " + v);
@@ -162,7 +162,7 @@ class SigmoidFunctionTest {
     private void testDerivativeValue(final double input, 
     		final double expected) {
         LOGGER.debug("===== Sigmoid Derivative Test. =====");
-        IActivationFunction f = new SigmoidFunction();
+        BaseFunction f = new SigmoidFunction();
         double v = f.derivative(input);
         LOGGER.debug(" Input: " + input);
         LOGGER.debug(" Value: " + v);

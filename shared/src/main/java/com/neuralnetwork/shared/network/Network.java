@@ -10,330 +10,152 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.network;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.stream.IntStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.neuralnetwork.shared.layers.HiddenLayer;
-import com.neuralnetwork.shared.layers.IHiddenLayer;
-import com.neuralnetwork.shared.layers.IInputLayer;
-import com.neuralnetwork.shared.layers.ILayer;
-import com.neuralnetwork.shared.layers.IOutputLayer;
 import com.neuralnetwork.shared.layers.InputLayer;
 import com.neuralnetwork.shared.layers.OutputLayer;
-import com.neuralnetwork.shared.neurons.IHiddenNeuron;
-import com.neuralnetwork.shared.neurons.IInputNeuron;
-import com.neuralnetwork.shared.neurons.INeuron;
-import com.neuralnetwork.shared.neurons.IOutputNeuron;
+import com.neuralnetwork.shared.neurons.InputNeuron;
+import com.neuralnetwork.shared.neurons.Neuron;
+import com.neuralnetwork.shared.neurons.OutputNeuron;
 import com.neuralnetwork.shared.training.TrainType;
-import com.neuralnetwork.shared.util.Connections;
 
 /**
- * Represents a neural network structure.
+ * Represents an Artificial neural network of INodes.
+ * 
+ * @author fredladeroute
+ * 
  *
  */
-public final class Network implements INetwork {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Network.class);
-    private IInputLayer inputLayer;
-    private final ConcurrentMap<Integer, IHiddenLayer> layers;
-    private IOutputLayer outputLayer;
-    private int height = 0;
-    private final int numInputs;
-    private final int numOutputs;
-    private int numHidden;
-	private int[] layerSizes;
-	private final INeuralNetContext nnctx;
-	private TrainType trainAlgorithm = TrainType.BACKPROP;
+public interface Network {
     
     /**
-     * Construct a 2d neural network.
-     * With {@link TrainType#RPROP}
-     * as the default training algorithm.
+     * Run inputs through the network.
      * 
-     * @param numIn
-     *      the number of inputs to the network
-     *      
-     * @param numOut
-     *      the number of outputs from the network
-     *      
-     * @param numHide
-     *      the number of hidden layers in the network
-     *      
-     * @param sizes
-     * 		the sizes of each hidden layer respectively.
+     * @param inputLayer
+     *      the values to provide to the input layer
+     * 
+     * @return
+     *      the output values of the neural net
      */
-    public Network(final int numIn, final int numOut, 
-                final int numHide, final int[] sizes) {
-        
-    	if (numHide < 0) {
-        	throw new IllegalArgumentException(
-        			"Error cannot have negative amount of hidden layers.");
-        } else if (numIn < 0) {
-        	throw new IllegalArgumentException(
-        			"Error cannot have negative amount of input layers.");
-        } else if (numOut < 0) {
-        	throw new IllegalArgumentException(
-        			"Error cannot have negative amount of output layers.");
-        }
-        this.numInputs = numIn;
-        this.numOutputs = numOut;
-        this.numHidden = numHide;
-        this.height = numHide + 2;
-        this.layerSizes = sizes;
-        this.inputLayer = new InputLayer(numInputs);
-        this.outputLayer = new OutputLayer(numOutputs);
-        this.layers = new ConcurrentHashMap<>();
-        this.nnctx = new NeuralNetContext(this);
-    }
+	List<Double> runInputs(final List<Double> inputLayer);
     
     /**
-     * Construct a 2d neural network.
+     * Reset the network effectively,
+     * changes all weight values to a random value between [0,1].
+     */
+    void reset();
+    
+    /**
+     * Adds a hidden layer to the network at l.getIntex()
      * 
-     * @param numIn
-     *      the number of inputs to the network
+     * @param l
+     *      the layer to be added to the network
+     */
+    void addHiddenLayer(HiddenLayer l);
+    
+    /**
+     * Get the hidden layer at height i of the network,
+     * where the first hidden layer is 0 and the last hidden
+     * layer is getHeight() - 1.
+     * 
+     * @param i
+     *      the index to the hidden layer to get
+     * @return
+     *      the IHiddenLayer at index i
+     */
+    HiddenLayer getHiddenLayer(int i);
+    
+    /**
+     * Get the output layer of this network.
+     * 
+     * @return
+     *      the output layer of this network
+     */
+    OutputLayer getOutputLayer();
+    
+    /**
+     * Set the output layer for this network.
+     * 
+     * @param l
+     *      the output layer to be set
+     */
+    void setOutputLayer(OutputLayer l);
+    
+    /**
+     * Get an INeuron from the INetwork.
+     * 
+     * @param x
+     *      the x co-ordinate of the INetwork
      *      
-     * @param numOut
-     *      the number of outputs from the network
+     * @param y
+     *      the y co-ordinate of the INetwork
      *      
-     * @param numHide
-     *      the number of hidden layers in the network
-     *      
-     * @param sizes
-     * 		the sizes of each hidden layer respectively.
+     * @return
+     *      the INeuron at (x,y) in this INetwork
+     *      where x is the position of the neuron at layer y
+     *      in the INetwork.
+     */
+    Neuron getNeuron(int x, int y);
+
+    /**
+     * Get the height of the network.
+     * 
+     * @return
+     *      the height of this network
+     */
+    int getHeight();
+    
+    /**
+     * Get a neuron from this networks output layer.
+     * 
+     * @param x
+     *      the position of the neuron to get
+     * @return
+     *      the INeuron at position x
+     */
+    OutputNeuron getOutputNeuron(int x);
+    
+    /**
+     * Get a neuron from this networks input layer.
+     * 
+     * @param x
+     *      the position of the neuron in the input layer to get
+     * @return
+     *      the neuron at position x in the input layer
+     */
+    InputNeuron getInputNeuron(int x);
+    
+    /**
+     * Get the input layer to this network.
+     * 
+     * @return 
+     *      the inputLayer
+     */
+    InputLayer getInputLayer();
+    
+    /**
+     * Set the input layer of this network.
+     * 
+     * @param l
+     *      the inputLayer to set
+     */
+    void setInputLayer(final InputLayer l);
+    
+    /**
+     * Set the desired training algorithm.
      * 
      * @param t
-     * 		the training algorithm for the network
+     * 		the training algorithm to be used.
      */
-    public Network(final int numIn, final int numOut,
-                final int numHide, final int[] sizes,
-                final TrainType t) {
-    	this(numIn, numOut, numHide, sizes);
-    	this.setTrainingAlgorithm(t);
-    }
+    void setTrainingAlgorithm(final TrainType t);
     
     /**
-     * Construct a 2d neural network.
-     * With {@link TrainType#RPROP}
-     * as the default training algorithm.
-     * Note: No hidden layers are created.
+     * Build the neural network.
      * 
-     * @param numIn
-     *      the number of inputs to the network
-     *      
-     * @param numOut
-     *      the number of outputs from the network
+     * 1. Construct all Neurons in each layer.
+     * 2. Construct all the links connecting all layers
      */
-    public Network(final int numIn, final int numOut) {
-        this.numInputs = numIn;
-        this.numOutputs = numOut;
-        this.inputLayer = new InputLayer(numInputs);
-        this.outputLayer = new OutputLayer(numOutputs);
-        this.layers = new ConcurrentHashMap<>();
-        this.nnctx = new NeuralNetContext(this);
-    }
-    
-    /**
-     * Construct a 2d neural network.
-     * Note: No hidden layers are created.
-     * 
-     * @param numIn
-     *      the number of inputs to the network
-     *      
-     * @param numOut
-     *      the number of outputs from the network
-     *      
-     * @param t
-     * 		the training algorithm for the network
-     */
-    public Network(final int numIn, final int numOut,
-    		final TrainType t) {
-    	this(numIn, numOut);
-    	this.setTrainingAlgorithm(t);
-    }
+    void build();
 
-    @Override
-    public INeuron getNeuron(final int x, final int y) {
-
-        if (x < 0 || y < 0 || x == Integer.MAX_VALUE || y == Integer.MAX_VALUE) {
-            return null;
-        }
-        int n = x + 1;
-        if (y == 0) {
-            return getInputNeuron(x);
-        } else if (y < getHeight() - 1) {
-            return layers.get(y - 1).getNeuron(n);
-        } else if (y == getHeight() - 1) {
-            return getOutputNeuron(x);
-        }
-        
-        return null;
-    }
-
-    @Override
-    public IOutputNeuron getOutputNeuron(final int x) {
-        if (x < 0) {
-            return null;
-        }
-        return getOutputLayer().getNeuron(x + 1);
-    }
-
-    @Override
-    public IInputNeuron getInputNeuron(final int x) {
-        if (x < 0) {
-            return null;
-        }
-        return getInputLayer().getNeuron(x + 1);
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
-    }
-
-    @Override
-    public synchronized List<Double> runInputs(final List<Double> l) {
-        nnctx.setRunning(true);
-    	if (l.size() != inputLayer.getSize()) {
-    		LOGGER.error("Input vector does not have correct "
-    				+ "dimension to be run through this network.");
-    		return new ArrayList<>();
-    	}
-    	getInputLayer().addValues(l);
-        IOutputLayer ol = getInputLayer().propagate(nnctx);
-        nnctx.setRunning(false);
-        return ol.getOutputValues();
-    }
-
-    @Override
-    public void reset() {
-        LOGGER.debug("Resetting the network.");
-
-        for (ILayer<IHiddenNeuron> l : layers.values()) {
-            for (IHiddenNeuron iHiddenNeuron : l) {
-                iHiddenNeuron.reset();
-            }
-        }
-    }
-
-    /**
-     * Get the training algorithm.
-	 * @return the trainAlgorithm
-	 */
-	public TrainType getTrainAlgorithm() {
-		return trainAlgorithm;
-	}
-
-	/**
-	 * Set the training algorithm.
-	 * 
-	 * @param t 
-	 * 		the trainAlgorithm to set
-	 */
-	public void setTrainingAlgorithm(
-			final TrainType t) {
-		this.trainAlgorithm = t;
-	}
-
-	@Override
-    public IOutputLayer getOutputLayer() {
-        return outputLayer;
-    }
-    
-    @Override
-    public void setOutputLayer(final IOutputLayer l) {
-        this.outputLayer = l;
-    }
-
-    @Override
-    public void addHiddenLayer(final IHiddenLayer l) {
-    	l.build();
-        layers.put(l.getIndex(), l);
-    }
-
-    @Override
-    public IHiddenLayer getHiddenLayer(final int i) {
-        return layers.get(i);
-    }
-
-    @Override
-    public IInputLayer getInputLayer() {
-        return inputLayer;
-    }
-
-    @Override
-    public void setInputLayer(final IInputLayer l) {
-        this.inputLayer = l;
-    }
-
-    @Override
-    public void build() {
-    	Connections c = Connections.getInstance();
-		Deque<IHiddenLayer> temp = new LinkedBlockingDeque<>();
-        for (IHiddenLayer hiddenNeurons : layers.values()) {
-            temp.push(hiddenNeurons);
-        }
-        IntStream.range(0, numHidden).parallel().forEach(i -> {
-            IHiddenLayer h = new HiddenLayer(layerSizes[i], i);
-            h.build();
-            layers.put(h.getIndex(), h);
-        });
-		while (!temp.isEmpty()) {
-            IHiddenLayer l = temp.pop();
-            layers.put(l.getIndex(), l);
-		}
-        inputLayer.build();
-        for (IHiddenLayer iHiddenNeurons : layers.values()) {
-            iHiddenNeurons.build();
-        }
-        outputLayer.build();
-        
-        if (!layers.isEmpty()) {
-	        //Connect input layer to first hidden layer.
-	        c.create(inputLayer, layers.get(0));
-	        
-	        //Connect each hidden layer to its child hidden layer.
-	        if (layers.size() >= 2) {
-                Iterator<IHiddenLayer> i = layers.values().iterator();
-	            while (i.hasNext()) {
-	                IHiddenLayer layer = i.next();
-	                if (i.hasNext()) {
-	                    c.create(layer, i.next());
-	                }
-	            }
-	        }
-	        //Connect the output layer to the last hidden layer.
-	        c.create(outputLayer, layers.get(layers.size() - 1));
-        } else {
-        	c.create(inputLayer, outputLayer);
-        }
-    }
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        for (IInputNeuron iInputNeuron : inputLayer) {
-            sb.append(iInputNeuron.toString());
-        }
-        sb.append("\n");
-        for (IHiddenLayer iHiddenNeurons : layers.values()) {
-            for (IHiddenNeuron iHiddenNeuron : iHiddenNeurons) {
-                sb.append(iHiddenNeuron);
-            }
-            sb.append("\n");
-        }
-        for (IOutputNeuron iOutputNeuron : outputLayer) {
-            sb.append(iOutputNeuron.toString());
-        }
-        sb.append("\n");
-        return sb.toString();
-    }    
 }

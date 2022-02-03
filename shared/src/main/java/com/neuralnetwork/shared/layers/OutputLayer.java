@@ -10,57 +10,22 @@
  ******************************************************************************/
 package com.neuralnetwork.shared.layers;
 
-import java.io.Serial;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.neuralnetwork.shared.network.LayerType;
-import com.neuralnetwork.shared.neurons.BiasNeuron;
-import com.neuralnetwork.shared.neurons.IOutputNeuron;
 import com.neuralnetwork.shared.neurons.OutputNeuron;
 
 /**
- * Represents an output layer of a network.
+ * Output layer.
  * 
  * @author fredladeroute
  *
  */
-public class OutputLayer extends Layer<IOutputNeuron> implements IOutputLayer {
-
-    @Serial
-    private static final long serialVersionUID = -6278154162004288836L;
-
+public interface OutputLayer extends Layer<OutputNeuron>, Buildable {
+    
     /**
-     * Construct a new Output layer.
-     * 
-     * @param w
-     *      the length of the layer
+     * Return the output values of the network.
+     * @return
+     *      the output values of the network
      */
-    public OutputLayer(final int w) {
-        super(w + 1);
-        add(new BiasNeuron());
-        super.setLayerType(LayerType.OUTPUT);
-    }
-
-    @Override
-    public final void build() {
-        while (getWidth() != size()) {
-            add(new OutputNeuron());
-        }
-    }
-
-	@Override
-    public final int getSize() {
-		return size() - 1;
-	}
-
-    @Override
-    public final List<Double> getOutputValues() {
-    	List<Double> v = new ArrayList<>();
-        for (int i = 0; i < getSize(); i++) {
-            v.add(getNeuron(i).getValue());
-        }
-        return v;
-    }
-
+	List<Double> getOutputValues();
 }
