@@ -41,13 +41,12 @@ public interface Neuron {
      * 
      * @param n
      *      the neuron to connect to.
-     *      
-     * @param weight 
+     *
+     * @param weight
      *      the weight value of this connection.
-     * 
-     * @return a new link.
+     *
      */
-    Link addInputLink(Neuron n, double weight);
+    void addInputLink(Neuron n, double weight);
     
     /**
      * Adds a link from this neuron tp neuron n
@@ -56,10 +55,9 @@ public interface Neuron {
      * 
      * @param n
      *      the neuron to connect to.
-     * 
-     * @return a new link.
+     *
      */
-    Link addInputLink(Neuron n);
+    void addInputLink(Neuron n);
     
     /**
      * Set the input link at i to be l.
@@ -67,20 +65,16 @@ public interface Neuron {
      *      the index of the link to be set
      * @param l
      *      the new link to be set
-     * @return
-     *      the old link.
      */
-    Link setInputLink(int i, Link l);
+    void setInputLink(int i, Link l);
     
     /**
      * Set the input links for this neuron.
      * 
      * @param links
      *      the links to be set
-     * @return
-     *      the old input links
      */
-    Link[] setInputLinks(Link[] links);
+    void setInputLinks(Link[] links);
     
     /**
      * Get a link by the id of the other neuron.
@@ -119,13 +113,12 @@ public interface Neuron {
      * 
      * @param n
      *      the node to connect to.
-     *      
+     *
      * @param weight
      *      the weight value of this connection.
-     * 
-     * @return a new link.
+     *
      */
-    Link addOutputLink(Neuron n, double weight);
+    void addOutputLink(Neuron n, double weight);
     
     /**
      * Adds a link from this neuron to n
@@ -134,35 +127,30 @@ public interface Neuron {
      * 
      * @param n
      *      the node to connect to.
-     * 
-     * @return a new link.
+     *
      * 
      */
-    Link addOutputLink(Neuron n);
+    void addOutputLink(Neuron n);
     
     /**
      * Set the output link at i to be l.
      * 
      * @param i
      *      the index to the output link to be set
-     * 
+     *
      * @param l
      *      the new link to be set
-     * 
-     * @return
-     *      the old output link
+     *
      */
-    Link setOutputLink(int i, Link l);
+    void setOutputLink(int i, Link l);
     
     /**
      * Set the output links of this neuron.
      * @param links
      *      the new links to be set
-     *      
-     * @return
-     *      the old output links array
+     *
      */
-    Link[] setOutputLinks(Link[] links);
+    void setOutputLinks(Link[] links);
     
     /**
      * Get a link by the id of the other neuron.
@@ -276,10 +264,8 @@ public interface Neuron {
 	 * 
 	 * @param error
 	 * 		the error to propagate.
-	 * @return
-	 * 		propagated error value.
-	 */
-	double propagateError(double error);
+     */
+	void propagateError(double error);
 	
 	@Override
 	int hashCode();

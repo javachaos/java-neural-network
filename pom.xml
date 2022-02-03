@@ -5,9 +5,9 @@
     <version>0.0.1</version>
     <packaging>pom</packaging>
     <name>Java Neural Network</name>
-    <description>A Java based neural neuralNetwork library.</description>
+    <description>A Java based neural network library.</description>
 
-    <url>http://javachaos.github.io/java-neural-neuralNetwork</url>
+    <url>http://javachaos.github.io/java-neural-network</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,7 +17,7 @@
 
     <organization>
         <name>Alfred</name>
-        <url>https://github.com/java-neural-neuralNetwork/</url>
+        <url>https://github.com/java-neural-network/</url>
     </organization>
 
     <developers>
@@ -28,14 +28,14 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com:javachaos/java-neural-neuralNetwork</connection>
-        <developerConnection>scm:git:https://github.com/javachaos/java-neural-neuralNetwork</developerConnection>
-        <url>https://github.com/javachaos/java-neural-neuralNetwork</url>
+        <connection>scm:git:https://github.com:javachaos/java-neural-network</connection>
+        <developerConnection>scm:git:https://github.com/javachaos/java-neural-network</developerConnection>
+        <url>https://github.com/javachaos/java-neural-network</url>
     </scm>
 
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/javachaos/java-neural-neuralNetwork/issues</url>
+        <url>https://github.com/javachaos/java-neural-network/issues</url>
     </issueManagement>
     <modules>
         <module>opencl</module>
@@ -103,36 +103,6 @@
                         <version>5.0.3</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.7.3</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.pitest</groupId>
-                        <artifactId>pitest-junit5-plugin</artifactId>
-                        <version>0.15</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <avoidCallsTo>
-                        <avoidCallsTo>java.util.logging</avoidCallsTo>
-                        <avoidCallsTo>org.apache.log4j</avoidCallsTo>
-                        <avoidCallsTo>org.slf4j</avoidCallsTo>
-                        <avoidCallsTo>org.apache.commons.logging</avoidCallsTo>
-                    </avoidCallsTo>
-                    <mutators>
-                        <mutator>CONSTRUCTOR_CALLS</mutator>
-                        <mutator>NON_VOID_METHOD_CALLS</mutator>
-                    </mutators>
-                    <targetClasses>
-                        <param>com.neuralnetwork.shared.*</param>
-                    </targetClasses>
-                    <targetTests>
-                        <param>com.neuralnetwork.shared.tests.*</param>
-                    </targetTests>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -109,15 +109,14 @@ public abstract class NeuronImpl implements Neuron {
     }
     
     @Override
-    public final Link addInputLink(
+    public final void addInputLink(
             final Neuron inode, final double weight) {
         this.inputLinks.add(++numInputLinks, new BasicLink(this, inode, weight));
-        return inputLinks.get(numInputLinks);
     }
 
     @Override
-    public final Link addInputLink(final Neuron inode) {
-        return addInputLink(inode, Math.random());
+    public final void addInputLink(final Neuron inode) {
+        addInputLink(inode, Math.random());
     }
 
     @Override
@@ -164,17 +163,16 @@ public abstract class NeuronImpl implements Neuron {
     }
 
     @Override
-    public final Link addOutputLink(
+    public final void addOutputLink(
             final Neuron inode, final double weight) {
         Link l = new BasicLink(this, inode, weight);
         this.getOutputs().add(++numOutputLinks, l);
         inode.addInputLink(this, weight);
-        return getOutputs().get(numOutputLinks);
     }
 
     @Override
-    public final Link addOutputLink(final Neuron inode) {
-        return addOutputLink(inode, Math.random());
+    public final void addOutputLink(final Neuron inode) {
+        addOutputLink(inode, Math.random());
     }
 
     @Override
@@ -195,35 +193,31 @@ public abstract class NeuronImpl implements Neuron {
     }
     
     @Override
-    public final Link setInputLink(final int i, final Link l) {
+    public final void setInputLink(final int i, final Link l) {
         Link r = getInputLink(i);
         inputLinks.set(i, l);
-        return r;
     }
 
     @Override
-    public final Link[] setInputLinks(final Link[] links) {
+    public final void setInputLinks(final Link[] links) {
         Link[] oldLinks = inputLinks.toArray(new Link[0]);
         inputLinks.clear();
         Collection<Link> c = Arrays.asList(links);
         inputLinks.addAll(c);
-        return oldLinks;
     }
 
     @Override
-    public final Link setOutputLink(final int i, final Link l) {
+    public final void setOutputLink(final int i, final Link l) {
         Link r = getOutputLink(i);
         getOutputs().set(i, l);
-        return r;
     }
 
     @Override
-    public final Link[] setOutputLinks(final Link[] links) {
+    public final void setOutputLinks(final Link[] links) {
         Link[] oldLinks = getOutputs().toArray(new Link[0]);
         getOutputs().clear();
         Collection<Link> c = Arrays.asList(links);
         getOutputs().addAll(c);
-        return oldLinks;
     }
     
     @Override

@@ -51,8 +51,7 @@ public class BiasNeuron extends NeuronImpl
 	}
 
 	@Override
-	public final double propagateError(final double e) {
-		return 0.0;
-	}
+	public final void propagateError(final double e) {
+    }
 
 }

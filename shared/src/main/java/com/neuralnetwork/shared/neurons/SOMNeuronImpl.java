@@ -154,9 +154,6 @@ public class SOMNeuronImpl implements SOMNeuron {
         }
     }
 
-    /**
-     * @return the neuralNetwork
-     */
     @Override
     public final Network getNeuralNetwork() {
         return neuralNetwork;
@@ -166,129 +163,104 @@ public class SOMNeuronImpl implements SOMNeuron {
     public double getValue() {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public void setValue(double v) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
-    public Link addInputLink(Neuron n, double weight) {
+    public void addInputLink(Neuron n, double weight) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
-    public Link addInputLink(Neuron n) {
+    public void addInputLink(Neuron n) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
-    public Link setInputLink(int i, Link l) {
+    public void setInputLink(int i, Link l) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
-    public Link[] setInputLinks(Link[] links) {
+    public void setInputLinks(Link[] links) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public Link getInputLink(int linkId) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public Link[] getInputLinks(int... ids) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public Link[] getInputLinks() {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
-    public Link addOutputLink(Neuron n, double weight) {
+    public void addOutputLink(Neuron n, double weight) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
-    public Link addOutputLink(Neuron n) {
+    public void addOutputLink(Neuron n) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
-    public Link setOutputLink(int i, Link l) {
+    public void setOutputLink(int i, Link l) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
-    public Link[] setOutputLinks(Link[] links) {
+    public void setOutputLinks(Link[] links) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public Link getOutputLink(int linkId) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public Link[] getOutputLinks(int... ids) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public Link[] getOutputLinks() {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
 	public final NeuronType getType() {
 		return TYPE;
 	}
-
     @Override
     public void setType(NeuronType t) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public Neuron getNextChild() {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public Neuron getNextParent() {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public void reset() {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public void setActivationFunction(ActivationFunction f) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public ActivationFunction getActivationFunction() {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public double feedforward(double v, NeuralNetContext neuralNetContext) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
     public double getError() {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
-
     @Override
-    public double propagateError(double error) {
+    public void propagateError(double error) {
         throw new UnsupportedOperationException(ConstStrings.UNSUPPORTED_SOM);
     }
 }

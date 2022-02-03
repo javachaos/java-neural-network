@@ -45,7 +45,6 @@ public class OpenCLNode extends NeuronImpl implements Neuron {
     }
 
     @Override
-    public final double propagateError(final double e) {
-        return 0.0;
+    public final void propagateError(final double e) {
     }
 }

@@ -18,26 +18,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A SOM Layer.
- * 
- * 
- *
  */
 public class SOMLayerImpl extends ArrayList<Double> implements SOMLayer {
-    
-    /**
-     * Logger instance.
-     */
+
     private static final Logger LOGGER =
     		LoggerFactory.getLogger(SOMLayerImpl.class);
 
     @Serial
     private static final long serialVersionUID = -8674168620850601954L;
 
-   /** 
-    * Creates a new instance of a SOM Layer.
-    */
-   public SOMLayerImpl() {
-   }
+    public SOMLayerImpl() {
+    }
    
    /**
     * Create a new instance of a SOM Layer

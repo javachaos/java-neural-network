@@ -43,15 +43,14 @@ public final class OutputNeuronImpl extends AbstractOutputNeuron {
     }
 
 	@Override
-	public double propagateError(final double e) {
+	public void propagateError(final double e) {
 		Link[] links = getInputLinks();
 		double error = e;
 		error = getActivationFunction().derivative(error);
 		for (Link il : links) {
 			il.getHead().propagateError(error);
 		}
-		return error;
-	}
+    }
 
 	@Override
 	public double getError() {

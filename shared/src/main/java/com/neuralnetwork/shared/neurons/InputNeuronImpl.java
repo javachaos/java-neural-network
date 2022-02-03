@@ -58,11 +58,10 @@ public class InputNeuronImpl extends AbstractInputNeuronImpl {
     }
 
 	@Override
-	public final double propagateError(final double e) {
+	public final void propagateError(final double e) {
 		double error = e;
 		error = getActivationFunction().derivative(error);
-		return error;
-	}
+    }
 
 	@Override
 	public final double getError() {

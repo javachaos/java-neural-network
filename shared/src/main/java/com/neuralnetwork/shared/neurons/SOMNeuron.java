@@ -14,9 +14,6 @@ import com.neuralnetwork.shared.network.Network;
 
 /**
  * Represents a SOM Neuron.
- * 
- * 
- *
  */
 public interface SOMNeuron extends Neuron {
 
