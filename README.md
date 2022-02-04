@@ -7,5 +7,6 @@ Work in progress.
 
 Code
 https://github.com/javachaos/java-neural-network/tree/develop/shared/src/main/java/com/neuralnetwork/shared
+
 Tests
-https://github.com/javachaos/java-neural-neuralNetwork/tree/develop/shared/src/test/java/com/neuralnetwork/shared/tests
+https://github.com/javachaos/java-neural-network/tree/develop/shared/src/test/java/com/neuralnetwork/shared/tests
