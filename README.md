@@ -6,7 +6,7 @@ Java based artificial neural neuralNetwork library. (Plan to use OpenCL to optim
 Work in progress.
 
 Code
-https://github.com/javachaos/java-neural-network/tree/develop/shared/src/main/java/com/neuralnetwork/shared
+https://github.com/javachaos/java-neural-network/tree/develop/shared/src/main/java/com/github/javachaos/javaneuralnetwork/shared
 
 Tests
-https://github.com/javachaos/java-neural-network/tree/develop/shared/src/test/java/com/neuralnetwork/shared/tests
+https://github.com/javachaos/java-neural-network/tree/develop/shared/src/test/java/com/github/javachaos/javaneuralnetwork/shared/tests
