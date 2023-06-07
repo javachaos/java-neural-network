@@ -12,6 +12,7 @@ package com.github.javachaos.javaneuralnetwork.shared.functions;
 
 public enum FunctionType {
 	SIGMOID,
+	RELU,
 	LINEAR,
 	NULL
 }

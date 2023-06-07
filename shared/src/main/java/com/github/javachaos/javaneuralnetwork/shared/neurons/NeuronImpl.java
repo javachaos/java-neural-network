@@ -11,13 +11,13 @@
 package com.github.javachaos.javaneuralnetwork.shared.neurons;
 
 import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.javachaos.javaneuralnetwork.shared.functions.ActivationFunction;
 import com.github.javachaos.javaneuralnetwork.shared.functions.SigmoidFunction;
 import com.github.javachaos.javaneuralnetwork.shared.links.BasicLink;
 import com.github.javachaos.javaneuralnetwork.shared.links.Link;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * An abstract Neuron class implements the INeuron interface.
@@ -30,7 +30,7 @@ public abstract class NeuronImpl implements Neuron {
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(NeuronImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(NeuronImpl.class);
     
     /**
      * The value for this neuron.

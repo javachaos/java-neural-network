@@ -1,8 +1,11 @@
 package com.github.javachaos.javaneuralnetwork.jbrain.exceptions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+/**
+ * Simple exception wrapper.
+ */
 public class JbrainException extends RuntimeException {
 
 	/**
@@ -13,8 +16,8 @@ public class JbrainException extends RuntimeException {
     /**
      * Logger instance.
      */
-    public static final Logger LOGGER = 
-            LoggerFactory.getLogger(JbrainException.class);
+    public static final Logger LOGGER =
+            LogManager.getLogger(JbrainException.class);
 	
 	/**
 	 * Default ctor.

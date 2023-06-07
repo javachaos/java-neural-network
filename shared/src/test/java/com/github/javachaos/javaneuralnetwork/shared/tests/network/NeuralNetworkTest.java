@@ -13,9 +13,9 @@ package com.github.javachaos.javaneuralnetwork.shared.tests.network;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.javachaos.javaneuralnetwork.shared.layers.HiddenLayer;
 import com.github.javachaos.javaneuralnetwork.shared.layers.HiddenNeuronLayer;
@@ -31,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NeuralNetworkTest {
 
-    private static final Logger LOGGER = 
-            LoggerFactory.getLogger(NeuralNetworkTest.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(NeuralNetworkTest.class);
     private static final double NN_INPUT_VALUE = 0.0321;
 
 	@Test
@@ -43,6 +43,7 @@ class NeuralNetworkTest {
 		assertNotNull(neuralNetwork);
 		NeuralNetwork n = new NeuralNetwork(3, 3, TrainType.BACKPROP);
 		assertNotNull(n);
+		LOGGER.debug(n.toString());
 	}
 
 	@Test

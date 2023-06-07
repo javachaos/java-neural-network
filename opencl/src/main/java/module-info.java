@@ -2,6 +2,6 @@ module opencl {
 	exports com.github.javachaos.javaneuralnetwork.opencl.node;
 
 	requires jocl;
-	requires org.slf4j;
+	requires org.apache.logging.log4j;
 	requires shared;
 }

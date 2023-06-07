@@ -8,6 +8,6 @@ module shared {
 	exports com.github.javachaos.javaneuralnetwork.shared.training;
 	exports com.github.javachaos.javaneuralnetwork.shared.values;
 	exports com.github.javachaos.javaneuralnetwork.shared.network;
-	
-	requires org.slf4j;
+
+	requires org.apache.logging.log4j;
 }

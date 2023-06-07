@@ -14,10 +14,9 @@ import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.javachaos.javaneuralnetwork.shared.util.ListUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a Training data set.
@@ -30,8 +29,8 @@ public class TrainingStack {
     /**
      * Logger instance.
      */
-    public static final Logger LOGGER = 
-            LoggerFactory.getLogger(TrainingStack.class);
+    public static final Logger LOGGER =
+            LogManager.getLogger(TrainingStack.class);
     
     /**
      * The raw data values.

@@ -10,13 +10,12 @@
  ******************************************************************************/
 package com.github.javachaos.javaneuralnetwork.shared.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.javachaos.javaneuralnetwork.shared.layers.HiddenLayer;
 import com.github.javachaos.javaneuralnetwork.shared.layers.HiddenNeuronLayer;
 import com.github.javachaos.javaneuralnetwork.shared.network.Network;
 import com.github.javachaos.javaneuralnetwork.shared.network.NeuralNetwork;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.stream.IntStream;
 
@@ -26,8 +25,8 @@ import java.util.stream.IntStream;
  */
 public final class NeuralNetBuilder {
 
-    private static final Logger LOGGER = 
-            LoggerFactory.getLogger(NeuralNetBuilder.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(NeuralNetBuilder.class);
 
     private Network network;
     

@@ -15,14 +15,13 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.javachaos.javaneuralnetwork.shared.network.LayerType;
 import com.github.javachaos.javaneuralnetwork.shared.network.NeuralNetContext;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.BiasNeuron;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.InputNeuron;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.InputNeuronImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents an Input layer to the network.
@@ -31,7 +30,7 @@ public final class InputNeuronLayer extends NeuronLayer<InputNeuron>
         implements InputLayer {
 
     private static final Logger LOGGER =
-    		LoggerFactory.getLogger(InputNeuronLayer.class);
+    		LogManager.getLogger(InputNeuronLayer.class);
 
     @Serial
     private static final long serialVersionUID = 7502031311250577255L;

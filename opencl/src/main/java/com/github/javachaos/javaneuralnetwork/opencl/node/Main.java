@@ -20,8 +20,8 @@ import org.jocl.cl_kernel;
 import org.jocl.cl_mem;
 import org.jocl.cl_platform_id;
 import org.jocl.cl_program;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static org.jocl.CL.*;
 
@@ -42,7 +42,7 @@ public final class Main {
      * Logger instance.
      */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(Main.class);
+            LogManager.getLogger(Main.class);
 
     /**
      * The number of memory objects to be created.

@@ -12,12 +12,12 @@ package com.github.javachaos.javaneuralnetwork.shared.training;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.javachaos.javaneuralnetwork.shared.neurons.SOMLatticeImpl;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.SOMLayerImpl;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.SOMNeuron;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * SOM Trainer responsible for training a SOM
@@ -26,8 +26,8 @@ import com.github.javachaos.javaneuralnetwork.shared.neurons.SOMNeuron;
  */
 public class SOMTrainer implements Runnable {
 	
-    private static final Logger LOGGER = 
-            LoggerFactory.getLogger(SOMTrainer.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(SOMTrainer.class);
 	
 	private final double initialLearningRate;
 	private final int numIterations;

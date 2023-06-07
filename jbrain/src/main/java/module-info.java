@@ -7,6 +7,6 @@ module jbrain {
 	exports com.github.javachaos.javaneuralnetwork.jbrain.vision;
 
 	requires java.desktop;
-	requires org.slf4j;
+	requires org.apache.logging.log4j;
 	requires shared;
 }

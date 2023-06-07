@@ -5,11 +5,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.javachaos.javaneuralnetwork.shared.network.BackPropNetworkTrainer;
 import com.github.javachaos.javaneuralnetwork.shared.network.Network;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -20,8 +19,8 @@ public class TrainNetworkTask {
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = 
-    		LoggerFactory.getLogger(TrainNetworkTask.class);
+    private static final Logger LOGGER =
+    		LogManager.getLogger(TrainNetworkTask.class);
 
 	/**
 	 * Network reference.

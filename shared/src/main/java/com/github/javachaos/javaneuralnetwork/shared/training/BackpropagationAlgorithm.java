@@ -5,14 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.javachaos.javaneuralnetwork.shared.network.Network;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.InputNeuron;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.OutputNeuron;
 import com.github.javachaos.javaneuralnetwork.shared.util.ErrorFunctions;
 import com.github.javachaos.javaneuralnetwork.shared.util.MathTools;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Backpropagation algorithm implementation.
@@ -21,8 +20,8 @@ public final class BackpropagationAlgorithm implements ITrainAlgorithm {
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = 
-    		LoggerFactory.getLogger(BackpropagationAlgorithm.class);
+    private static final Logger LOGGER =
+    		LogManager.getLogger(BackpropagationAlgorithm.class);
 	private final Network network;
 	private final Double expectedError;
 	private Double currError;

@@ -18,9 +18,8 @@ import com.github.javachaos.javaneuralnetwork.shared.util.NetworkConfig;
 import com.github.javachaos.javaneuralnetwork.shared.util.NeuralNetBuilder;
 import com.github.javachaos.javaneuralnetwork.shared.util.SimpleNetworkConfigs;
 import com.github.javachaos.javaneuralnetwork.shared.values.ConstStrings;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a SOM Neuron.
@@ -28,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public class SOMNeuronImpl implements SOMNeuron {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(SOMNeuronImpl.class);
+            LogManager.getLogger(SOMNeuronImpl.class);
     private SOMLayerImpl weights;
     private static final NeuronType TYPE = NeuronType.SOM;
     private final Network neuralNetwork;

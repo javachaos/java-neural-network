@@ -1,19 +1,14 @@
 package com.github.javachaos.javaneuralnetwork.core;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serial;
-import java.io.Serializable;
-import java.security.SecureRandom;
-import java.util.Random;
+import java.io.*;
+import java.util.Arrays;
+import java.util.SplittableRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.javachaos.javaneuralnetwork.shared.functions.SigmoidFunction;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Backpropagation Network.
@@ -21,79 +16,18 @@ import com.github.javachaos.javaneuralnetwork.shared.functions.SigmoidFunction;
  */
 public final class BackpropagationNetwork implements Serializable {
 
-    private static final transient Logger LOGGER =
-            LoggerFactory.getLogger(BackpropagationNetwork.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(BackpropagationNetwork.class);
 
     @Serial
     private static final long serialVersionUID = -8666581554984473793L;
+    private static final int PARALLEL_THRESHOLD = 10;
 
-    public enum TransferFunction {
-        NONE,
-        SIGMOID
-    }
-
-    /**
-     * Transfer functions.
-     *
-     */
-    static class TransferFunctions {
-
-        private TransferFunctions() {}
-
-        /**
-         * Evaluate the transfer function transferFunction.
-         * @param transferFunction
-         *         the transfer function to use.
-         *         
-         * @param input
-         *         the input data.
-         *         
-         * @return
-         *         the result of applying the
-         *         transfer function on the data.
-         */
-        public static double evaluate(
-        		final TransferFunction transferFunction,
-        		final double input) {
-            switch (transferFunction) {
-                case SIGMOID:
-                    return new SigmoidFunction().activate(input);
-                case NONE:
-                default:
-                    break;
-            }
-            return input;
-        }
-
-        /**
-         * Evaluate the derivative of the transfer function.
-         * @param transferFunction
-         *         the transfer function to use.
-         *         
-         * @param input
-         *         the input data.
-         *         
-         * @return
-         *         the derivative of the transfer function.
-         */
-        public static double evaluateDerivative(
-                final TransferFunction transferFunction,
-                final double input) {
-            switch (transferFunction) {
-                case SIGMOID:
-                    return new SigmoidFunction().derivative(input);
-                case NONE:
-                default:
-                    break;
-            }
-            return input;
-        }
-    }
 
     private int numLayers;
     private int inputSize;
     private int[] layerSize;
-    private TransferFunction[] transferFunction;
+    private TransferFunctions.TransferFunction[] transferFunction;
 
     private double[][] layerOutput;
     private double[][] layerInput;
@@ -102,8 +36,8 @@ public final class BackpropagationNetwork implements Serializable {
     private double[][] previousBiasDelta;
     private double[][][] weight;
     private double[][][] previousWeightDelta;
-    private int iterations = 0;
-    private static final int UPDATE_EVERY = 1000;
+    private AtomicInteger iterations = new AtomicInteger(0);
+    private static final int UPDATE_EVERY = 1;
 
     /**
      * Create and initialize new back-propagation network.
@@ -115,7 +49,7 @@ public final class BackpropagationNetwork implements Serializable {
      *         the array of transfer functions for each layer.
      */
     public BackpropagationNetwork(final int[] layerSizes,
-        final TransferFunction[] transferFunctions) {
+        final TransferFunctions.TransferFunction[] transferFunctions) {
         if (transferFunctions.length != layerSizes.length) {
             throw new IllegalArgumentException();
         }
@@ -124,7 +58,7 @@ public final class BackpropagationNetwork implements Serializable {
         layerSize = new int[numLayers];
 
         System.arraycopy(layerSizes, 1, layerSize, 0, numLayers);
-        transferFunction = new TransferFunction[numLayers];
+        transferFunction = new TransferFunctions.TransferFunction[numLayers];
         System.arraycopy(transferFunctions, 1, transferFunction, 0, numLayers);
 
         bias = new double[numLayers][];
@@ -156,9 +90,9 @@ public final class BackpropagationNetwork implements Serializable {
 
         // Init weights and bias.
         for (int l = 0; l < numLayers; l++) {
-            Random rand = new SecureRandom();
+            SplittableRandom rand = new SplittableRandom();
             for (int j = 0; j < layerSize[l]; j++) {
-                bias[l][j] = rand.nextGaussian();
+                bias[l][j] = 0.0000001 * rand.nextGaussian();
                 previousBiasDelta[l][j] = 0.0;
                 layerOutput[l][j] = 0.0;
                 layerInput[l][j] = 0.0;
@@ -166,7 +100,7 @@ public final class BackpropagationNetwork implements Serializable {
             }
             for (int i = 0; i < getLayer(l); i++) {
                 for (int j = 0; j < layerSize[l]; j++) {
-                    weight[l][i][j] = rand.nextGaussian();
+                    weight[l][i][j] = 0.01 * rand.nextGaussian();
                     previousWeightDelta[l][i][j] = 0.0;
                 }
             }
@@ -199,7 +133,7 @@ public final class BackpropagationNetwork implements Serializable {
      * @return
      *         the result of running the network.
      */
-    public double[] run(final double[] input) {
+    public synchronized double[] run(final double[] input) {
         double[] output;
         if (input.length != inputSize) {
             throw new IllegalArgumentException();
@@ -271,15 +205,28 @@ public final class BackpropagationNetwork implements Serializable {
             final double[][] desiredData,
             final double trainingRate,
             final double desiredError) {
-        double error = 0.0;
-        for (int i = 0; i < trainingData.length; i++) {
-            do {
-                error = train(trainingData[i],
-                        desiredData[i], trainingRate, trainingRate);
-                run(trainingData[i]);
-            } while (error > desiredError);
+        double[] error = new double[1];
+        if (trainingData.length < PARALLEL_THRESHOLD) {
+            for (int i = 0; i < trainingData.length; i++) {
+                do {
+                    error[0] = train(trainingData[i],
+                            desiredData[i], trainingRate, trainingRate * 1.618) / trainingData.length;
+                    run(trainingData[i]);
+                } while (error[0] > desiredError);
+            }
+        } else {
+            double[] errors = new double[trainingData.length];
+            IntStream.range(0, trainingData.length).parallel().forEach(i -> {
+                do {
+                    synchronized (errors) {
+                        errors[i] = train(trainingData[i], desiredData[i], trainingRate, trainingRate * 1.618) / trainingData.length;
+                    }
+                    run(trainingData[i]);
+                } while (errors[i] > desiredError);
+            });
+            error[0] = Arrays.stream(errors).sum();
         }
-        return error;
+        return error[0] / trainingData.length;
     }
 
     /**
@@ -300,7 +247,7 @@ public final class BackpropagationNetwork implements Serializable {
      * @return
      *         the mse of the network after training.
      */
-    public double train(final double[] input,
+    public synchronized double train(final double[] input,
             final double[] desired, final double trainingRate,
             final double momentum) {
         if (input.length != inputSize
@@ -313,8 +260,8 @@ public final class BackpropagationNetwork implements Serializable {
         updateWeights(trainingRate, momentum, input);
         updateBiases(trainingRate, momentum);
 
-        if (iterations++ % UPDATE_EVERY  == 0) {
-            prettyPrint(input, output, error, iterations);
+        if (iterations.getAndIncrement() % UPDATE_EVERY  == 0) {
+            prettyPrint(input, output, error, iterations.get());
         }
         return error;
     }
@@ -349,13 +296,14 @@ public final class BackpropagationNetwork implements Serializable {
 
     private double backProp(double[] output, double[] desired, double[][] delta, double error) {
         double sum;
+        double errorCopy = error;
         // Back-propagation pass.
         for (int l = numLayers - 1; l >= 0; l--) {
             // Output layer
             if (l == numLayers - 1) {
                 for (int k = 0; k < layerSize[l]; k++) {
                     delta[l][k] = output[k] - desired[k];
-                    error += Math.pow(delta[l][k], 2);
+                    errorCopy += Math.pow(delta[l][k], 2);
                     delta[l][k] *= TransferFunctions.evaluateDerivative(
                             transferFunction[l], layerInput[l][k]);
                 }
@@ -371,14 +319,14 @@ public final class BackpropagationNetwork implements Serializable {
                 }
             }
         }
-        return error;
+        return errorCopy;
     }
 
     /**
      * Clear the iteration counter.
      */
     public void clearIterationCounter() {
-        iterations = 0;
+        iterations.set(0);
     }
 
     /**
@@ -426,6 +374,7 @@ public final class BackpropagationNetwork implements Serializable {
              ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(this);
         } catch (IOException e) {
+            e.printStackTrace();
             LOGGER.error(e.getMessage());
         }
     }
@@ -460,6 +409,7 @@ public final class BackpropagationNetwork implements Serializable {
             this.weight = net.weight;
             this.transferFunction = net.transferFunction;
         } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
             LOGGER.error(e.getMessage());
         }
         return net;

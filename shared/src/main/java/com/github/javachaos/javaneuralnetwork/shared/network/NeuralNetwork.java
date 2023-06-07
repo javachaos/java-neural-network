@@ -18,8 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.IntStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.javachaos.javaneuralnetwork.shared.layers.HiddenLayer;
 import com.github.javachaos.javaneuralnetwork.shared.layers.HiddenNeuronLayer;
@@ -34,13 +32,15 @@ import com.github.javachaos.javaneuralnetwork.shared.neurons.Neuron;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.OutputNeuron;
 import com.github.javachaos.javaneuralnetwork.shared.training.TrainType;
 import com.github.javachaos.javaneuralnetwork.shared.util.Connections;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a neural network structure.
  */
 public final class NeuralNetwork implements Network {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NeuralNetwork.class);
+    private static final Logger LOGGER = LogManager.getLogger(NeuralNetwork.class);
     private InputLayer inputLayer;
     private final ConcurrentMap<Integer, HiddenLayer> layers;
     private OutputLayer outputLayer;
