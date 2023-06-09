@@ -14,6 +14,8 @@ public class ReluFunction extends BaseFunction {
 
     @Override
     public double derivative(final double v) {
+        if (Double.isNaN(v))
+            return 0.0;
         return (v > 0.000000000000000000001) ? 1.0 : 0.0;
     }
 }

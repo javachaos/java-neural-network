@@ -1,9 +1,7 @@
 package com.github.javachaos.javaneuralnetwork.core;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.SplittableRandom;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
@@ -21,7 +19,7 @@ public final class BackpropagationNetwork implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -8666581554984473793L;
-    private static final int PARALLEL_THRESHOLD = 10;
+    private static final int PARALLEL_THRESHOLD = 100;
 
 
     private int numLayers;
@@ -37,7 +35,7 @@ public final class BackpropagationNetwork implements Serializable {
     private double[][][] weight;
     private double[][][] previousWeightDelta;
     private AtomicInteger iterations = new AtomicInteger(0);
-    private static final int UPDATE_EVERY = 1;
+    private static final int UPDATE_EVERY = 100;
 
     /**
      * Create and initialize new back-propagation network.
@@ -92,7 +90,7 @@ public final class BackpropagationNetwork implements Serializable {
         for (int l = 0; l < numLayers; l++) {
             SplittableRandom rand = new SplittableRandom();
             for (int j = 0; j < layerSize[l]; j++) {
-                bias[l][j] = 0.0000001 * rand.nextGaussian();
+                bias[l][j] = 0.0;
                 previousBiasDelta[l][j] = 0.0;
                 layerOutput[l][j] = 0.0;
                 layerInput[l][j] = 0.0;
@@ -133,7 +131,7 @@ public final class BackpropagationNetwork implements Serializable {
      * @return
      *         the result of running the network.
      */
-    public synchronized double[] run(final double[] input) {
+    public double[] run(final double[] input) {
         double[] output;
         if (input.length != inputSize) {
             throw new IllegalArgumentException();
@@ -206,25 +204,12 @@ public final class BackpropagationNetwork implements Serializable {
             final double trainingRate,
             final double desiredError) {
         double[] error = new double[1];
-        if (trainingData.length < PARALLEL_THRESHOLD) {
-            for (int i = 0; i < trainingData.length; i++) {
-                do {
-                    error[0] = train(trainingData[i],
-                            desiredData[i], trainingRate, trainingRate * 1.618) / trainingData.length;
-                    run(trainingData[i]);
-                } while (error[0] > desiredError);
-            }
-        } else {
-            double[] errors = new double[trainingData.length];
-            IntStream.range(0, trainingData.length).parallel().forEach(i -> {
-                do {
-                    synchronized (errors) {
-                        errors[i] = train(trainingData[i], desiredData[i], trainingRate, trainingRate * 1.618) / trainingData.length;
-                    }
-                    run(trainingData[i]);
-                } while (errors[i] > desiredError);
-            });
-            error[0] = Arrays.stream(errors).sum();
+        for (int i = 0; i < trainingData.length; i++) {
+            do {
+                error[0] = train(trainingData[i],
+                        desiredData[i], trainingRate, trainingRate * 1.618) / trainingData.length;
+                run(trainingData[i]);
+            } while (error[0] > desiredError);
         }
         return error[0] / trainingData.length;
     }
@@ -247,11 +232,13 @@ public final class BackpropagationNetwork implements Serializable {
      * @return
      *         the mse of the network after training.
      */
-    public synchronized double train(final double[] input,
+    public double train(final double[] input,
             final double[] desired, final double trainingRate,
             final double momentum) {
         if (input.length != inputSize
         ||  desired.length != layerSize[numLayers - 1]) {
+            LOGGER.error("Input dims: expected({})  actual({})", inputSize, input.length);
+            LOGGER.error("Desired dims: expected({})  actual({})", layerSize[numLayers - 1], desired.length);
             throw new IllegalArgumentException();
         }
         double error = 0.0;
@@ -295,7 +282,7 @@ public final class BackpropagationNetwork implements Serializable {
     }
 
     private double backProp(double[] output, double[] desired, double[][] delta, double error) {
-        double sum;
+        double[] sum = new double[1];
         double errorCopy = error;
         // Back-propagation pass.
         for (int l = numLayers - 1; l >= 0; l--) {
@@ -308,14 +295,27 @@ public final class BackpropagationNetwork implements Serializable {
                             transferFunction[l], layerInput[l][k]);
                 }
             } else { // Hidden Layer
-                for (int i = 0; i < layerSize[l]; i++) {
-                    sum = 0.0;
-                    for (int j = 0; j < layerSize[l + 1]; j++) {
-                        sum += weight[l + 1][i][j] * delta[l + 1][j];
+                if (layerSize[l] > PARALLEL_THRESHOLD) {// parallel
+                    int finalL = l;
+                    IntStream.range(0, layerSize[l]).parallel().forEach(i -> {
+                        sum[0] = 0.0;
+                        for (int j = 0; j < layerSize[finalL + 1]; j++) {
+                            sum[0] += weight[finalL + 1][i][j] * delta[finalL + 1][j];
+                        }
+                        sum[0] += TransferFunctions.evaluateDerivative(
+                                transferFunction[finalL], layerInput[finalL][i]);
+                        delta[finalL][i] = sum[0];
+                    });
+                } else {// sequential
+                    for (int i = 0; i < layerSize[l]; i++) {
+                        sum[0] = 0.0;
+                        for (int j = 0; j < layerSize[l + 1]; j++) {
+                            sum[0] += weight[l + 1][i][j] * delta[l + 1][j];
+                        }
+                        sum[0] += TransferFunctions.evaluateDerivative(
+                                transferFunction[l], layerInput[l][i]);
+                        delta[l][i] = sum[0];
                     }
-                    sum += TransferFunctions.evaluateDerivative(
-                            transferFunction[l], layerInput[l][i]);
-                    delta[l][i] = sum;
                 }
             }
         }
@@ -359,7 +359,7 @@ public final class BackpropagationNetwork implements Serializable {
         }
         LOGGER.info(
                 "Iteration {}:\n\t\tInput {}\n\t\tOutput {}\n\t\tError {}",
-                i, ssb, sb, error);
+                i, ssb, sb, error / input.length);
     }
 
     /**
