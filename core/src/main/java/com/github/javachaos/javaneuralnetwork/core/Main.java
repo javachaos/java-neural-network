@@ -52,7 +52,7 @@ public final class Main {
 
         double desiredError = 0.1;
         double learnRate = 0.61803398875;
-        MNISTDataReader dr = new MNISTDataReader("/train-images-idx3-ubyte");
+        MNISTDataReader dr = new MNISTDataReader();
         double[][] input = new double[dr.getNumImages()/2][dr.getNumCols() * dr.getNumRows()];
 
         int i = 0;

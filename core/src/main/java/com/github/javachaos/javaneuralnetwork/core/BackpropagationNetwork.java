@@ -204,14 +204,16 @@ public final class BackpropagationNetwork implements Serializable {
             final double trainingRate,
             final double desiredError) {
         double[] error = new double[1];
+        double totalError = Double.MAX_VALUE;
         for (int i = 0; i < trainingData.length; i++) {
             do {
                 error[0] = train(trainingData[i],
-                        desiredData[i], trainingRate, trainingRate * 1.618) / trainingData.length;
+                        desiredData[i], trainingRate, trainingRate * 1.618);
                 run(trainingData[i]);
-            } while (error[0] > desiredError);
+                totalError = error[0] / trainingData.length;
+            } while (totalError > desiredError);
         }
-        return error[0] / trainingData.length;
+        return totalError;
     }
 
     /**
