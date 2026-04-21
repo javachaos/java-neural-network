@@ -10,8 +10,6 @@
  ******************************************************************************/
 package com.github.javachaos.javaneuralnetwork.shared.util;
 
-import java.util.Iterator;
-
 import com.github.javachaos.javaneuralnetwork.shared.layers.Layer;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.Neuron;
 
@@ -42,13 +40,9 @@ public final class Connections {
      */
     public <T1 extends Neuron, T2 extends Neuron>
             void create(final Layer<T1> l1, final Layer<T2> l2) {
-        Iterator<T1> iterator = l1.iterator();
-        Iterator<T2> iterator1 = l2.iterator();
-        T1 tmp;
-        while (iterator.hasNext()) {
-            tmp = iterator.next();
-            while (iterator1.hasNext()) {
-                tmp.addOutputLink(iterator1.next());
+        for (T1 parent : l1) {
+            for (T2 child : l2) {
+                parent.addOutputLink(child);
             }
         }
     }

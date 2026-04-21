@@ -56,8 +56,8 @@ public class OutputNeuronLayer extends NeuronLayer<OutputNeuron> implements Outp
 
     @Override
     public final List<Double> getOutputValues() {
-    	List<Double> v = new ArrayList<>();
-        for (int i = 0; i < getSize(); i++) {
+        List<Double> v = new ArrayList<>();
+        for (int i = 1; i <= getSize(); i++) {
             v.add(getNeuron(i).getValue());
         }
         return v;

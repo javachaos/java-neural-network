@@ -41,10 +41,10 @@ class TrainSampleTest {
     }
 
     @Test
-    void createTrainSample_inputLengthsShouldBeEqual() {
-        Exception ex = assertThrows(IllegalArgumentException.class,
-                () -> new TrainSample(twoElement, oneElement), "Input vectors should be the same length.");
-        assertEquals("Input vectors should be the same length.", ex.getMessage());
+    void createTrainSample_canHaveDifferentInputAndOutputLengths() {
+        TrainSample sample = new TrainSample(twoElement, oneElement);
+        assertEquals(twoElement, sample.getInputs());
+        assertEquals(oneElement, sample.getOutputs());
     }
 
     @Test

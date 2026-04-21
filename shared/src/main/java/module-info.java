@@ -1,5 +1,7 @@
 module shared {
 	exports com.github.javachaos.javaneuralnetwork.shared.links;
+	exports com.github.javachaos.javaneuralnetwork.shared.hilbert;
+	exports com.github.javachaos.javaneuralnetwork.shared.knowledge;
 	exports com.github.javachaos.javaneuralnetwork.shared.layers;
 	exports com.github.javachaos.javaneuralnetwork.shared.exceptions;
 	exports com.github.javachaos.javaneuralnetwork.shared.util;

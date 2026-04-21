@@ -15,8 +15,6 @@ public class TrainSample {
             throw new IllegalArgumentException("Inputs should not be null.");
         if (inputVector.isEmpty() || outputVector.isEmpty())
             throw new IllegalArgumentException("Input vectors should not be empty.");
-        if (inputVector.size() != outputVector.size())
-            throw new IllegalArgumentException("Input vectors should be the same length.");
         this.outputs = outputVector;
         this.inputs = inputVector;
     }

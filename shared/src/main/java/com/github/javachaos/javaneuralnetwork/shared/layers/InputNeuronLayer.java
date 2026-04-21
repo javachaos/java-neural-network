@@ -12,8 +12,6 @@ package com.github.javachaos.javaneuralnetwork.shared.layers;
 
 import java.io.Serial;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.IntStream;
 
 import com.github.javachaos.javaneuralnetwork.shared.network.LayerType;
 import com.github.javachaos.javaneuralnetwork.shared.network.NeuralNetContext;
@@ -71,9 +69,11 @@ public final class InputNeuronLayer extends NeuronLayer<InputNeuron>
 
     @Override
     public OutputLayer propagate(final NeuralNetContext nnctx) {
-    	AtomicReference<Double> v = new AtomicReference<>(Double.MAX_VALUE);
-        IntStream.range(0, getSize()).parallel().forEach(i -> v.updateAndGet(v1 -> v1 + getNeuron(i).feedforward(nnctx)));
-    	LOGGER.debug("Propagation Error: {}", v);
+        double propagationError = 0.0;
+        for (int i = 1; i <= getSize(); i++) {
+            propagationError += getNeuron(i).feedforward(nnctx);
+        }
+        LOGGER.debug("Propagation Error: {}", propagationError);
         return nnctx.getNetwork().getOutputLayer();
     }
 

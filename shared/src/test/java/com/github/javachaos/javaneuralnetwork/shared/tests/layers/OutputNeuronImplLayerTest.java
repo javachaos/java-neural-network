@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.github.javachaos.javaneuralnetwork.shared.tests.layers;
 
+import java.util.List;
+
 import com.github.javachaos.javaneuralnetwork.shared.layers.OutputLayer;
 import com.github.javachaos.javaneuralnetwork.shared.layers.OutputNeuronLayer;
 import com.github.javachaos.javaneuralnetwork.shared.network.LayerType;
@@ -39,5 +41,15 @@ class OutputNeuronImplLayerTest {
         int size = l.getSize();
         assertEquals(1, size);
     }
-    
+
+    @Test
+    final void testGetOutputValuesSkipsBiasNeuron() {
+        OutputLayer l = new OutputNeuronLayer(2);
+        l.build();
+        l.getNeuron(0).setValue(1.0);
+        l.getNeuron(1).setValue(0.25);
+        l.getNeuron(2).setValue(0.75);
+        assertEquals(List.of(0.25, 0.75), l.getOutputValues());
+    }
+
 }

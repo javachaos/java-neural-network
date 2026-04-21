@@ -284,7 +284,6 @@ public final class BackpropagationNetwork implements Serializable {
     }
 
     private double backProp(double[] output, double[] desired, double[][] delta, double error) {
-        double[] sum = new double[1];
         double errorCopy = error;
         // Back-propagation pass.
         for (int l = numLayers - 1; l >= 0; l--) {
@@ -300,23 +299,23 @@ public final class BackpropagationNetwork implements Serializable {
                 if (layerSize[l] > PARALLEL_THRESHOLD) {// parallel
                     int finalL = l;
                     IntStream.range(0, layerSize[l]).parallel().forEach(i -> {
-                        sum[0] = 0.0;
+                        double sum = 0.0;
                         for (int j = 0; j < layerSize[finalL + 1]; j++) {
-                            sum[0] += weight[finalL + 1][i][j] * delta[finalL + 1][j];
+                            sum += weight[finalL + 1][i][j] * delta[finalL + 1][j];
                         }
-                        sum[0] += TransferFunctions.evaluateDerivative(
+                        sum *= TransferFunctions.evaluateDerivative(
                                 transferFunction[finalL], layerInput[finalL][i]);
-                        delta[finalL][i] = sum[0];
+                        delta[finalL][i] = sum;
                     });
                 } else {// sequential
                     for (int i = 0; i < layerSize[l]; i++) {
-                        sum[0] = 0.0;
+                        double sum = 0.0;
                         for (int j = 0; j < layerSize[l + 1]; j++) {
-                            sum[0] += weight[l + 1][i][j] * delta[l + 1][j];
+                            sum += weight[l + 1][i][j] * delta[l + 1][j];
                         }
-                        sum[0] += TransferFunctions.evaluateDerivative(
+                        sum *= TransferFunctions.evaluateDerivative(
                                 transferFunction[l], layerInput[l][i]);
-                        delta[l][i] = sum[0];
+                        delta[l][i] = sum;
                     }
                 }
             }

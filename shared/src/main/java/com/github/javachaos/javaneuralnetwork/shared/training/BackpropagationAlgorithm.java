@@ -1,15 +1,12 @@
 package com.github.javachaos.javaneuralnetwork.shared.training;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import com.github.javachaos.javaneuralnetwork.shared.network.Network;
-import com.github.javachaos.javaneuralnetwork.shared.neurons.InputNeuron;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.OutputNeuron;
 import com.github.javachaos.javaneuralnetwork.shared.util.ErrorFunctions;
-import com.github.javachaos.javaneuralnetwork.shared.util.MathTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,21 +61,24 @@ public final class BackpropagationAlgorithm implements ITrainAlgorithm {
 	 */
 	public synchronized Double compute() {
 		List<Double> output = network.runInputs(trainSample.getInputs());
+		List<Double> expectedOutput = trainSample.getOutputs();
+		if (output.size() != expectedOutput.size()) {
+			throw new IllegalArgumentException(
+					"Output vector does not match expected output dimension.");
+		}
 		LOGGER.debug("Network output: {}", output);
 		currError =	ErrorFunctions.getInstance().meanSquaredError(
-						output, trainSample.getInputs());
+						output, expectedOutput);
 		Iterator<OutputNeuron> iterator = network.getOutputLayer().iterator();
 		LinkedBlockingDeque<Double> outputs = new LinkedBlockingDeque<>(output);
+		LinkedBlockingDeque<Double> expectedOutputs =
+				new LinkedBlockingDeque<>(expectedOutput);
 		//Skip bias neuron.
 		iterator.next();
 		while (iterator.hasNext()) {
-			iterator.next().propagateError(outputs.pop());
+			iterator.next().propagateError(outputs.pop() - expectedOutputs.pop());
 		}
-		List<Double> errVector = new ArrayList<>();
-		for (InputNeuron iInputNeuron : network.getInputLayer()) {
-			errVector.add(iInputNeuron.getValue());
-		}
-		return MathTools.sum(errVector);
+		return currError;
 	}
 
 }

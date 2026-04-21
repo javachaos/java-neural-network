@@ -37,7 +37,7 @@ class ConnectionsTest {
 	/**
 	 * The size of each layer in the test.
 	 */
-	private static final int LAYER_SIZE = 30000;
+	private static final int LAYER_SIZE = 5;
 	
 	/**
 	 * Testing timeout.
@@ -64,8 +64,9 @@ class ConnectionsTest {
         while (iter1.hasNext()) {
             tmp = iter1.next();
             Iterator<OutputNeuron> iter2 = l2.iterator();
+            assertEquals(LAYER_SIZE + 1, tmp.getOutputLinks().length);
             for (Link l : tmp.getOutputLinks()) {
-            	if (iter2.hasNext()) {
+                if (iter2.hasNext()) {
                     assertEquals(l.getTail(), iter2.next());
             	}
             }
