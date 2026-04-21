@@ -190,6 +190,35 @@ public final class HilbertVector {
     }
 
     /**
+     * Reflects this vector about the line spanned by an axis vector.
+     *
+     * <p>This applies {@code R(x) = 2 * <x,a> * a / <a,a> - x} directly,
+     * avoiding the dense {@code n x n} reflection matrix.
+     *
+     * @param axis the vector that defines the reflection axis
+     * @return the reflected vector
+     */
+    public HilbertVector reflectAbout(final HilbertVector axis) {
+        Objects.requireNonNull(axis, "Axis vector cannot be null.");
+        requireSameDimension(axis);
+        double dot = 0.0;
+        double axisNormSquared = 0.0;
+        for (int i = 0; i < dimension(); i++) {
+            dot += coordinates[i] * axis.coordinates[i];
+            axisNormSquared += axis.coordinates[i] * axis.coordinates[i];
+        }
+        if (axisNormSquared == 0.0) {
+            throw new IllegalArgumentException("Cannot reflect about the zero vector.");
+        }
+        double projectionScale = 2.0 * dot / axisNormSquared;
+        double[] values = new double[dimension()];
+        for (int i = 0; i < values.length; i++) {
+            values[i] = projectionScale * axis.coordinates[i] - coordinates[i];
+        }
+        return new HilbertVector(values);
+    }
+
+    /**
      * Computes the tensor product of this vector and another vector.
      *
      * @param other the other vector

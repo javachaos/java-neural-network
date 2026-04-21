@@ -41,6 +41,26 @@ class HilbertVectorTest {
     }
 
     @Test
+    final void testReflectionPreservesAxisAndFlipsOrthogonalComponent() {
+        HilbertVector state = HilbertVector.of(2.0, 3.0, -4.0);
+        HilbertVector xAxis = HilbertVector.basis(3, 0);
+
+        HilbertVector reflected = state.reflectAbout(xAxis);
+
+        assertArrayEquals(new double[]{2.0, -3.0, 4.0}, reflected.toArray(), EPSILON);
+        assertEquals(state.norm(), reflected.norm(), EPSILON);
+        assertArrayEquals(state.toArray(), reflected.reflectAbout(xAxis).toArray(), EPSILON);
+    }
+
+    @Test
+    final void testReflectionAboutDiagonalSwapsTwoDimensionalCoordinates() {
+        HilbertVector state = HilbertVector.of(2.0, 0.0);
+        HilbertVector diagonal = HilbertVector.of(1.0, 1.0);
+
+        assertArrayEquals(new double[]{0.0, 2.0}, state.reflectAbout(diagonal).toArray(), EPSILON);
+    }
+
+    @Test
     final void testTensorProduct() {
         HilbertVector left = HilbertVector.of(1.0, 2.0);
         HilbertVector right = HilbertVector.of(3.0, 4.0, 5.0);
@@ -58,5 +78,7 @@ class HilbertVectorTest {
         assertThrows(IllegalArgumentException.class, () -> HilbertVector.zero(0));
         assertThrows(IllegalArgumentException.class, () -> HilbertVector.basis(2, 2));
         assertThrows(IllegalArgumentException.class, () -> HilbertVector.zero(2).normalized());
+        assertThrows(IllegalArgumentException.class,
+                () -> HilbertVector.of(1.0, 0.0).reflectAbout(HilbertVector.zero(2)));
     }
 }
