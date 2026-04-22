@@ -6,6 +6,8 @@ import com.github.javachaos.javaneuralnetwork.core.BackpropagationNetwork;
 import com.github.javachaos.javaneuralnetwork.core.BackpropagationStateTransitionModel;
 import com.github.javachaos.javaneuralnetwork.core.TransferFunctions;
 import com.github.javachaos.javaneuralnetwork.shared.hilbert.HilbertVector;
+import com.github.javachaos.javaneuralnetwork.shared.knowledge.HilbertImitationLearner;
+import com.github.javachaos.javaneuralnetwork.shared.knowledge.NeuralImitationLearner;
 import com.github.javachaos.javaneuralnetwork.shared.knowledge.StatePrediction;
 import com.github.javachaos.javaneuralnetwork.shared.knowledge.WorldState;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,30 @@ class BackpropagationStateTransitionModelTest {
         assertEquals(2, prediction.predicted().dimension());
         assertTrue(Double.isFinite(prediction.errorNorm()));
         assertTrue(Double.isFinite(error));
+    }
+
+    @Test
+    final void testBackpropagationModelCanTrainInsideNeuralImitationLoop() {
+        BackpropagationStateTransitionModel model = model();
+        HilbertImitationLearner memory = HilbertImitationLearner.of("prototype-memory", 2, 1.0, 0.1);
+        NeuralImitationLearner learner = NeuralImitationLearner.of(
+                "neural-imitation",
+                memory,
+                model,
+                (predictionName, before, observed) -> model.observe(predictionName, before, observed, 0.2, 0.0),
+                0.5);
+        WorldState before = WorldState.of("before", HilbertVector.of(1.0, 0.0));
+        WorldState observed = WorldState.of("observed", HilbertVector.of(0.0, 1.0));
+
+        NeuralImitationLearner.LearningStep step = learner.observe(before, observed);
+        NeuralImitationLearner.HybridPrediction prediction = learner.forecastDetailed(before);
+
+        assertTrue(step.neuralLearning().isPresent());
+        assertTrue(step.prediction().isPresent());
+        assertTrue(prediction.imitation().isPresent());
+        assertTrue(prediction.modelPrediction().isPresent());
+        assertEquals(2, prediction.predicted().dimension());
+        assertTrue(Arrays.stream(prediction.predicted().state().toArray()).allMatch(Double::isFinite));
     }
 
     @Test

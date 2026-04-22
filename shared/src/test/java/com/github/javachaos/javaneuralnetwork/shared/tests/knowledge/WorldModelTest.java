@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.github.javachaos.javaneuralnetwork.shared.hilbert.HilbertVector;
 import com.github.javachaos.javaneuralnetwork.shared.hilbert.LinearOperator;
+import com.github.javachaos.javaneuralnetwork.shared.knowledge.BestMatchingUnit;
 import com.github.javachaos.javaneuralnetwork.shared.knowledge.ConceptSubspace;
 import com.github.javachaos.javaneuralnetwork.shared.knowledge.GoalSubspace;
 import com.github.javachaos.javaneuralnetwork.shared.knowledge.MemoryTrace;
@@ -132,6 +133,22 @@ class WorldModelTest {
         assertTrue(WorldModel.empty().withGoal(seekX)
                 .rankGoals(WorldState.of("zero", HilbertVector.zero(2))).isEmpty());
         assertEquals("x", model.observe(x).rankStatesByRelevance(xAxis).get(0).state().name());
+    }
+
+    @Test
+    final void testWorldModelFindsBestMatchingStatePrototype() {
+        WorldState x = WorldState.of("x", HilbertVector.basis(2, 0));
+        WorldState y = WorldState.of("y", HilbertVector.basis(2, 1));
+        WorldState cue = WorldState.of("cue", HilbertVector.of(0.8, 0.2));
+        WorldModel model = WorldModel.empty()
+                .observe(y)
+                .observe(x);
+
+        BestMatchingUnit.Match match = model.bestMatchingState(cue).orElseThrow();
+
+        assertEquals("x", match.prototype().name());
+        assertEquals("x", model.rankBestMatchingStates(cue).get(0).prototype().name());
+        assertEquals(0.08, match.distanceSquared(), EPSILON);
     }
 
     private LinearOperator swap() {

@@ -188,6 +188,26 @@ public final class WorldModel {
     }
 
     /**
+     * Finds the best matching known state for a cue.
+     *
+     * @param cue the cue state
+     * @return the best matching state, if any compatible state exists
+     */
+    public Optional<BestMatchingUnit.Match> bestMatchingState(final WorldState cue) {
+        return BestMatchingUnit.find(cue, states);
+    }
+
+    /**
+     * Ranks known states as BMU prototypes for a cue.
+     *
+     * @param cue the cue state
+     * @return prototype matches in ascending distance order
+     */
+    public List<BestMatchingUnit.Match> rankBestMatchingStates(final WorldState cue) {
+        return BestMatchingUnit.rank(cue, states);
+    }
+
+    /**
      * Ranks compatible states by relevance to a concept subspace.
      *
      * @param concept the concept to query
