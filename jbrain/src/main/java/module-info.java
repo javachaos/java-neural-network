@@ -6,7 +6,7 @@ module jbrain {
 	exports com.github.javachaos.javaneuralnetwork.jbrain.sensors.camera;
 	exports com.github.javachaos.javaneuralnetwork.jbrain.vision;
 
-	requires java.desktop;
-	requires org.apache.logging.log4j;
-	requires shared;
+	requires transitive java.desktop;
+	requires transitive org.apache.logging.log4j;
+	requires transitive shared;
 }

@@ -11,7 +11,6 @@
 package com.github.javachaos.javaneuralnetwork.shared.tests.neurons;
 
 import com.github.javachaos.javaneuralnetwork.shared.functions.SigmoidFunction;
-import com.github.javachaos.javaneuralnetwork.shared.layers.HiddenNeuronLayer;
 import com.github.javachaos.javaneuralnetwork.shared.links.Link;
 import com.github.javachaos.javaneuralnetwork.shared.network.NetworkContext;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.*;
@@ -449,7 +448,6 @@ class NeuronImplTest {
 		n1.setType(null);
 		assertEquals(n, n1);
 		assertNotEquals(null, n);
-		HiddenNeuronLayer n2 = new HiddenNeuronLayer(1, 0);
 		n.setActivationFunction(null);
 		n1 = new InputNeuronImpl(val);
 		assertNotEquals(n1, n);

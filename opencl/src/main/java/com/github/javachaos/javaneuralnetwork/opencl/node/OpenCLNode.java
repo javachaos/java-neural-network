@@ -11,7 +11,6 @@
 package com.github.javachaos.javaneuralnetwork.opencl.node;
 
 import com.github.javachaos.javaneuralnetwork.shared.network.NeuralNetContext;
-import com.github.javachaos.javaneuralnetwork.shared.neurons.Neuron;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.NeuronImpl;
 import com.github.javachaos.javaneuralnetwork.shared.neurons.NeuronType;
 
@@ -21,7 +20,7 @@ import com.github.javachaos.javaneuralnetwork.shared.neurons.NeuronType;
  * 
  *
  */
-public class OpenCLNode extends NeuronImpl implements Neuron {
+public class OpenCLNode extends NeuronImpl {
 
     /**
      * Construct a new OpenCL Node.

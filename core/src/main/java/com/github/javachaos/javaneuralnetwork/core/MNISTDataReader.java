@@ -3,7 +3,7 @@ package com.github.javachaos.javaneuralnetwork.core;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class MNISTDataReader {
 
     private byte[] readRawFile() {
         try (BufferedInputStream bin = new BufferedInputStream(
-                new URL(Constants.MNIST_URL).openStream())) {
+                URI.create(Constants.MNIST_URL).toURL().openStream())) {
             return decompressGzipToBytes(bin);
         } catch (IOException | NoSuchAlgorithmException fnf) {
             fnf.printStackTrace();

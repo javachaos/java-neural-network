@@ -55,20 +55,6 @@ public class MNISTImage {
         return op.filter(buff, null);
     }
 
-    /**
-     * Convert 4 bytes to int.
-     * @param b 4 byte array
-     * @return signed int
-     */
-    private int bytesToInt(byte[] b) {
-        int x;
-        x = ((b[0] & 0xFF) << 24) |
-                ((b[1] & 0xFF) << 16) |
-                ((b[2] & 0xFF) << 8)  |
-                ( b[3] & 0xFF);
-        return x;
-    }
-
     @Override
     public String toString() {
         return predictedValue;

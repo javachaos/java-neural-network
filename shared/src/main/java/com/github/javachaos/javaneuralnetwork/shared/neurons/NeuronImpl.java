@@ -195,13 +195,11 @@ public abstract class NeuronImpl implements Neuron {
     
     @Override
     public final void setInputLink(final int i, final Link l) {
-        Link r = getInputLink(i);
         inputLinks.set(i, l);
     }
 
     @Override
     public final void setInputLinks(final Link[] links) {
-        Link[] oldLinks = inputLinks.toArray(new Link[0]);
         inputLinks.clear();
         Collection<Link> c = Arrays.asList(links);
         inputLinks.addAll(c);
@@ -209,13 +207,11 @@ public abstract class NeuronImpl implements Neuron {
 
     @Override
     public final void setOutputLink(final int i, final Link l) {
-        Link r = getOutputLink(i);
         getOutputs().set(i, l);
     }
 
     @Override
     public final void setOutputLinks(final Link[] links) {
-        Link[] oldLinks = getOutputs().toArray(new Link[0]);
         getOutputs().clear();
         Collection<Link> c = Arrays.asList(links);
         getOutputs().addAll(c);

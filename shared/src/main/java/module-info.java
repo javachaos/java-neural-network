@@ -11,5 +11,5 @@ module shared {
 	exports com.github.javachaos.javaneuralnetwork.shared.values;
 	exports com.github.javachaos.javaneuralnetwork.shared.network;
 
-	requires org.apache.logging.log4j;
+	requires transitive org.apache.logging.log4j;
 }

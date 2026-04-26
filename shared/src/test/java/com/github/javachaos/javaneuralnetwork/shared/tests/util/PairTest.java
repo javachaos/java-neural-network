@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.github.javachaos.javaneuralnetwork.shared.tests.util;
 
-import com.github.javachaos.javaneuralnetwork.shared.neurons.HiddenNeuronImpl;
 import com.github.javachaos.javaneuralnetwork.shared.util.Pair;
 
 import org.junit.jupiter.api.Test;
@@ -75,7 +74,6 @@ class PairTest {
 		p1 = null;
 		assertNotEquals(p, p1);
 		p = new Pair<>(D_0_1, null);
-		HiddenNeuronImpl n = new HiddenNeuronImpl();
 		p = new Pair<>(D_0_1, null);
 		p1 = new Pair<>(D_0_1, null);
 		assertEquals(p, p1);
