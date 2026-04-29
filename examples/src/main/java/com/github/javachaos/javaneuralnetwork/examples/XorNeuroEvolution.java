@@ -2,10 +2,15 @@ package com.github.javachaos.javaneuralnetwork.examples;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
+import java.util.function.Consumer;
 
 /**
  * Evolves learners that can change topology, memory, representation, loss, and
@@ -31,6 +36,13 @@ public final class XorNeuroEvolution {
     private static final double GROUP_RELATIVE_GENERALIZATION_WEIGHT = 0.08;
     private static final double MAX_GROUP_RELATIVE_GENERALIZATION_ERROR = 3.0;
     private static final int DEFAULT_PARALLELISM = NeuroEvolutionParallelism.defaultParallelism();
+    private static final int STAGNATION_PATIENCE_PER_CANDIDATE = 30;
+    private static final int MIN_STAGNATION_PATIENCE = 250;
+    private static final double BASE_IMMIGRANT_FRACTION = 0.06;
+    private static final double STAGNATION_RESEED_START_PRESSURE = 0.25;
+    private static final double MAX_STAGNATION_RESEED_FRACTION = 0.65;
+    private static final double REHEATED_MUTATION_MULTIPLIER = 3.5;
+    private static final double MAX_REHEATED_MUTATION_INTENSITY = 0.45;
 
     private XorNeuroEvolution() {
     }
@@ -227,6 +239,10 @@ public final class XorNeuroEvolution {
             double jitterMeanSquaredError,
             double smoothnessPenalty,
             double complexity,
+            double predictiveFreeEnergy,
+            double sensoryPredictionEnergy,
+            double latentPredictionEnergy,
+            double complexityPriorEnergy,
             List<NeuroEvolutionOutputGroupScore> outputGroupScores,
             int generation) {
 
@@ -235,6 +251,10 @@ public final class XorNeuroEvolution {
             if (Double.isNaN(groupRelativeGeneralizationError) || groupRelativeGeneralizationError < 0.0) {
                 throw new IllegalArgumentException("Group-relative generalization error must be non-negative.");
             }
+            requireNonNegativeScore(predictiveFreeEnergy, "Predictive free energy");
+            requireNonNegativeScore(sensoryPredictionEnergy, "Sensory prediction energy");
+            requireNonNegativeScore(latentPredictionEnergy, "Latent prediction energy");
+            requireNonNegativeScore(complexityPriorEnergy, "Complexity prior energy");
             outputGroupScores = List.copyOf(Objects.requireNonNull(
                     outputGroupScores,
                     "Output group scores cannot be null."));
@@ -262,6 +282,10 @@ public final class XorNeuroEvolution {
                     jitterMeanSquaredError,
                     smoothnessPenalty,
                     complexity,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
                     List.of(),
                     generation);
         }
@@ -279,7 +303,32 @@ public final class XorNeuroEvolution {
                     jitterMeanSquaredError,
                     smoothnessPenalty,
                     complexity,
+                    predictiveFreeEnergy,
+                    sensoryPredictionEnergy,
+                    latentPredictionEnergy,
+                    complexityPriorEnergy,
                     updatedOutputGroupScores,
+                    generation);
+        }
+
+        public CandidateScore withFreeEnergyMetrics(final NeuroEvolutionFreeEnergyMetrics metrics) {
+            Objects.requireNonNull(metrics, "Free-energy metrics cannot be null.");
+            return new CandidateScore(
+                    genome,
+                    score,
+                    meanSquaredError,
+                    configuredLoss,
+                    accuracy,
+                    generalizationMeanSquaredError,
+                    groupRelativeGeneralizationError,
+                    jitterMeanSquaredError,
+                    smoothnessPenalty,
+                    complexity,
+                    metrics.value(),
+                    metrics.sensoryPredictionEnergy(),
+                    metrics.latentPredictionEnergy(),
+                    metrics.complexityPriorEnergy(),
+                    outputGroupScores,
                     generation);
         }
     }
@@ -305,6 +354,28 @@ public final class XorNeuroEvolution {
         }
     }
 
+    public record EvolutionProgress(
+            NeuroEvolutionProblem problem,
+            EvolutionConfig config,
+            int generation,
+            CandidateScore champion,
+            CandidateScore best,
+            int generationsSinceImprovement) {
+
+        public EvolutionProgress {
+            Objects.requireNonNull(problem, "Problem cannot be null.");
+            Objects.requireNonNull(config, "Config cannot be null.");
+            Objects.requireNonNull(champion, "Champion cannot be null.");
+            Objects.requireNonNull(best, "Best score cannot be null.");
+            if (generation < 0) {
+                throw new IllegalArgumentException("Generation cannot be negative.");
+            }
+            if (generationsSinceImprovement < 0) {
+                throw new IllegalArgumentException("Generations since improvement cannot be negative.");
+            }
+        }
+    }
+
     public static EvolutionResult evolve() {
         return evolve(EvolutionConfig.defaults());
     }
@@ -314,8 +385,17 @@ public final class XorNeuroEvolution {
     }
 
     public static EvolutionResult evolve(final NeuroEvolutionProblem problem, final EvolutionConfig config) {
+        return evolve(problem, config, progress -> {
+        });
+    }
+
+    public static EvolutionResult evolve(
+            final NeuroEvolutionProblem problem,
+            final EvolutionConfig config,
+            final Consumer<EvolutionProgress> progressSink) {
         Objects.requireNonNull(problem, "Problem cannot be null.");
         Objects.requireNonNull(config, "Config cannot be null.");
+        Objects.requireNonNull(progressSink, "Progress sink cannot be null.");
         Random random = new Random(config.seed());
         List<EvolvableXorGenome> population = new ArrayList<>(config.populationSize());
         for (int i = 0; i < config.populationSize(); i++) {
@@ -324,6 +404,7 @@ public final class XorNeuroEvolution {
 
         CandidateScore best = null;
         List<CandidateScore> champions = new ArrayList<>();
+        int generationsSinceImprovement = 0;
         ForkJoinPool evaluationPool =
                 NeuroEvolutionParallelism.newPool(config.parallelism(), config.populationSize());
         try {
@@ -333,8 +414,18 @@ public final class XorNeuroEvolution {
                 champions.add(champion);
                 if (best == null || champion.score() < best.score()) {
                     best = champion;
+                    generationsSinceImprovement = 0;
+                } else {
+                    generationsSinceImprovement++;
                 }
-                population = nextGeneration(scored, config, random);
+                progressSink.accept(new EvolutionProgress(
+                        problem,
+                        config,
+                        generation,
+                        champion,
+                        best,
+                        generationsSinceImprovement));
+                population = nextGeneration(scored, config, random, best, generationsSinceImprovement);
             }
         } finally {
             NeuroEvolutionParallelism.shutdown(evaluationPool);
@@ -376,6 +467,12 @@ public final class XorNeuroEvolution {
         double groupRelativeGeneralizationTotal = 0.0;
         double jitterTotal = 0.0;
         double smoothnessTotal = 0.0;
+        double predictiveFreeEnergyTotal = 0.0;
+        double sensoryPredictionEnergyTotal = 0.0;
+        double latentPredictionEnergyTotal = 0.0;
+        double complexityPriorEnergyTotal = 0.0;
+        double complexity = genome.complexityCost(problem);
+        double normalizedComplexity = normalizedComplexity(problem, complexity);
         long candidateSeed = config.seed() + 1_000_003L * candidateIndex;
         for (int repeat = 0; repeat < config.evaluationRepeats(); repeat++) {
             Random learnerRandom = new Random(candidateSeed + 37_000L * generation + 131L * repeat);
@@ -395,6 +492,12 @@ public final class XorNeuroEvolution {
             groupRelativeGeneralizationTotal += generalization.groupRelativeGeneralizationError();
             jitterTotal += generalization.jitterMeanSquaredError();
             smoothnessTotal += generalization.smoothnessPenalty();
+            NeuroEvolutionFreeEnergyMetrics freeEnergy =
+                    learner.predictiveFreeEnergy(problem.generalizationSamples(), normalizedComplexity);
+            predictiveFreeEnergyTotal += freeEnergy.value();
+            sensoryPredictionEnergyTotal += freeEnergy.sensoryPredictionEnergy();
+            latentPredictionEnergyTotal += freeEnergy.latentPredictionEnergy();
+            complexityPriorEnergyTotal += freeEnergy.complexityPriorEnergy();
         }
         double meanSquaredError = mseTotal / config.evaluationRepeats();
         double configuredLoss = lossTotal / config.evaluationRepeats();
@@ -404,7 +507,10 @@ public final class XorNeuroEvolution {
                 groupRelativeGeneralizationTotal / config.evaluationRepeats();
         double jitterMeanSquaredError = jitterTotal / config.evaluationRepeats();
         double smoothnessPenalty = smoothnessTotal / config.evaluationRepeats();
-        double complexity = genome.complexityCost(problem);
+        double predictiveFreeEnergy = predictiveFreeEnergyTotal / config.evaluationRepeats();
+        double sensoryPredictionEnergy = sensoryPredictionEnergyTotal / config.evaluationRepeats();
+        double latentPredictionEnergy = latentPredictionEnergyTotal / config.evaluationRepeats();
+        double complexityPriorEnergy = complexityPriorEnergyTotal / config.evaluationRepeats();
         double score = score(
                 problem,
                 meanSquaredError,
@@ -415,6 +521,7 @@ public final class XorNeuroEvolution {
                 jitterMeanSquaredError,
                 smoothnessPenalty,
                 complexity,
+                predictiveFreeEnergy,
                 config);
         return new CandidateScore(
                 genome,
@@ -427,9 +534,13 @@ public final class XorNeuroEvolution {
                 jitterMeanSquaredError,
                 smoothnessPenalty,
                 complexity,
+                predictiveFreeEnergy,
+                sensoryPredictionEnergy,
+                latentPredictionEnergy,
+                complexityPriorEnergy,
                 List.of(),
                 generation);
-    }
+        }
 
     public static void main(final String[] args) {
         EvolutionResult result = evolve();
@@ -461,26 +572,228 @@ public final class XorNeuroEvolution {
                 Comparator.comparingDouble(CandidateScore::score));
     }
 
-    private static List<EvolvableXorGenome> nextGeneration(
+    static List<EvolvableXorGenome> nextGeneration(
             final List<CandidateScore> scored,
             final EvolutionConfig config,
-            final Random random) {
-        int eliteCount = Math.max(2, config.populationSize() / 10);
-        List<EvolvableXorGenome> next = new ArrayList<>(config.populationSize());
-        for (int i = 0; i < eliteCount; i++) {
-            next.add(scored.get(i).genome());
+            final Random random,
+            final CandidateScore best,
+            final int generationsSinceImprovement) {
+        Objects.requireNonNull(scored, "Scored population cannot be null.");
+        Objects.requireNonNull(config, "Config cannot be null.");
+        Objects.requireNonNull(random, "Random cannot be null.");
+        if (scored.isEmpty()) {
+            throw new IllegalArgumentException("Scored population cannot be empty.");
         }
-        while (next.size() < config.populationSize()) {
-            EvolvableXorGenome parentA = tournament(scored, random).genome();
-            EvolvableXorGenome parentB = tournament(scored, random).genome();
+        if (generationsSinceImprovement < 0) {
+            throw new IllegalArgumentException("Generations since improvement cannot be negative.");
+        }
+        boolean reheated = reheated(config, generationsSinceImprovement);
+        double mutationIntensity = adaptiveMutationIntensity(config, generationsSinceImprovement);
+        int eliteCount = Math.max(2, config.populationSize() / 10);
+        int diverseEliteCount = Math.max(eliteCount, config.populationSize() / 4);
+        int immigrantCount = Math.max(
+                1,
+                (int) Math.round(config.populationSize()
+                        * stagnationReseedFraction(config, generationsSinceImprovement)));
+        int localRefinementCount = reheated ? Math.max(2, config.populationSize() / 6) : 0;
+        int breedingLimit = Math.max(1, config.populationSize() - immigrantCount);
+        List<EvolvableXorGenome> next = new ArrayList<>(config.populationSize());
+        if (best != null) {
+            addIfAbsent(next, best.genome(), config.populationSize());
+        }
+        for (EvolvableXorGenome elite : diverseElites(scored, eliteCount, diverseEliteCount)) {
+            addIfAbsent(next, elite, config.populationSize());
+        }
+        for (int i = 0; i < localRefinementCount && next.size() < breedingLimit; i++) {
+            addIfAbsent(
+                    next,
+                    localRefinement(best == null ? scored.get(0).genome() : best.genome(), random, mutationIntensity),
+                    breedingLimit);
+        }
+        List<List<CandidateScore>> speciesPools = speciesPools(scored);
+        int maxMutations = config.maxMutationsPerChild() + (reheated ? 2 : 0);
+        while (next.size() < breedingLimit) {
+            EvolvableXorGenome parentA = architectureTournament(scored, speciesPools, random).genome();
+            EvolvableXorGenome parentB = architectureTournament(scored, speciesPools, random).genome();
             EvolvableXorGenome child = parentA.crossover(parentB, random);
-            int mutations = 1 + random.nextInt(config.maxMutationsPerChild());
+            int mutations = 1 + random.nextInt(maxMutations);
             for (int i = 0; i < mutations; i++) {
-                child = child.mutate(random, config.mutationIntensity());
+                child = child.mutate(random, mutationIntensity);
             }
             next.add(child);
         }
+        while (next.size() < config.populationSize()) {
+            next.add(immigrant(random, reheated, mutationIntensity));
+        }
         return next;
+    }
+
+    static int stagnationPatience(final EvolutionConfig config) {
+        Objects.requireNonNull(config, "Config cannot be null.");
+        return Math.max(MIN_STAGNATION_PATIENCE, config.populationSize() * STAGNATION_PATIENCE_PER_CANDIDATE);
+    }
+
+    static boolean reheated(final EvolutionConfig config, final int generationsSinceImprovement) {
+        return generationsSinceImprovement >= stagnationPatience(config);
+    }
+
+    static double stagnationReseedFraction(
+            final EvolutionConfig config,
+            final int generationsSinceImprovement) {
+        Objects.requireNonNull(config, "Config cannot be null.");
+        if (generationsSinceImprovement < 0) {
+            throw new IllegalArgumentException("Generations since improvement cannot be negative.");
+        }
+        double pressure = stagnationPressure(config, generationsSinceImprovement);
+        if (pressure <= STAGNATION_RESEED_START_PRESSURE) {
+            return BASE_IMMIGRANT_FRACTION;
+        }
+        double ramp = (pressure - STAGNATION_RESEED_START_PRESSURE)
+                / (1.0 - STAGNATION_RESEED_START_PRESSURE);
+        return BASE_IMMIGRANT_FRACTION
+                + (MAX_STAGNATION_RESEED_FRACTION - BASE_IMMIGRANT_FRACTION) * Math.min(1.0, ramp);
+    }
+
+    static boolean reseeding(final EvolutionConfig config, final int generationsSinceImprovement) {
+        return stagnationReseedFraction(config, generationsSinceImprovement) > BASE_IMMIGRANT_FRACTION;
+    }
+
+    static double adaptiveMutationIntensity(
+            final EvolutionConfig config,
+            final int generationsSinceImprovement) {
+        Objects.requireNonNull(config, "Config cannot be null.");
+        double pressure = stagnationPressure(config, generationsSinceImprovement);
+        double multiplier = 1.0 + pressure * (REHEATED_MUTATION_MULTIPLIER - 1.0);
+        return Math.min(MAX_REHEATED_MUTATION_INTENSITY, config.mutationIntensity() * multiplier);
+    }
+
+    static String evolutionStrategySummary(
+            final EvolutionConfig config,
+            final int generationsSinceImprovement) {
+        Objects.requireNonNull(config, "Config cannot be null.");
+        String mode;
+        if (reheated(config, generationsSinceImprovement)) {
+            mode = "reseed";
+        } else if (reseeding(config, generationsSinceImprovement)) {
+            mode = "diversify";
+        } else {
+            mode = "search";
+        }
+        return "Strategy: " + mode
+                + ", stale " + generationsSinceImprovement + "/" + stagnationPatience(config)
+                + ", mutation " + formatShort(adaptiveMutationIntensity(config, generationsSinceImprovement))
+                + ", reseed " + formatShort(100.0
+                        * stagnationReseedFraction(config, generationsSinceImprovement)) + "%";
+    }
+
+    private static double stagnationPressure(
+            final EvolutionConfig config,
+            final int generationsSinceImprovement) {
+        Objects.requireNonNull(config, "Config cannot be null.");
+        if (generationsSinceImprovement < 0) {
+            throw new IllegalArgumentException("Generations since improvement cannot be negative.");
+        }
+        return Math.min(1.0, generationsSinceImprovement / (double) stagnationPatience(config));
+    }
+
+    private static List<EvolvableXorGenome> diverseElites(
+            final List<CandidateScore> scored,
+            final int eliteCount,
+            final int diverseEliteCount) {
+        List<EvolvableXorGenome> elites = new ArrayList<>();
+        Set<ArchitectureSpecies> species = new HashSet<>();
+        for (int i = 0; i < Math.min(eliteCount, scored.size()); i++) {
+            EvolvableXorGenome genome = scored.get(i).genome();
+            addIfAbsent(elites, genome, diverseEliteCount);
+            species.add(ArchitectureSpecies.from(genome));
+        }
+        for (CandidateScore candidate : scored) {
+            if (elites.size() >= diverseEliteCount) {
+                break;
+            }
+            EvolvableXorGenome genome = candidate.genome();
+            if (species.add(ArchitectureSpecies.from(genome))) {
+                addIfAbsent(elites, genome, diverseEliteCount);
+            }
+        }
+        for (CandidateScore candidate : scored) {
+            if (elites.size() >= diverseEliteCount) {
+                break;
+            }
+            addIfAbsent(elites, candidate.genome(), diverseEliteCount);
+        }
+        return elites;
+    }
+
+    private static List<List<CandidateScore>> speciesPools(final List<CandidateScore> scored) {
+        Map<ArchitectureSpecies, List<CandidateScore>> grouped = new LinkedHashMap<>();
+        for (CandidateScore candidate : scored) {
+            grouped.computeIfAbsent(
+                    ArchitectureSpecies.from(candidate.genome()),
+                    ignored -> new ArrayList<>()).add(candidate);
+        }
+        return new ArrayList<>(grouped.values());
+    }
+
+    private static CandidateScore architectureTournament(
+            final List<CandidateScore> scored,
+            final List<List<CandidateScore>> speciesPools,
+            final Random random) {
+        if (!speciesPools.isEmpty() && random.nextDouble() < 0.45) {
+            return tournament(speciesPools.get(random.nextInt(speciesPools.size())), random);
+        }
+        return tournament(scored, random);
+    }
+
+    private static EvolvableXorGenome localRefinement(
+            final EvolvableXorGenome genome,
+            final Random random,
+            final double mutationIntensity) {
+        EvolvableXorGenome refined = genome;
+        int mutations = 2 + random.nextInt(4);
+        double localIntensity = Math.max(0.01, mutationIntensity * 0.35);
+        for (int i = 0; i < mutations; i++) {
+            refined = refined.mutate(random, XorMutationType.PERTURB_NUMERIC_PARAMETER, localIntensity);
+        }
+        return refined;
+    }
+
+    private static EvolvableXorGenome immigrant(
+            final Random random,
+            final boolean reheated,
+            final double mutationIntensity) {
+        EvolvableXorGenome genome = EvolvableXorGenome.random(random);
+        if (!reheated) {
+            return genome;
+        }
+        XorMutationType[] explorationMutations = {
+                XorMutationType.ADD_NEURON,
+                XorMutationType.ADD_NEURON,
+                XorMutationType.ADD_HIDDEN_LAYER,
+                XorMutationType.ADD_KERNEL_MEMORY,
+                XorMutationType.ADD_PHASE_ENCODING,
+                XorMutationType.CHANGE_INPUT_REPRESENTATION,
+                XorMutationType.CHANGE_ACTIVATION,
+                XorMutationType.ADD_NORMALIZATION,
+                XorMutationType.ADD_SECOND_DERIVATIVE_ESTIMATE
+        };
+        int mutations = 2 + random.nextInt(5);
+        for (int i = 0; i < mutations; i++) {
+            genome = genome.mutate(
+                    random,
+                    explorationMutations[random.nextInt(explorationMutations.length)],
+                    mutationIntensity);
+        }
+        return genome;
+    }
+
+    private static void addIfAbsent(
+            final List<EvolvableXorGenome> genomes,
+            final EvolvableXorGenome genome,
+            final int limit) {
+        if (genomes.size() < limit && !genomes.contains(genome)) {
+            genomes.add(genome);
+        }
     }
 
     private static CandidateScore tournament(final List<CandidateScore> scored, final Random random) {
@@ -495,6 +808,34 @@ public final class XorNeuroEvolution {
         return best;
     }
 
+    private static String formatShort(final double value) {
+        if (!Double.isFinite(value)) {
+            return Double.toString(value);
+        }
+        return String.format(java.util.Locale.ROOT, "%.3f", value);
+    }
+
+    private record ArchitectureSpecies(
+            int hiddenLayers,
+            int hiddenNeurons,
+            int memoryCells,
+            boolean kernelMemory,
+            boolean phaseEncoding,
+            XorInputRepresentation inputRepresentation,
+            XorActivationFunction hiddenActivation) {
+
+        static ArchitectureSpecies from(final EvolvableXorGenome genome) {
+            return new ArchitectureSpecies(
+                    genome.hiddenLayers(),
+                    genome.hiddenNeurons(),
+                    genome.memoryCells(),
+                    genome.kernelMemory(),
+                    genome.phaseEncoding(),
+                    genome.inputRepresentation(),
+                    genome.hiddenActivation());
+        }
+    }
+
     private static double score(
             final NeuroEvolutionProblem problem,
             final double meanSquaredError,
@@ -505,18 +846,21 @@ public final class XorNeuroEvolution {
             final double jitterMeanSquaredError,
             final double smoothnessPenalty,
             final double complexity,
+            final double predictiveFreeEnergy,
             final EvolutionConfig config) {
         Objects.requireNonNull(problem, "Problem cannot be null.");
         if (!Double.isFinite(meanSquaredError)
                 || !Double.isFinite(configuredLoss)
                 || !Double.isFinite(generalizationMeanSquaredError)
                 || !Double.isFinite(jitterMeanSquaredError)
-                || !Double.isFinite(smoothnessPenalty)) {
+                || !Double.isFinite(smoothnessPenalty)
+                || !Double.isFinite(predictiveFreeEnergy)) {
             return Double.POSITIVE_INFINITY;
         }
         double normalizedComplexity = complexity / problem.complexityScale();
         double boundedGroupRelativeGeneralizationError =
                 boundedGroupRelativeGeneralizationError(groupRelativeGeneralizationError);
+        NeuroEvolutionFreeEnergyProfile freeEnergyProfile = problem.freeEnergyProfile();
         return meanSquaredError
                 + configuredLoss * 0.1
                 + (1.0 - accuracy) * 0.8
@@ -524,7 +868,8 @@ public final class XorNeuroEvolution {
                 + jitterMeanSquaredError * config.jitterWeight()
                 + smoothnessPenalty * config.smoothnessWeight()
                 + normalizedComplexity * config.complexityPenalty()
-                + boundedGroupRelativeGeneralizationError * GROUP_RELATIVE_GENERALIZATION_WEIGHT;
+                + boundedGroupRelativeGeneralizationError * GROUP_RELATIVE_GENERALIZATION_WEIGHT
+                + predictiveFreeEnergy * freeEnergyProfile.objectiveWeight();
     }
 
     static double normalizedComplexity(final NeuroEvolutionProblem problem, final double complexity) {
@@ -539,6 +884,12 @@ public final class XorNeuroEvolution {
         return Math.min(
                 MAX_GROUP_RELATIVE_GENERALIZATION_ERROR,
                 Math.max(0.0, groupRelativeGeneralizationError));
+    }
+
+    private static void requireNonNegativeScore(final double value, final String label) {
+        if (Double.isNaN(value) || value < 0.0) {
+            throw new IllegalArgumentException(label + " must be non-negative.");
+        }
     }
 
     private static NeuroEvolutionGeneralizationEvaluator.GeneralizationMetrics generalizationMetrics(

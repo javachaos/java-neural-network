@@ -178,6 +178,10 @@ public abstract class NeuroEvolutionProblem {
         return List.of(new NeuroEvolutionOutputGroup("All outputs", 0, outputDimensions));
     }
 
+    public NeuroEvolutionFreeEnergyProfile freeEnergyProfile() {
+        return NeuroEvolutionFreeEnergyProfile.disabled();
+    }
+
     public boolean statefulSamples() {
         return false;
     }

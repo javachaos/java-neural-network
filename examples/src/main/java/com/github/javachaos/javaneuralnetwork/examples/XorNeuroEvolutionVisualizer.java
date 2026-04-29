@@ -13,9 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -40,10 +42,9 @@ import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
-import java.util.concurrent.ForkJoinPool;
 
 /**
  * Swing GUI that visualizes the current rich learner while evolution runs.
@@ -51,7 +52,6 @@ import java.util.concurrent.ForkJoinPool;
 public final class XorNeuroEvolutionVisualizer {
 
     private static final int GUI_GENERATION_LIMIT = Integer.MAX_VALUE;
-    private static final long VISUAL_UPDATE_INTERVAL_NANOS = 100_000_000L;
 
     private XorNeuroEvolutionVisualizer() {
     }
@@ -88,9 +88,14 @@ public final class XorNeuroEvolutionVisualizer {
 
         private final XorNeuroEvolution.EvolutionConfig config;
         private final NeuroEvolutionProblemCatalog catalog;
+        private NeuroEvolutionWorker worker;
         private final NetworkPanel networkPanel;
         private final JLabel titleLabel;
         private final JComboBox<String> problemSelector;
+        private final JComboBox<WorkerMode> workerModeSelector;
+        private final JComboBox<NeuroEvolutionDistributedConfig.ComputeBackend> workerBackendSelector;
+        private final JTextField remoteHostField;
+        private final JTextField remotePortField;
         private final JTextArea problemDescriptionArea;
         private final JLabel generationLabel;
         private final JLabel scoreLabel;
@@ -102,22 +107,30 @@ public final class XorNeuroEvolutionVisualizer {
         private final JLabel smoothnessLabel;
         private final JLabel topologyLabel;
         private final JLabel populationLabel;
+        private final JLabel strategyLabel;
         private final JLabel parallelismLabel;
+        private final JLabel workerLabel;
         private final JLabel checkpointLabel;
         private final JLabel rateLabel;
         private final JLabel ruleLabel;
+        private final JLabel frontierScoreLabel;
+        private final JLabel frontierGeneralizationLabel;
+        private final JLabel frontierGroupLabel;
+        private final JLabel frontierAttentionLabel;
+        private final JLabel frontierTradeoffLabel;
         private final JButton startButton;
         private final JButton pauseButton;
         private final JButton resetButton;
         private final JButton detailsButton;
         private final JButton saveCheckpointButton;
         private final JButton loadCheckpointButton;
+        private final JButton applyWorkerButton;
 
         private NeuroEvolutionProblem problem;
-        private EvolutionRunner runner;
-        private Thread runnerThread;
+        private NeuroEvolutionRunHandle runner;
         private VisualState latestState;
         private ChampionDetailsDialog detailsDialog;
+        private final ParetoFrontierTracker frontierTracker = new ParetoFrontierTracker();
 
         VisualizerFrame(
                 final NeuroEvolutionProblem problem,
@@ -127,9 +140,16 @@ public final class XorNeuroEvolutionVisualizer {
             this.problem = Objects.requireNonNull(problem, "Problem cannot be null.");
             this.config = Objects.requireNonNull(config, "Config cannot be null.");
             this.catalog = Objects.requireNonNull(catalog, "Problem catalog cannot be null.");
+            WorkerMode initialWorkerMode = initialWorkerMode();
+            NeuroEvolutionDistributedConfig.ComputeBackend initialBackend = initialBackend();
+            this.worker = createWorker(initialWorkerMode, initialBackend, initialRemoteHost(), initialRemotePort());
             this.networkPanel = new NetworkPanel();
             this.titleLabel = new JLabel(titleText(problem));
             this.problemSelector = new JComboBox<>(catalog.problemKeys().toArray(String[]::new));
+            this.workerModeSelector = new JComboBox<>(WorkerMode.values());
+            this.workerBackendSelector = new JComboBox<>(NeuroEvolutionDistributedConfig.ComputeBackend.values());
+            this.remoteHostField = new JTextField(initialRemoteHost());
+            this.remotePortField = new JTextField(Integer.toString(initialRemotePort()));
             this.problemDescriptionArea = descriptionArea(problem);
             this.generationLabel = valueLabel("Generation: 0");
             this.scoreLabel = valueLabel("Champion score: waiting");
@@ -141,19 +161,30 @@ public final class XorNeuroEvolutionVisualizer {
             this.smoothnessLabel = valueLabel("Best smoothness: waiting");
             this.topologyLabel = valueLabel("Best topology: waiting");
             this.populationLabel = valueLabel("Population: waiting");
+            this.strategyLabel = valueLabel("Strategy: waiting");
             this.parallelismLabel = valueLabel("Parallelism: " + config.parallelism() + " workers");
+            this.workerLabel = valueLabel("Worker: " + workerDescription(initialWorkerMode, initialBackend));
             this.checkpointLabel = valueLabel("Checkpoint: waiting");
             this.rateLabel = valueLabel("Rate: waiting");
             this.ruleLabel = valueLabel("Rule: waiting");
+            this.frontierScoreLabel = valueLabel("Score lens: waiting");
+            this.frontierGeneralizationLabel = valueLabel("Gen lens: waiting");
+            this.frontierGroupLabel = valueLabel("Group lens: waiting");
+            this.frontierAttentionLabel = valueLabel("Attention lens: waiting");
+            this.frontierTradeoffLabel = valueLabel("Compact lens: waiting");
             this.startButton = new JButton("Start");
             this.pauseButton = new JButton("Pause");
             this.resetButton = new JButton("Reset");
             this.detailsButton = new JButton("Best Details");
             this.saveCheckpointButton = new JButton("Save Best");
             this.loadCheckpointButton = new JButton("Load Best");
+            this.applyWorkerButton = new JButton("Apply Worker");
 
             titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD, 18.0f));
             problemSelector.setSelectedItem(problem.key());
+            workerModeSelector.setSelectedItem(initialWorkerMode);
+            workerBackendSelector.setSelectedItem(initialBackend);
+            updateWorkerControlEnablement();
             setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             setMinimumSize(new Dimension(980, 680));
             setLayout(new BorderLayout());
@@ -168,23 +199,97 @@ public final class XorNeuroEvolutionVisualizer {
             detailsButton.addActionListener(event -> showBestDetails());
             saveCheckpointButton.addActionListener(event -> saveBestCheckpoint());
             loadCheckpointButton.addActionListener(event -> loadBestCheckpoint());
+            applyWorkerButton.addActionListener(event -> applyWorkerSelection());
+            workerModeSelector.addActionListener(event -> updateWorkerControlEnablement());
             problemSelector.addActionListener(event -> switchProblem((String) problemSelector.getSelectedItem()));
             addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(final WindowEvent event) {
                     stopRunner();
+                    worker.close();
                 }
             });
         }
 
-        private JPanel sidePanel() {
-            JPanel panel = new JPanel(new BorderLayout(0, 14));
-            panel.setPreferredSize(new Dimension(310, 680));
-            panel.setBorder(BorderFactory.createEmptyBorder(18, 18, 18, 18));
-            panel.setBackground(new Color(242, 244, 247));
+        private static WorkerMode initialWorkerMode() {
+            if (Boolean.getBoolean("neuroEvolution.javaWorker")) {
+                return WorkerMode.JAVA_LOCAL;
+            }
+            String configured = System.getProperty("neuroEvolution.workerMode", "RUST_LOCAL");
+            try {
+                return WorkerMode.valueOf(configured.trim().toUpperCase());
+            } catch (IllegalArgumentException exception) {
+                return WorkerMode.RUST_LOCAL;
+            }
+        }
 
-            JPanel metrics = new JPanel(new GridLayout(0, 1, 0, 8));
+        private static NeuroEvolutionDistributedConfig.ComputeBackend initialBackend() {
+            String configured = System.getProperty("neuroEvolution.computeBackend", "CPU");
+            try {
+                return NeuroEvolutionDistributedConfig.ComputeBackend.valueOf(
+                        configured.trim().toUpperCase());
+            } catch (IllegalArgumentException exception) {
+                return NeuroEvolutionDistributedConfig.ComputeBackend.CPU;
+            }
+        }
+
+        private static String initialRemoteHost() {
+            return System.getProperty("neuroEvolution.remoteHost", "127.0.0.1");
+        }
+
+        private static int initialRemotePort() {
+            return parsePort(System.getProperty("neuroEvolution.remotePort", "50051"), 50051);
+        }
+
+        private static NeuroEvolutionWorker createWorker(
+                final WorkerMode mode,
+                final NeuroEvolutionDistributedConfig.ComputeBackend backend,
+                final String remoteHost,
+                final int remotePort) {
+            NeuroEvolutionDistributedConfig distributedConfig =
+                    NeuroEvolutionDistributedConfig.local().withComputeBackend(backend);
+            return switch (mode) {
+                case JAVA_LOCAL -> new LocalNeuroEvolutionWorker();
+                case RUST_LOCAL -> new RustNeuroEvolutionWorker(distributedConfig);
+                case RUST_REMOTE -> new RemoteRustNeuroEvolutionWorker(remoteHost, remotePort, distributedConfig);
+            };
+        }
+
+        private static String workerDescription(
+                final WorkerMode mode,
+                final NeuroEvolutionDistributedConfig.ComputeBackend backend) {
+            if (mode == WorkerMode.JAVA_LOCAL) {
+                return mode.label();
+            }
+            return mode.label() + " / " + backend.name();
+        }
+
+        private static int parsePort(final String value, final int fallback) {
+            try {
+                int port = Integer.parseInt(value.trim());
+                return port > 0 && port <= 65_535 ? port : fallback;
+            } catch (NumberFormatException exception) {
+                return fallback;
+            }
+        }
+
+        private JPanel sidePanel() {
+            final int sideInnerWidth = 274;
+            final int metricRowHeight = 22;
+            final int metricRowGap = 4;
+            final int metricRows = 16;
+            JPanel panel = new JPanel(new BorderLayout());
+            panel.setPreferredSize(new Dimension(310, 680));
+            panel.setBackground(new Color(242, 244, 247));
+            JPanel content = new JPanel(new BorderLayout(0, 14));
+            content.setBorder(BorderFactory.createEmptyBorder(18, 18, 18, 18));
+            content.setBackground(new Color(242, 244, 247));
+
+            JPanel metrics = new JPanel(new GridLayout(0, 1, 0, metricRowGap));
             metrics.setOpaque(false);
+            metrics.setPreferredSize(new Dimension(
+                    sideInnerWidth,
+                    metricRows * metricRowHeight + (metricRows - 1) * metricRowGap));
             metrics.add(generationLabel);
             metrics.add(scoreLabel);
             metrics.add(bestScoreLabel);
@@ -195,10 +300,21 @@ public final class XorNeuroEvolutionVisualizer {
             metrics.add(smoothnessLabel);
             metrics.add(topologyLabel);
             metrics.add(populationLabel);
+            metrics.add(strategyLabel);
             metrics.add(parallelismLabel);
+            metrics.add(workerLabel);
             metrics.add(checkpointLabel);
             metrics.add(rateLabel);
             metrics.add(ruleLabel);
+
+            JPanel frontier = new JPanel(new GridLayout(0, 1, 0, 6));
+            frontier.setOpaque(false);
+            frontier.add(valueLabel("Observed frontier"));
+            frontier.add(frontierScoreLabel);
+            frontier.add(frontierGeneralizationLabel);
+            frontier.add(frontierGroupLabel);
+            frontier.add(frontierAttentionLabel);
+            frontier.add(frontierTradeoffLabel);
 
             JPanel controls = new JPanel(new GridLayout(0, 2, 8, 8));
             controls.setOpaque(false);
@@ -208,6 +324,18 @@ public final class XorNeuroEvolutionVisualizer {
             controls.add(detailsButton);
             controls.add(saveCheckpointButton);
             controls.add(loadCheckpointButton);
+
+            JPanel workerControls = new JPanel(new GridLayout(0, 1, 0, 6));
+            workerControls.setOpaque(false);
+            workerControls.add(valueLabel("Worker management"));
+            workerControls.add(workerModeSelector);
+            workerControls.add(workerBackendSelector);
+            JPanel remoteControls = new JPanel(new GridLayout(1, 2, 6, 0));
+            remoteControls.setOpaque(false);
+            remoteControls.add(remoteHostField);
+            remoteControls.add(remotePortField);
+            workerControls.add(remoteControls);
+            workerControls.add(applyWorkerButton);
 
             JPanel legend = new JPanel(new GridLayout(0, 1, 0, 8));
             legend.setOpaque(false);
@@ -224,35 +352,82 @@ public final class XorNeuroEvolutionVisualizer {
             JPanel problemControls = new JPanel(new BorderLayout(0, 8));
             problemControls.setOpaque(false);
             JScrollPane descriptionScroll = new JScrollPane(problemDescriptionArea);
-            descriptionScroll.setPreferredSize(new Dimension(274, 132));
+            descriptionScroll.setPreferredSize(new Dimension(sideInnerWidth, 132));
             descriptionScroll.setBorder(BorderFactory.createLineBorder(new Color(212, 217, 224)));
             problemControls.add(problemSelector, BorderLayout.NORTH);
             problemControls.add(descriptionScroll, BorderLayout.CENTER);
             heading.add(titleLabel, BorderLayout.NORTH);
             heading.add(problemControls, BorderLayout.CENTER);
             top.add(heading, BorderLayout.NORTH);
-            top.add(metrics, BorderLayout.CENTER);
-            top.add(controls, BorderLayout.SOUTH);
+            JPanel metricsAndFrontier = new JPanel(new BorderLayout(0, 12));
+            metricsAndFrontier.setOpaque(false);
+            metricsAndFrontier.add(metrics, BorderLayout.NORTH);
+            metricsAndFrontier.add(frontier, BorderLayout.CENTER);
+            top.add(metricsAndFrontier, BorderLayout.CENTER);
+            JPanel lowerControls = new JPanel(new BorderLayout(0, 10));
+            lowerControls.setOpaque(false);
+            lowerControls.add(workerControls, BorderLayout.NORTH);
+            lowerControls.add(controls, BorderLayout.SOUTH);
+            top.add(lowerControls, BorderLayout.SOUTH);
 
-            panel.add(top, BorderLayout.NORTH);
-            panel.add(legend, BorderLayout.SOUTH);
+            content.add(top, BorderLayout.NORTH);
+            content.add(legend, BorderLayout.SOUTH);
+            JScrollPane sideScroll = new JScrollPane(content);
+            sideScroll.setBorder(null);
+            sideScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            sideScroll.getVerticalScrollBar().setUnitIncrement(16);
+            panel.add(sideScroll, BorderLayout.CENTER);
             return panel;
         }
 
         private void start() {
             if (runner == null || runner.isStopped()) {
-                runner = new EvolutionRunner(problem, config, this::updateState);
-                runnerThread = new Thread(runner, "neuro-evolution-visualizer");
-                runnerThread.setDaemon(true);
-                runnerThread.start();
+                runner = worker.start(
+                        new NeuroEvolutionRunRequest(problem, config),
+                        new GuiRunListener());
             } else {
-                runner.setPaused(false);
+                runner.resume();
             }
+        }
+
+        private void applyWorkerSelection() {
+            WorkerMode mode = (WorkerMode) workerModeSelector.getSelectedItem();
+            NeuroEvolutionDistributedConfig.ComputeBackend backend =
+                    (NeuroEvolutionDistributedConfig.ComputeBackend) workerBackendSelector.getSelectedItem();
+            if (mode == null || backend == null) {
+                workerLabel.setText("Worker: invalid selection");
+                return;
+            }
+            int port = parsePort(remotePortField.getText(), initialRemotePort());
+            String host = remoteHostField.getText().trim();
+            if (host.isBlank()) {
+                host = initialRemoteHost();
+                remoteHostField.setText(host);
+            }
+            remotePortField.setText(Integer.toString(port));
+            boolean restart = runner != null && !runner.isStopped();
+            stopRunner();
+            worker.close();
+            worker = createWorker(mode, backend, host, port);
+            workerLabel.setText("Worker: " + workerDescription(mode, backend));
+            clearState();
+            if (restart) {
+                start();
+            }
+        }
+
+        private void updateWorkerControlEnablement() {
+            WorkerMode mode = (WorkerMode) workerModeSelector.getSelectedItem();
+            boolean rustWorker = mode != WorkerMode.JAVA_LOCAL;
+            boolean remoteWorker = mode == WorkerMode.RUST_REMOTE;
+            workerBackendSelector.setEnabled(rustWorker);
+            remoteHostField.setEnabled(remoteWorker);
+            remotePortField.setEnabled(remoteWorker);
         }
 
         private void pause() {
             if (runner != null) {
-                runner.setPaused(true);
+                runner.pause();
             }
         }
 
@@ -285,6 +460,7 @@ public final class XorNeuroEvolutionVisualizer {
 
         private void clearState() {
             latestState = null;
+            frontierTracker.clear();
             networkPanel.setVisualState(null);
             generationLabel.setText("Generation: 0");
             scoreLabel.setText("Champion score: waiting");
@@ -296,10 +472,16 @@ public final class XorNeuroEvolutionVisualizer {
             smoothnessLabel.setText("Best smoothness: waiting");
             topologyLabel.setText("Best topology: waiting");
             populationLabel.setText("Population: waiting");
+            strategyLabel.setText("Strategy: waiting");
             parallelismLabel.setText("Parallelism: " + config.parallelism() + " workers");
             checkpointLabel.setText("Checkpoint: waiting");
             rateLabel.setText("Rate: waiting");
             ruleLabel.setText("Rule: waiting");
+            setStableText(frontierScoreLabel, "Score lens: waiting");
+            setStableText(frontierGeneralizationLabel, "Gen lens: waiting");
+            setStableText(frontierGroupLabel, "Group lens: waiting");
+            setStableText(frontierAttentionLabel, "Attention lens: waiting");
+            setStableText(frontierTradeoffLabel, "Compact lens: waiting");
             if (detailsDialog != null) {
                 detailsDialog.setVisualState(null);
             }
@@ -310,7 +492,18 @@ public final class XorNeuroEvolutionVisualizer {
                 runner.stop();
                 runner = null;
             }
-            runnerThread = null;
+        }
+
+        private void updateProgress(final NeuroEvolutionRunProgress progress) {
+            updateState(new VisualState(
+                    progress.generation(),
+                    progress.champion(),
+                    progress.best(),
+                    progress.populationSummary(),
+                    progress.strategySummary(),
+                    progress.generationsPerSecond(),
+                    progress.snapshot(),
+                    progress.bestSnapshot()));
         }
 
         private void updateState(final VisualState state) {
@@ -319,6 +512,8 @@ public final class XorNeuroEvolutionVisualizer {
                     return;
                 }
                 latestState = state;
+                frontierTracker.observe(problem, state.score());
+                frontierTracker.observe(problem, state.bestScore());
                 generationLabel.setText("Generation: " + state.generation());
                 scoreLabel.setText("Champion score: " + format(state.score().score()));
                 bestScoreLabel.setText("Best score: " + format(state.bestScore().score()));
@@ -331,18 +526,47 @@ public final class XorNeuroEvolutionVisualizer {
                 smoothnessLabel.setText("Best smoothness: " + format(state.bestScore().smoothnessPenalty()));
                 topologyLabel.setText("Best topology: " + state.bestSnapshot().nodes().size()
                         + " nodes, " + state.bestSnapshot().links().size() + " links");
-                populationLabel.setText(state.populationSummary());
+                setStableText(populationLabel, state.populationSummary());
+                setStableText(strategyLabel, state.strategySummary());
                 rateLabel.setText("Rate: " + format(state.generationsPerSecond()) + " gen/s");
                 EvolvableXorGenome genome = state.bestScore().genome();
-                ruleLabel.setText("<html>Rule: " + genome.hiddenActivation()
+                setStableText(ruleLabel, "Rule: " + genome.hiddenActivation()
                         + ", " + genome.inputRepresentation()
                         + ", " + genome.lossFunction()
-                        + ", " + genome.learningSchedule() + "</html>");
+                        + ", " + genome.learningSchedule());
+                updateFrontierLabels(problem);
                 networkPanel.setVisualState(state);
                 if (detailsDialog != null && detailsDialog.isVisible()) {
                     detailsDialog.setVisualState(state);
                 }
             });
+        }
+
+        private void updateFrontierLabels(final NeuroEvolutionProblem currentProblem) {
+            setStableText(
+                    frontierScoreLabel,
+                    frontierText("Score lens", frontierTracker.bestByScore(), frontierTracker.scoreValue()));
+            setStableText(
+                    frontierGeneralizationLabel,
+                    frontierText(
+                            "Gen lens",
+                            frontierTracker.bestByGeneralization(),
+                            frontierTracker.generalizationValue()));
+            setStableText(
+                    frontierGroupLabel,
+                    frontierText("Group lens", frontierTracker.bestByGroup(), frontierTracker.groupValue()));
+            setStableText(
+                    frontierAttentionLabel,
+                    frontierPercentText(
+                            "Attention lens",
+                            frontierTracker.bestByAttention(),
+                            frontierTracker.attentionValue()));
+            setStableText(
+                    frontierTradeoffLabel,
+                    frontierText(
+                            "Compact lens",
+                            frontierTracker.bestByTradeoff(),
+                            frontierTracker.tradeoffValue(currentProblem)));
         }
 
         private void showBestDetails() {
@@ -384,12 +608,14 @@ public final class XorNeuroEvolutionVisualizer {
                 titleLabel.setText(titleText(problem));
                 problemDescriptionArea.setText(problem.description());
                 problemDescriptionArea.setCaretPosition(0);
-                ChampionView champion = buildChampionView(problem, checkpoint.config(), checkpoint.score());
+                NeuroEvolutionChampionView champion =
+                        NeuroEvolutionChampionViews.build(problem, checkpoint.config(), checkpoint.score());
                 updateState(new VisualState(
                         champion.score().generation(),
                         champion.score(),
                         champion.score(),
                         "Loaded checkpoint: " + path.getFileName(),
+                        "Strategy: checkpoint",
                         0.0,
                         champion.snapshot(),
                         champion.snapshot()));
@@ -400,10 +626,50 @@ public final class XorNeuroEvolutionVisualizer {
             }
         }
 
+        private final class GuiRunListener implements NeuroEvolutionRunListener {
+
+            @Override
+            public void onProgress(final NeuroEvolutionRunProgress progress) {
+                updateProgress(progress);
+            }
+
+            @Override
+            public void onCheckpoint(final NeuroEvolutionCheckpointEvent checkpoint) {
+                SwingUtilities.invokeLater(() -> {
+                    if (!checkpoint.problem().name().equals(problem.name())) {
+                        return;
+                    }
+                    if (checkpoint.saved()) {
+                        checkpointLabel.setText("Checkpoint: auto-saved " + checkpoint.path().getFileName());
+                    } else {
+                        checkpointLabel.setText("Checkpoint: auto-save failed");
+                        System.err.println("Could not auto-save champion checkpoint: " + checkpoint.message());
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(final Throwable failure) {
+                SwingUtilities.invokeLater(() -> {
+                    checkpointLabel.setText("Worker: failed");
+                    System.err.println("Neuro-evolution worker failed: " + failure.getMessage());
+                });
+            }
+        }
+
         private static JLabel valueLabel(final String text) {
             JLabel label = new JLabel(text, SwingConstants.LEFT);
             label.setFont(label.getFont().deriveFont(13.0f));
+            label.setPreferredSize(new Dimension(274, 22));
+            label.setMinimumSize(new Dimension(274, 22));
+            label.setMaximumSize(new Dimension(274, 22));
+            label.setToolTipText(text);
             return label;
+        }
+
+        private static void setStableText(final JLabel label, final String text) {
+            label.setText(text);
+            label.setToolTipText(text);
         }
 
         private static JTextArea descriptionArea(final NeuroEvolutionProblem problem) {
@@ -430,248 +696,24 @@ public final class XorNeuroEvolutionVisualizer {
 
     }
 
-    private static ChampionView buildChampionView(
-            final NeuroEvolutionProblem problem,
-            final XorNeuroEvolution.EvolutionConfig config,
-            final XorNeuroEvolution.CandidateScore bestScore) {
-        RichEvolvedProblemLearner learner = new RichEvolvedProblemLearner(
-                problem,
-                bestScore.genome(),
-                championRandom(config, bestScore));
-        learner.train(config.maxEpochs(), config.targetMeanSquaredError());
-        return new ChampionView(bestScore.withOutputGroupScores(learner.outputGroupScores()), learner.snapshot());
-    }
+    private enum WorkerMode {
+        JAVA_LOCAL("Java local"),
+        RUST_LOCAL("Rust local"),
+        RUST_REMOTE("Rust gRPC");
 
-    private static Random championRandom(
-            final XorNeuroEvolution.EvolutionConfig config,
-            final XorNeuroEvolution.CandidateScore bestScore) {
-        return new Random(config.seed() + 97_531L * (bestScore.generation() + 1L) + 17L);
-    }
+        private final String label;
 
-    private static final class EvolutionRunner implements Runnable {
+        WorkerMode(final String label) {
+            this.label = label;
+        }
 
-        private final NeuroEvolutionProblem problem;
-        private final XorNeuroEvolution.EvolutionConfig config;
-        private final StateListener listener;
-        private volatile boolean stopped;
-        private volatile boolean paused;
-        private XorNeuroEvolution.CandidateScore cachedBestScore;
-        private XorNeuroEvolution.CandidateScore cachedBestScoreWithDiagnostics;
-        private NetworkSnapshot cachedBestSnapshot;
-
-        EvolutionRunner(
-                final NeuroEvolutionProblem problem,
-                final XorNeuroEvolution.EvolutionConfig config,
-                final StateListener listener) {
-            this.problem = Objects.requireNonNull(problem, "Problem cannot be null.");
-            this.config = Objects.requireNonNull(config, "Config cannot be null.");
-            this.listener = Objects.requireNonNull(listener, "Listener cannot be null.");
+        String label() {
+            return label;
         }
 
         @Override
-        public void run() {
-            Random random = new Random(config.seed());
-            List<EvolvableXorGenome> population = initialPopulation(random);
-            XorNeuroEvolution.CandidateScore best = null;
-            long startNanos = System.nanoTime();
-            long lastVisualUpdateNanos = startNanos - VISUAL_UPDATE_INTERVAL_NANOS;
-            ForkJoinPool evaluationPool =
-                    NeuroEvolutionParallelism.newPool(config.parallelism(), config.populationSize());
-            try {
-                for (int generation = 0; generation < config.generations() && !stopped; generation++) {
-                    waitWhilePaused();
-                    if (stopped) {
-                        break;
-                    }
-                    List<XorNeuroEvolution.CandidateScore> scored =
-                            scorePopulation(population, generation, evaluationPool);
-                    XorNeuroEvolution.CandidateScore champion = scored.get(0);
-                    if (best == null || champion.score() < best.score()) {
-                        best = champion;
-                        saveBestCheckpoint(best);
-                    }
-                    long now = System.nanoTime();
-                    if (shouldUpdateVisual(generation, now, lastVisualUpdateNanos)) {
-                        listener.accept(visualState(generation, champion, best, scored, startNanos, now));
-                        lastVisualUpdateNanos = System.nanoTime();
-                    }
-                    population = nextGeneration(scored, random);
-                }
-            } finally {
-                NeuroEvolutionParallelism.shutdown(evaluationPool);
-            }
-        }
-
-        boolean isStopped() {
-            return stopped;
-        }
-
-        void stop() {
-            stopped = true;
-        }
-
-        void setPaused(final boolean paused) {
-            this.paused = paused;
-        }
-
-        private List<EvolvableXorGenome> initialPopulation(final Random random) {
-            List<EvolvableXorGenome> population = new ArrayList<>(config.populationSize());
-            for (int i = 0; i < config.populationSize(); i++) {
-                population.add(EvolvableXorGenome.random(random));
-            }
-            return population;
-        }
-
-        private List<XorNeuroEvolution.CandidateScore> scorePopulation(
-                final List<EvolvableXorGenome> population,
-                final int generation,
-                final ForkJoinPool evaluationPool) {
-            return NeuroEvolutionParallelism.mapAndSort(
-                    population.size(),
-                    evaluationPool,
-                    index -> XorNeuroEvolution.evaluateCandidate(
-                            problem,
-                            population.get(index),
-                            config,
-                            generation,
-                            index),
-                    Comparator.comparingDouble(XorNeuroEvolution.CandidateScore::score));
-        }
-
-        private List<EvolvableXorGenome> nextGeneration(
-                final List<XorNeuroEvolution.CandidateScore> scored,
-                final Random random) {
-            int eliteCount = Math.max(2, config.populationSize() / 10);
-            List<EvolvableXorGenome> next = new ArrayList<>(config.populationSize());
-            for (int i = 0; i < eliteCount; i++) {
-                next.add(scored.get(i).genome());
-            }
-            while (next.size() < config.populationSize()) {
-                EvolvableXorGenome parentA = tournament(scored, random).genome();
-                EvolvableXorGenome parentB = tournament(scored, random).genome();
-                EvolvableXorGenome child = parentA.crossover(parentB, random);
-                int mutations = 1 + random.nextInt(config.maxMutationsPerChild());
-                for (int i = 0; i < mutations; i++) {
-                    child = child.mutate(random, config.mutationIntensity());
-                }
-                next.add(child);
-            }
-            return next;
-        }
-
-        private XorNeuroEvolution.CandidateScore tournament(
-                final List<XorNeuroEvolution.CandidateScore> scored,
-                final Random random) {
-            XorNeuroEvolution.CandidateScore best = null;
-            int tournamentSize = Math.min(5, scored.size());
-            for (int i = 0; i < tournamentSize; i++) {
-                XorNeuroEvolution.CandidateScore candidate = scored.get(random.nextInt(scored.size()));
-                if (best == null || candidate.score() < best.score()) {
-                    best = candidate;
-                }
-            }
-            return best;
-        }
-
-        private VisualState visualState(
-                final int generation,
-                final XorNeuroEvolution.CandidateScore score,
-                final XorNeuroEvolution.CandidateScore bestScore,
-                final List<XorNeuroEvolution.CandidateScore> scored,
-                final long startNanos,
-                final long nowNanos) {
-            ChampionView bestView = championView(bestScore);
-            double generationsPerSecond = generationsPerSecond(generation, startNanos, nowNanos);
-            return new VisualState(
-                    generation,
-                    score,
-                    bestView.score(),
-                    populationSummary(scored),
-                    generationsPerSecond,
-                    bestView.snapshot(),
-                    bestView.snapshot());
-        }
-
-        private ChampionView championView(final XorNeuroEvolution.CandidateScore bestScore) {
-            if (bestScore.equals(cachedBestScore)
-                    && cachedBestScoreWithDiagnostics != null
-                    && cachedBestSnapshot != null) {
-                return new ChampionView(cachedBestScoreWithDiagnostics, cachedBestSnapshot);
-            }
-            cachedBestScore = bestScore;
-            ChampionView champion = buildChampionView(problem, config, bestScore);
-            cachedBestScoreWithDiagnostics = champion.score();
-            cachedBestSnapshot = champion.snapshot();
-            return new ChampionView(cachedBestScoreWithDiagnostics, cachedBestSnapshot);
-        }
-
-        private void saveBestCheckpoint(final XorNeuroEvolution.CandidateScore bestScore) {
-            try {
-                NeuroEvolutionChampionCheckpoint.save(
-                        NeuroEvolutionChampionCheckpoint.defaultPath(problem),
-                        problem,
-                        config,
-                        bestScore);
-            } catch (IOException exception) {
-                System.err.println("Could not auto-save champion checkpoint: " + exception.getMessage());
-            }
-        }
-
-        private boolean shouldUpdateVisual(
-                final int generation,
-                final long nowNanos,
-                final long lastVisualUpdateNanos) {
-            return generation == 0
-                    || generation == config.generations() - 1
-                    || nowNanos - lastVisualUpdateNanos >= VISUAL_UPDATE_INTERVAL_NANOS;
-        }
-
-        private static double generationsPerSecond(
-                final int generation,
-                final long startNanos,
-                final long nowNanos) {
-            long elapsed = Math.max(1L, nowNanos - startNanos);
-            return (generation + 1.0) * 1_000_000_000.0 / elapsed;
-        }
-
-        private static String populationSummary(final List<XorNeuroEvolution.CandidateScore> scored) {
-            int minHidden = Integer.MAX_VALUE;
-            int maxHidden = Integer.MIN_VALUE;
-            int minLayers = Integer.MAX_VALUE;
-            int maxLayers = Integer.MIN_VALUE;
-            int minMemory = Integer.MAX_VALUE;
-            int maxMemory = Integer.MIN_VALUE;
-            int minRecurrent = Integer.MAX_VALUE;
-            int maxRecurrent = Integer.MIN_VALUE;
-            for (XorNeuroEvolution.CandidateScore candidate : scored) {
-                EvolvableXorGenome genome = candidate.genome();
-                minHidden = Math.min(minHidden, genome.hiddenNeurons());
-                maxHidden = Math.max(maxHidden, genome.hiddenNeurons());
-                minLayers = Math.min(minLayers, genome.hiddenLayers());
-                maxLayers = Math.max(maxLayers, genome.hiddenLayers());
-                minMemory = Math.min(minMemory, genome.memoryCells());
-                maxMemory = Math.max(maxMemory, genome.memoryCells());
-                minRecurrent = Math.min(minRecurrent, genome.recurrentConnections());
-                maxRecurrent = Math.max(maxRecurrent, genome.recurrentConnections());
-            }
-            return "Population: H " + minHidden + "-" + maxHidden
-                    + ", L " + minLayers + "-" + maxLayers
-                    + ", M " + minMemory + "-" + maxMemory
-                    + ", R " + minRecurrent + "-" + maxRecurrent;
-        }
-
-        private void waitWhilePaused() {
-            while (paused && !stopped) {
-                sleep(75L);
-            }
-        }
-
-        private static void sleep(final long millis) {
-            try {
-                Thread.sleep(millis);
-            } catch (InterruptedException interruptedException) {
-                Thread.currentThread().interrupt();
-            }
+        public String toString() {
+            return label;
         }
     }
 
@@ -688,6 +730,9 @@ public final class XorNeuroEvolutionVisualizer {
         private static final Color NEGATIVE = new Color(206, 87, 79);
         private static final Color RECURRENT = new Color(111, 86, 174);
         private static final Color BIAS_LINK = new Color(60, 67, 78);
+        private static final int STABLE_HIDDEN_LAYER_SLOTS = 4;
+        private static final int STABLE_HIDDEN_NEURON_SLOTS = 12;
+        private static final int STABLE_MEMORY_SLOTS = 4;
 
         private VisualState state;
 
@@ -758,19 +803,31 @@ public final class XorNeuroEvolutionVisualizer {
                 }
             }
             Map<String, Point2D.Double> positions = new HashMap<>();
-            int hiddenLayers = snapshot.genome().hiddenLayers();
             double outputX = Math.max(470.0, getWidth() - 80.0);
-            double hiddenStart = grouped.get(VisualNodeLayer.MEMORY).isEmpty() ? 235.0 : 285.0;
+            double hiddenStart = 285.0;
             double hiddenEnd = Math.max(hiddenStart, outputX - 145.0);
-            placeColumn(positions, grouped.get(VisualNodeLayer.INPUT), 72.0);
-            placeColumn(positions, grouped.get(VisualNodeLayer.MEMORY), 190.0);
+            placeIndexedColumn(positions, grouped.get(VisualNodeLayer.INPUT), 72.0, stableInputSlots(snapshot));
+            placeIndexedColumn(positions, grouped.get(VisualNodeLayer.MEMORY), 190.0, STABLE_MEMORY_SLOTS);
+            int hiddenLayers = snapshot.genome().hiddenLayers();
             for (int layer = 0; layer < hiddenLayers; layer++) {
-                double x = hiddenColumnX(layer, hiddenLayers, hiddenStart, hiddenEnd);
-                placeColumn(positions, hiddenByDepth.getOrDefault(layer, List.of()), x);
+                double x = hiddenColumnX(layer, STABLE_HIDDEN_LAYER_SLOTS, hiddenStart, hiddenEnd);
+                placeIndexedColumn(
+                        positions,
+                        hiddenByDepth.getOrDefault(layer, List.of()),
+                        x,
+                        STABLE_HIDDEN_NEURON_SLOTS);
                 placeBiasNodes(positions, biasByDepth.getOrDefault(layer, List.of()), x);
             }
-            placeColumn(positions, biasByDepth.getOrDefault(hiddenLayers, List.of()), Math.max(hiddenEnd + 55.0, outputX - 105.0));
-            placeColumn(positions, grouped.get(VisualNodeLayer.OUTPUT), outputX);
+            placeIndexedColumn(
+                    positions,
+                    biasByDepth.getOrDefault(hiddenLayers, List.of()),
+                    Math.max(hiddenEnd + 55.0, outputX - 105.0),
+                    1);
+            placeIndexedColumn(
+                    positions,
+                    grouped.get(VisualNodeLayer.OUTPUT),
+                    outputX,
+                    Math.max(1, snapshot.problem().outputDimensions()));
             return positions;
         }
 
@@ -794,20 +851,51 @@ public final class XorNeuroEvolutionVisualizer {
             }
         }
 
-        private void placeColumn(
+        private void placeIndexedColumn(
                 final Map<String, Point2D.Double> positions,
                 final List<VisualNode> nodes,
-                final double x) {
+                final double x,
+                final int slotCount) {
             if (nodes.isEmpty()) {
                 return;
             }
+            int slots = Math.max(1, Math.max(slotCount, highestNodeIndex(nodes) + 1));
+            for (VisualNode node : nodes) {
+                int slot = Math.max(0, Math.min(slots - 1, node.index()));
+                positions.put(node.id(), new Point2D.Double(x, yForSlot(slot, slots)));
+            }
+        }
+
+        private double yForSlot(final int slot, final int slotCount) {
             double top = 80.0;
             double bottom = Math.max(top + 1.0, getHeight() - 110.0);
-            double spacing = nodes.size() == 1 ? 0.0 : (bottom - top) / (nodes.size() - 1.0);
-            for (int i = 0; i < nodes.size(); i++) {
-                double y = nodes.size() == 1 ? (top + bottom) * 0.5 : top + spacing * i;
-                positions.put(nodes.get(i).id(), new Point2D.Double(x, y));
+            if (slotCount <= 1) {
+                return (top + bottom) * 0.5;
             }
+            return top + (bottom - top) * slot / (slotCount - 1.0);
+        }
+
+        private static int highestNodeIndex(final List<VisualNode> nodes) {
+            int highest = 0;
+            for (VisualNode node : nodes) {
+                highest = Math.max(highest, node.index());
+            }
+            return highest;
+        }
+
+        private static int stableInputSlots(final NetworkSnapshot snapshot) {
+            int slots = 0;
+            for (XorInputRepresentation representation : XorInputRepresentation.values()) {
+                slots = Math.max(
+                        slots,
+                        representation.encode(
+                                new double[snapshot.problem().inputDimensions()],
+                                snapshot.problem().kernelCenters(),
+                                true,
+                                true,
+                                snapshot.genome().kernelSharpness()).length);
+            }
+            return Math.max(slots, snapshot.genome().inputFeatureSize(snapshot.problem()));
         }
 
         private void paintLinks(
@@ -869,17 +957,15 @@ public final class XorNeuroEvolutionVisualizer {
                 if (point == null) {
                     continue;
                 }
-                int radius = switch (node.layer()) {
-                    case INPUT -> 11;
-                    case MEMORY, BIAS -> 12;
-                    case HIDDEN -> 16;
-                    case OUTPUT -> 20;
-                };
+                int radius = nodeRadius(snapshot, node);
                 Color color = nodeColor(node.layer());
                 g.setColor(withAlpha(color, 52));
                 g.fillOval((int) point.x - radius - 7, (int) point.y - radius - 7, (radius + 7) * 2, (radius + 7) * 2);
                 g.setColor(color);
                 g.fillOval((int) point.x - radius, (int) point.y - radius, radius * 2, radius * 2);
+                if (!shouldDrawNodeLabel(snapshot, node, radius)) {
+                    continue;
+                }
                 g.setColor(Color.WHITE);
                 g.setFont(g.getFont().deriveFont(Font.BOLD, node.layer() == VisualNodeLayer.OUTPUT ? 13.0f : 10.0f));
                 FontMetrics metrics = g.getFontMetrics();
@@ -888,6 +974,41 @@ public final class XorNeuroEvolutionVisualizer {
                         (int) point.x - metrics.stringWidth(node.label()) / 2,
                         (int) point.y + metrics.getAscent() / 2 - 2);
             }
+        }
+
+        private int nodeRadius(final NetworkSnapshot snapshot, final VisualNode node) {
+            int maxRadius = switch (node.layer()) {
+                case INPUT -> 11;
+                case MEMORY, BIAS -> 12;
+                case HIDDEN -> 16;
+                case OUTPUT -> 18;
+            };
+            int slots = stableSlotsFor(snapshot, node);
+            if (slots <= 1) {
+                return maxRadius;
+            }
+            double spacing = Math.abs(yForSlot(1, slots) - yForSlot(0, slots));
+            return Math.max(4, Math.min(maxRadius, (int) Math.floor(spacing * 0.38)));
+        }
+
+        private boolean shouldDrawNodeLabel(
+                final NetworkSnapshot snapshot,
+                final VisualNode node,
+                final int radius) {
+            if (node.layer() == VisualNodeLayer.BIAS || node.layer() == VisualNodeLayer.HIDDEN) {
+                return true;
+            }
+            return radius >= 8 && stableSlotsFor(snapshot, node) <= 24;
+        }
+
+        private static int stableSlotsFor(final NetworkSnapshot snapshot, final VisualNode node) {
+            return switch (node.layer()) {
+                case INPUT -> stableInputSlots(snapshot);
+                case MEMORY -> STABLE_MEMORY_SLOTS;
+                case BIAS -> 1;
+                case HIDDEN -> STABLE_HIDDEN_NEURON_SLOTS;
+                case OUTPUT -> Math.max(1, snapshot.problem().outputDimensions());
+            };
         }
 
         private void paintGenomeStrip(final Graphics2D g, final EvolvableXorGenome genome) {
@@ -965,6 +1086,13 @@ public final class XorNeuroEvolutionVisualizer {
         appendLine(details, "Best discovered generation", Integer.toString(score.generation()));
         details.append('\n');
 
+        details.append("CURRENT SEARCH STATE\n");
+        details.append("--------------------\n");
+        appendLine(details, "Strategy", state.strategySummary());
+        appendLine(details, "Population", state.populationSummary());
+        appendLine(details, "Generation rate", format(state.generationsPerSecond()) + " gen/s");
+        details.append('\n');
+
         details.append("PROBLEM DESCRIPTION\n");
         details.append("-------------------\n");
         details.append(problem.description());
@@ -985,6 +1113,22 @@ public final class XorNeuroEvolutionVisualizer {
         appendLine(details, "Complexity", format(score.complexity()));
         appendLine(details, "Complexity pressure", format(XorNeuroEvolution.normalizedComplexity(problem, score.complexity())));
         details.append('\n');
+
+        if (problem.freeEnergyProfile().enabled()) {
+            NeuroEvolutionFreeEnergyProfile freeEnergyProfile = problem.freeEnergyProfile();
+            details.append("PREDICTIVE CODING\n");
+            details.append("-----------------\n");
+            appendLine(details, "Predictive free energy", format(score.predictiveFreeEnergy()));
+            appendLine(details, "Sensory prediction energy", format(score.sensoryPredictionEnergy()));
+            appendLine(details, "Latent prediction energy", format(score.latentPredictionEnergy()));
+            appendLine(details, "Complexity prior energy", format(score.complexityPriorEnergy()));
+            appendLine(details, "Objective weight", format(freeEnergyProfile.objectiveWeight()));
+            appendLine(details, "Sensory / latent / prior weights",
+                    format(freeEnergyProfile.sensoryPredictionWeight())
+                            + " / " + format(freeEnergyProfile.latentPredictionWeight())
+                            + " / " + format(freeEnergyProfile.complexityPriorWeight()));
+            details.append('\n');
+        }
 
         if (!score.outputGroupScores().isEmpty() && problem.outputDimensions() > 1) {
             details.append("OUTPUT GROUP DIAGNOSTICS\n");
@@ -1164,13 +1308,142 @@ public final class XorNeuroEvolutionVisualizer {
         return value ? "yes" : "no";
     }
 
-    private record ChampionView(
-            XorNeuroEvolution.CandidateScore score,
-            NetworkSnapshot snapshot) {
+    private static String frontierText(
+            final String label,
+            final XorNeuroEvolution.CandidateScore score,
+            final double value) {
+        if (score == null || !Double.isFinite(value)) {
+            return label + ": waiting";
+        }
+        return label + ": g" + score.generation() + " / " + format(value);
+    }
 
-        private ChampionView {
+    private static String frontierPercentText(
+            final String label,
+            final XorNeuroEvolution.CandidateScore score,
+            final double value) {
+        if (score == null || !Double.isFinite(value)) {
+            return label + ": waiting";
+        }
+        return label + ": g" + score.generation() + " / " + formatPercent(value);
+    }
+
+    private static double averageAttentionImprovement(final XorNeuroEvolution.CandidateScore score) {
+        double total = 0.0;
+        int count = 0;
+        for (NeuroEvolutionOutputGroupScore groupScore : score.outputGroupScores()) {
+            String groupName = groupScore.group().name().toLowerCase(Locale.ROOT);
+            if (groupName.startsWith("attention")) {
+                total += groupScore.generalizationImprovementOverBaseline();
+                count++;
+            }
+        }
+        return count == 0 ? Double.NaN : total / count;
+    }
+
+    private static double compactTradeoff(
+            final NeuroEvolutionProblem problem,
+            final XorNeuroEvolution.CandidateScore score) {
+        if (score == null) {
+            return Double.NaN;
+        }
+        double groupRelativeError = XorNeuroEvolution.boundedGroupRelativeGeneralizationError(
+                score.groupRelativeGeneralizationError());
+        return score.generalizationMeanSquaredError()
+                + 0.01 * groupRelativeError
+                + 0.001 * XorNeuroEvolution.normalizedComplexity(problem, score.complexity());
+    }
+
+    private static final class ParetoFrontierTracker {
+
+        private XorNeuroEvolution.CandidateScore bestByScore;
+        private XorNeuroEvolution.CandidateScore bestByGeneralization;
+        private XorNeuroEvolution.CandidateScore bestByGroup;
+        private XorNeuroEvolution.CandidateScore bestByAttention;
+        private XorNeuroEvolution.CandidateScore bestByTradeoff;
+
+        void clear() {
+            bestByScore = null;
+            bestByGeneralization = null;
+            bestByGroup = null;
+            bestByAttention = null;
+            bestByTradeoff = null;
+        }
+
+        void observe(
+                final NeuroEvolutionProblem problem,
+                final XorNeuroEvolution.CandidateScore score) {
+            Objects.requireNonNull(problem, "Problem cannot be null.");
             Objects.requireNonNull(score, "Score cannot be null.");
-            Objects.requireNonNull(snapshot, "Snapshot cannot be null.");
+            if (bestByScore == null || score.score() < bestByScore.score()) {
+                bestByScore = score;
+            }
+            if (Double.isFinite(score.generalizationMeanSquaredError())
+                    && (bestByGeneralization == null
+                    || score.generalizationMeanSquaredError()
+                    < bestByGeneralization.generalizationMeanSquaredError())) {
+                bestByGeneralization = score;
+            }
+            if (Double.isFinite(score.groupRelativeGeneralizationError())
+                    && (bestByGroup == null
+                    || score.groupRelativeGeneralizationError()
+                    < bestByGroup.groupRelativeGeneralizationError())) {
+                bestByGroup = score;
+            }
+            double attention = averageAttentionImprovement(score);
+            if (Double.isFinite(attention)
+                    && (bestByAttention == null
+                    || attention > averageAttentionImprovement(bestByAttention))) {
+                bestByAttention = score;
+            }
+            double tradeoff = compactTradeoff(problem, score);
+            if (Double.isFinite(tradeoff)
+                    && (bestByTradeoff == null
+                    || tradeoff < compactTradeoff(problem, bestByTradeoff))) {
+                bestByTradeoff = score;
+            }
+        }
+
+        XorNeuroEvolution.CandidateScore bestByScore() {
+            return bestByScore;
+        }
+
+        double scoreValue() {
+            return bestByScore == null ? Double.NaN : bestByScore.score();
+        }
+
+        XorNeuroEvolution.CandidateScore bestByGeneralization() {
+            return bestByGeneralization;
+        }
+
+        double generalizationValue() {
+            return bestByGeneralization == null
+                    ? Double.NaN
+                    : bestByGeneralization.generalizationMeanSquaredError();
+        }
+
+        XorNeuroEvolution.CandidateScore bestByGroup() {
+            return bestByGroup;
+        }
+
+        double groupValue() {
+            return bestByGroup == null ? Double.NaN : bestByGroup.groupRelativeGeneralizationError();
+        }
+
+        XorNeuroEvolution.CandidateScore bestByAttention() {
+            return bestByAttention;
+        }
+
+        double attentionValue() {
+            return bestByAttention == null ? Double.NaN : averageAttentionImprovement(bestByAttention);
+        }
+
+        XorNeuroEvolution.CandidateScore bestByTradeoff() {
+            return bestByTradeoff;
+        }
+
+        double tradeoffValue(final NeuroEvolutionProblem problem) {
+            return compactTradeoff(problem, bestByTradeoff);
         }
     }
 
@@ -1179,6 +1452,7 @@ public final class XorNeuroEvolutionVisualizer {
             XorNeuroEvolution.CandidateScore score,
             XorNeuroEvolution.CandidateScore bestScore,
             String populationSummary,
+            String strategySummary,
             double generationsPerSecond,
             NetworkSnapshot snapshot,
             NetworkSnapshot bestSnapshot) {
@@ -1187,17 +1461,13 @@ public final class XorNeuroEvolutionVisualizer {
             Objects.requireNonNull(score, "Score cannot be null.");
             Objects.requireNonNull(bestScore, "Best score cannot be null.");
             Objects.requireNonNull(populationSummary, "Population summary cannot be null.");
+            Objects.requireNonNull(strategySummary, "Strategy summary cannot be null.");
             if (!Double.isFinite(generationsPerSecond) || generationsPerSecond < 0.0) {
                 throw new IllegalArgumentException("Generation rate must be finite and non-negative.");
             }
             Objects.requireNonNull(snapshot, "Snapshot cannot be null.");
             Objects.requireNonNull(bestSnapshot, "Best snapshot cannot be null.");
         }
-    }
-
-    @FunctionalInterface
-    private interface StateListener {
-        void accept(VisualState state);
     }
 
     private static String format(final double value) {

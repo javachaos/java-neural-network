@@ -4,6 +4,8 @@ module examples {
     requires transitive core;
     requires transitive shared;
     requires transitive java.desktop;
+    requires io.grpc;
+    requires io.grpc.stub;
     requires org.apache.logging.log4j;
     requires static org.junit.jupiter.api;
 }

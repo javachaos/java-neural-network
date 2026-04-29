@@ -1,6 +1,7 @@
 package com.github.javachaos.javaneuralnetwork.examples;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Generic entry point for evolving scalar learners. The older
@@ -22,6 +23,16 @@ public final class NeuroEvolution {
         return XorNeuroEvolution.evolve(
                 Objects.requireNonNull(problem, "Problem cannot be null."),
                 Objects.requireNonNull(config, "Config cannot be null."));
+    }
+
+    public static XorNeuroEvolution.EvolutionResult evolve(
+            final NeuroEvolutionProblem problem,
+            final XorNeuroEvolution.EvolutionConfig config,
+            final Consumer<XorNeuroEvolution.EvolutionProgress> progressSink) {
+        return XorNeuroEvolution.evolve(
+                Objects.requireNonNull(problem, "Problem cannot be null."),
+                Objects.requireNonNull(config, "Config cannot be null."),
+                Objects.requireNonNull(progressSink, "Progress sink cannot be null."));
     }
 
     public static XorNeuroEvolution.CandidateScore evaluate(

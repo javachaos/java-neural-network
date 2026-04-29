@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package neuroevolution.worker.v1;
+
+service NeuroEvolutionWorkerService {
+  rpc Run(RunRequest) returns (stream WorkerEvent);
+  rpc Control(ControlRequest) returns (WorkerEvent);
+}
+
+message RunRequest {
+  string start_json = 1;
+}
+
+message ControlRequest {
+  string control_json = 1;
+}
+
+message WorkerEvent {
+  string event_json = 1;
+}

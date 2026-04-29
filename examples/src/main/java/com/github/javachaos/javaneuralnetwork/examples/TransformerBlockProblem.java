@@ -21,6 +21,8 @@ public final class TransformerBlockProblem extends NeuroEvolutionProblem {
     private static final int ATTENTION_OUTPUTS = HEADS * SEQUENCE_LENGTH * SEQUENCE_LENGTH;
     private static final int OUTPUT_DIMENSIONS = FINAL_OUTPUTS + QKV_OUTPUTS + ATTENTION_OUTPUTS;
     private static final double ATTENTION_OBJECTIVE_WEIGHT = 2.5;
+    private static final NeuroEvolutionFreeEnergyProfile FREE_ENERGY_PROFILE =
+            NeuroEvolutionFreeEnergyProfile.predictiveCoding(0.025, 1.0, 0.25, 0.006, 3.0);
     private static final double ATTENTION_LOGIT_SCALE = 3.8;
     private static final int BOS = 0;
     private static final int RED = 1;
@@ -172,6 +174,11 @@ public final class TransformerBlockProblem extends NeuroEvolutionProblem {
                         FINAL_OUTPUTS + QKV_OUTPUTS + ATTENTION_OUTPUTS_PER_HEAD,
                         OUTPUT_DIMENSIONS,
                         ATTENTION_OBJECTIVE_WEIGHT));
+    }
+
+    @Override
+    public NeuroEvolutionFreeEnergyProfile freeEnergyProfile() {
+        return FREE_ENERGY_PROFILE;
     }
 
     public String tokenLabel(final int token) {

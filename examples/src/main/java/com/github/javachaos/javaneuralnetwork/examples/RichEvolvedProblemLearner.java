@@ -217,6 +217,80 @@ public final class RichEvolvedProblemLearner {
                 weightedBaselineRelativeMeanSquaredError(groups, groupTotals, baselineTotals, groupCounts));
     }
 
+    public NeuroEvolutionFreeEnergyMetrics predictiveFreeEnergy(
+            final List<NeuroEvolutionSample> samples,
+            final double normalizedComplexity) {
+        Objects.requireNonNull(samples, "Samples cannot be null.");
+        if (!Double.isFinite(normalizedComplexity) || normalizedComplexity < 0.0) {
+            throw new IllegalArgumentException("Normalized complexity must be finite and non-negative.");
+        }
+        NeuroEvolutionFreeEnergyProfile profile = problem.freeEnergyProfile();
+        if (!profile.enabled() || samples.isEmpty()) {
+            return NeuroEvolutionFreeEnergyMetrics.disabled();
+        }
+
+        List<NeuroEvolutionOutputGroup> groups = validOutputGroups();
+        double[] trainingMeans = problem.trainingTargetMeans();
+        double[] groupTotals = new double[groups.size()];
+        double[] baselineTotals = new double[groups.size()];
+        int[] groupCounts = new int[groups.size()];
+        double latentTotal = 0.0;
+        int latentCount = 0;
+
+        resetState();
+        for (NeuroEvolutionSample sample : samples) {
+            prepareSampleState();
+            ForwardPass pass = forward(sample.input());
+            if (!arrayIsFinite(pass.outputs())) {
+                return NeuroEvolutionFreeEnergyMetrics.from(
+                        profile,
+                        Double.POSITIVE_INFINITY,
+                        Double.POSITIVE_INFINITY,
+                        normalizedComplexity);
+            }
+            double[] targets = sample.targets();
+            for (int groupIndex = 0; groupIndex < groups.size(); groupIndex++) {
+                NeuroEvolutionOutputGroup group = groups.get(groupIndex);
+                for (int output = group.startInclusive(); output < group.endExclusive(); output++) {
+                    double error = targets[output] - pass.outputs()[output];
+                    double baselineError = targets[output] - trainingMeans[output];
+                    groupTotals[groupIndex] += error * error;
+                    baselineTotals[groupIndex] += baselineError * baselineError;
+                    groupCounts[groupIndex]++;
+                }
+            }
+            for (int layer = 0; layer < hiddenWeights.length; layer++) {
+                double layerEnergy = latentPredictionEnergy(pass, layer);
+                if (!Double.isFinite(layerEnergy)) {
+                    return NeuroEvolutionFreeEnergyMetrics.from(
+                            profile,
+                            weightedBaselineRelativeMeanSquaredError(
+                                    groups,
+                                    groupTotals,
+                                    baselineTotals,
+                                    groupCounts),
+                            Double.POSITIVE_INFINITY,
+                            normalizedComplexity);
+                }
+                latentTotal += layerEnergy;
+                latentCount++;
+            }
+            finishSampleState(pass);
+        }
+
+        double sensoryEnergy = weightedBaselineRelativeMeanSquaredError(
+                groups,
+                groupTotals,
+                baselineTotals,
+                groupCounts);
+        double latentEnergy = latentCount == 0 ? 0.0 : latentTotal / latentCount;
+        return NeuroEvolutionFreeEnergyMetrics.from(
+                profile,
+                sensoryEnergy,
+                latentEnergy,
+                normalizedComplexity);
+    }
+
     public List<NeuroEvolutionOutputGroupScore> outputGroupScores() {
         List<NeuroEvolutionOutputGroup> groups = validOutputGroups();
         double[] trainingMeans = targetMeans(problem.trainingSamples());
@@ -804,6 +878,48 @@ public final class RichEvolvedProblemLearner {
             weightTotal += weight;
         }
         return weightTotal == 0.0 ? 0.0 : weightedTotal / weightTotal;
+    }
+
+    private double latentPredictionEnergy(final ForwardPass pass, final int layer) {
+        double[] actual = pass.hiddenInputs()[layer];
+        double[] prediction = new double[actual.length];
+        for (int input = 1; input < actual.length; input++) {
+            double predicted = 0.0;
+            int connections = 0;
+            for (int neuron = 0; neuron < hiddenWeights[layer].length; neuron++) {
+                if (hiddenMask[layer][neuron][input]) {
+                    predicted += pass.hiddenLayers()[layer][neuron] * hiddenWeights[layer][neuron][input];
+                    connections++;
+                }
+            }
+            if (connections > 0) {
+                prediction[input] = predicted / Math.sqrt(connections);
+            }
+        }
+        return cosinePredictionEnergy(actual, prediction, 1);
+    }
+
+    private static double cosinePredictionEnergy(
+            final double[] actual,
+            final double[] prediction,
+            final int startIndex) {
+        double actualNorm = 0.0;
+        double predictionNorm = 0.0;
+        double dot = 0.0;
+        for (int i = startIndex; i < actual.length; i++) {
+            actualNorm += actual[i] * actual[i];
+            predictionNorm += prediction[i] * prediction[i];
+            dot += actual[i] * prediction[i];
+        }
+        if (actualNorm <= 1.0e-12) {
+            return 0.0;
+        }
+        if (predictionNorm <= 1.0e-12) {
+            return 1.0;
+        }
+        double cosine = dot / Math.sqrt(actualNorm * predictionNorm);
+        cosine = Math.max(-1.0, Math.min(1.0, cosine));
+        return 0.5 * (1.0 - cosine);
     }
 
     private static double baselineRelativeError(

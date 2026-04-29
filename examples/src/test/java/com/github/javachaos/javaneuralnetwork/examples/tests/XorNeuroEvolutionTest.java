@@ -6,15 +6,30 @@ import com.github.javachaos.javaneuralnetwork.examples.DefaultNeuroEvolutionProb
 import com.github.javachaos.javaneuralnetwork.examples.EvolvableXorGenome;
 import com.github.javachaos.javaneuralnetwork.examples.GeometricClassificationProblem;
 import com.github.javachaos.javaneuralnetwork.examples.IdentityAutoencoderProblem;
+import com.github.javachaos.javaneuralnetwork.examples.LocalNeuroEvolutionWorker;
 import com.github.javachaos.javaneuralnetwork.examples.MettleTestProblem;
 import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolution;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionArtifactRef;
 import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionChampionCheckpoint;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionCheckpointEvent;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionDistributedConfig;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionFreeEnergyMetrics;
 import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionGeneralizationEvaluator;
 import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionProblem;
 import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionProblemCatalog;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionRunCompletion;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionRunHandle;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionRunListener;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionRunProgress;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionRunRequest;
+import com.github.javachaos.javaneuralnetwork.examples.NeuroEvolutionWorker;
 import com.github.javachaos.javaneuralnetwork.examples.RingProblem;
 import com.github.javachaos.javaneuralnetwork.examples.RichEvolvedXorLearner;
 import com.github.javachaos.javaneuralnetwork.examples.RichEvolvedProblemLearner;
+import com.github.javachaos.javaneuralnetwork.examples.RemoteRustNeuroEvolutionWorker;
+import com.github.javachaos.javaneuralnetwork.examples.RealTransformerBlockProblem;
+import com.github.javachaos.javaneuralnetwork.examples.RustNeuroEvolutionSidecar;
+import com.github.javachaos.javaneuralnetwork.examples.RustNeuroEvolutionWorker;
 import com.github.javachaos.javaneuralnetwork.examples.SineWaveProblem;
 import com.github.javachaos.javaneuralnetwork.examples.TextTrainingMettleProblem;
 import com.github.javachaos.javaneuralnetwork.examples.TransformerAttentionProblem;
@@ -26,12 +41,21 @@ import com.github.javachaos.javaneuralnetwork.examples.XorLearningSchedule;
 import com.github.javachaos.javaneuralnetwork.examples.XorLossFunction;
 import com.github.javachaos.javaneuralnetwork.examples.XorMutationType;
 import com.github.javachaos.javaneuralnetwork.examples.XorNeuroEvolution;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -121,6 +145,16 @@ class XorNeuroEvolutionTest {
     }
 
     @Test
+    void genomesCanExploreWiderHiddenLayers() {
+        EvolvableXorGenome genome = EvolvableXorGenome.random(new Random(13L));
+        for (int i = 0; i < 20; i++) {
+            genome = genome.mutate(new Random(300L + i), XorMutationType.ADD_NEURON, 0.1);
+        }
+
+        assertEquals(12, genome.hiddenNeurons());
+    }
+
+    @Test
     void genericLearnerRunsAgainstNonXorProblem() {
         NeuroEvolutionProblem problem = catalog.find("and", 5);
         EvolvableXorGenome genome = EvolvableXorGenome.random(new Random(7L));
@@ -134,6 +168,7 @@ class XorNeuroEvolutionTest {
         assertEquals("Sine wave", catalog.find("sine-wave", 5).name());
         assertEquals("Identity autoencoder", catalog.find("autoencoder", 5).name());
         assertEquals("Transformer attention", catalog.find("transformer", 5).name());
+        assertEquals("Real transformer block", catalog.find("real-transformer", 5).name());
         assertEquals("Text training mettle", catalog.find("text", 5).name());
         assertEquals("Spiral bands", catalog.find("spiral-bands", 5).name());
         assertEquals("Mettle test", catalog.find("mettle-test", 5).name());
@@ -278,9 +313,40 @@ class XorNeuroEvolutionTest {
         assertEquals(6, problem.outputGroups().size());
         assertEquals("Final residual outputs", problem.outputGroups().get(0).name());
         assertEquals("Attention head 1", problem.outputGroups().get(5).name());
+        assertTrue(problem.freeEnergyProfile().enabled());
+        assertTrue(problem.freeEnergyProfile().latentPredictionWeight() > 0.0);
         assertTrue(problem.outputGroups().get(4).objectiveWeight()
                 > problem.outputGroups().get(1).objectiveWeight());
         assertTrue(problem.generalizationSamples().size() > 20);
+        assertTrue(different(redCubeTarget, blueSphereTarget));
+        for (double target : redCubeTarget) {
+            assertTrue(target >= 0.0 && target <= 1.0);
+        }
+    }
+
+    @Test
+    void realTransformerBlockProblemProducesFullBlockTargets() {
+        RealTransformerBlockProblem problem = new RealTransformerBlockProblem(7);
+
+        double[] redCubeTarget = problem.targetVector(problem.encodeTokenSequence(0, 1, 3, 5));
+        double[] blueSphereTarget = problem.targetVector(problem.encodeTokenSequence(0, 2, 4, 6));
+
+        assertEquals(4, problem.inputDimensions());
+        assertEquals(160, problem.outputDimensions());
+        assertEquals("Y.P0.D0", problem.outputLabel(0));
+        assertEquals("LN1.P0.D0", problem.outputLabel(16));
+        assertEquals("LN2.P0.D0", problem.outputLabel(32));
+        assertEquals("Q0.P0.D0", problem.outputLabel(48));
+        assertEquals("A1.Q3.K3", problem.outputLabel(127));
+        assertEquals("MLP.P3.H7", problem.outputLabel(159));
+        assertEquals("RED", problem.tokenLabel(3));
+        assertEquals(9, problem.outputGroups().size());
+        assertEquals("Final residual stream", problem.outputGroups().get(0).name());
+        assertEquals("MLP GELU hidden", problem.outputGroups().get(8).name());
+        assertTrue(problem.freeEnergyProfile().enabled());
+        assertTrue(problem.outputGroups().get(6).objectiveWeight()
+                > problem.outputGroups().get(1).objectiveWeight());
+        assertTrue(problem.generalizationSamples().size() > 60);
         assertTrue(different(redCubeTarget, blueSphereTarget));
         for (double target : redCubeTarget) {
             assertTrue(target >= 0.0 && target <= 1.0);
@@ -305,6 +371,25 @@ class XorNeuroEvolutionTest {
         assertTrue(learner.outputGroupScores().stream()
                 .allMatch(score -> Double.isFinite(score.generalizationMeanSquaredError())
                         && Double.isFinite(score.baselineGeneralizationMeanSquaredError())));
+        NeuroEvolutionFreeEnergyMetrics freeEnergy = learner.predictiveFreeEnergy(
+                problem.generalizationSamples(),
+                genome.complexityCost(problem) / problem.complexityScale());
+        assertTrue(Double.isFinite(freeEnergy.value()));
+        assertTrue(freeEnergy.value() > 0.0);
+        assertTrue(freeEnergy.latentPredictionEnergy() >= 0.0);
+        XorNeuroEvolution.EvolutionConfig config = new XorNeuroEvolution.EvolutionConfig(
+                8,
+                1,
+                4,
+                0.04,
+                1,
+                0.08,
+                0.001,
+                2,
+                73L);
+        XorNeuroEvolution.CandidateScore score = XorNeuroEvolution.evaluate(problem, genome, config, 0);
+        assertTrue(score.predictiveFreeEnergy() > 0.0);
+        assertTrue(score.sensoryPredictionEnergy() > 0.0);
         assertTrue(Double.isFinite(learner.groupedMeanSquaredError(problem.generalizationSamples())
                 .baselineRelativeMeanSquaredError()));
         assertTrue(Double.isFinite(mse));
@@ -433,7 +518,366 @@ class XorNeuroEvolutionTest {
         assertEquals(config, loaded.config());
         assertEquals(score.genome(), loaded.score().genome());
         assertEquals(score.score(), loaded.score().score(), 1.0e-12);
+        assertEquals(score.predictiveFreeEnergy(), loaded.score().predictiveFreeEnergy(), 1.0e-12);
         assertEquals(score.generation(), loaded.score().generation());
+    }
+
+    @Test
+    void localWorkerEmitsProgressAndCheckpointsThroughWorkerBoundary() throws Exception {
+        NeuroEvolutionProblem problem = catalog.find("and", 5);
+        XorNeuroEvolution.EvolutionConfig config =
+                new XorNeuroEvolution.EvolutionConfig(
+                        4,
+                        2,
+                        6,
+                        0.05,
+                        1,
+                        0.06,
+                        0.001,
+                        1,
+                        1,
+                        41L);
+        Path checkpoint = Files.createTempFile("local-neuro-evolution-worker", ".properties");
+        CountDownLatch progressLatch = new CountDownLatch(1);
+        CountDownLatch checkpointLatch = new CountDownLatch(1);
+        CountDownLatch completionLatch = new CountDownLatch(1);
+        AtomicReference<NeuroEvolutionRunProgress> progress = new AtomicReference<>();
+        AtomicReference<NeuroEvolutionCheckpointEvent> checkpointEvent = new AtomicReference<>();
+        AtomicReference<NeuroEvolutionRunCompletion> completion = new AtomicReference<>();
+
+        try (NeuroEvolutionWorker worker = new LocalNeuroEvolutionWorker()) {
+            NeuroEvolutionRunHandle handle = worker.start(
+                    new NeuroEvolutionRunRequest(problem, config, true, checkpoint, 0L),
+                    new NeuroEvolutionRunListener() {
+                        @Override
+                        public void onProgress(final NeuroEvolutionRunProgress update) {
+                            progress.compareAndSet(null, update);
+                            progressLatch.countDown();
+                        }
+
+                        @Override
+                        public void onCheckpoint(final NeuroEvolutionCheckpointEvent event) {
+                            checkpointEvent.set(event);
+                            checkpointLatch.countDown();
+                        }
+
+                        @Override
+                        public void onComplete(final NeuroEvolutionRunCompletion result) {
+                            completion.set(result);
+                            completionLatch.countDown();
+                        }
+                    });
+
+            try {
+                assertTrue(progressLatch.await(20, TimeUnit.SECONDS));
+                assertTrue(checkpointLatch.await(20, TimeUnit.SECONDS));
+                assertTrue(completionLatch.await(20, TimeUnit.SECONDS));
+                assertTrue(handle.isStopped());
+                assertEquals(problem.key(), progress.get().problem().key());
+                assertEquals(problem.key(), completion.get().problem().key());
+                assertTrue(Double.isFinite(progress.get().best().score()));
+                assertTrue(checkpointEvent.get().saved());
+                assertTrue(Files.exists(checkpoint));
+                assertEquals(problem.key(), NeuroEvolutionChampionCheckpoint.load(checkpoint, catalog).problem().key());
+            } finally {
+                handle.stop();
+                Files.deleteIfExists(checkpoint);
+            }
+        }
+    }
+
+    @Test
+    void rustSidecarSpeaksJsonlProtocolWhenBuilt() throws Exception {
+        Path repositoryRoot = repositoryRoot();
+        Path workerBinary = RustNeuroEvolutionSidecar.defaultBinaryPath(repositoryRoot);
+        Assumptions.assumeTrue(
+                Files.isExecutable(workerBinary),
+                () -> "Build rust-worker first with cargo build --release --manifest-path "
+                        + repositoryRoot.resolve("rust-worker").resolve("Cargo.toml"));
+
+        CountDownLatch readyLatch = new CountDownLatch(1);
+        CountDownLatch acceptedLatch = new CountDownLatch(1);
+        CountDownLatch pausedLatch = new CountDownLatch(1);
+        CountDownLatch resumedLatch = new CountDownLatch(1);
+        CountDownLatch stoppedLatch = new CountDownLatch(1);
+        List<RustNeuroEvolutionSidecar.RustWorkerEvent> events = new CopyOnWriteArrayList<>();
+
+        try (RustNeuroEvolutionSidecar sidecar = new RustNeuroEvolutionSidecar(
+                RustNeuroEvolutionSidecar.defaultCommand(repositoryRoot),
+                event -> {
+                    events.add(event);
+                    if ("ready".equals(event.type())) {
+                        readyLatch.countDown();
+                    } else if ("accepted".equals(event.type())) {
+                        acceptedLatch.countDown();
+                    } else if ("paused".equals(event.type())) {
+                        pausedLatch.countDown();
+                    } else if ("resumed".equals(event.type())) {
+                        resumedLatch.countDown();
+                    } else if ("stopped".equals(event.type())) {
+                        stoppedLatch.countDown();
+                    }
+                })) {
+            NeuroEvolutionProblem problem = catalog.find("transformer-block", 5);
+            XorNeuroEvolution.EvolutionConfig config = new XorNeuroEvolution.EvolutionConfig(
+                    4,
+                    3,
+                    5,
+                    0.05,
+                    1,
+                    0.05,
+                    0.001,
+                    1,
+                    1,
+                    83L);
+
+            sidecar.start();
+            assertTrue(readyLatch.await(5, TimeUnit.SECONDS));
+            sidecar.submit(new NeuroEvolutionRunRequest(problem, config));
+            assertTrue(acceptedLatch.await(5, TimeUnit.SECONDS));
+            sidecar.pause();
+            assertTrue(pausedLatch.await(5, TimeUnit.SECONDS));
+            sidecar.resume();
+            assertTrue(resumedLatch.await(5, TimeUnit.SECONDS));
+            sidecar.stop();
+            assertTrue(stoppedLatch.await(5, TimeUnit.SECONDS));
+        }
+
+        assertTrue(events.stream().anyMatch(event -> event.protocol() == RustNeuroEvolutionSidecar.PROTOCOL_VERSION));
+        assertTrue(events.stream().anyMatch(event -> event.message() != null
+                && event.message().contains("Rust compute kernel is active")));
+    }
+
+    @Test
+    void rustSidecarCarriesDistributedStorageEnvelopeWhenBuilt() throws Exception {
+        Path repositoryRoot = repositoryRoot();
+        Path workerBinary = RustNeuroEvolutionSidecar.defaultBinaryPath(repositoryRoot);
+        Assumptions.assumeTrue(
+                Files.isExecutable(workerBinary),
+                () -> "Build rust-worker first with cargo build --release --manifest-path "
+                        + repositoryRoot.resolve("rust-worker").resolve("Cargo.toml"));
+
+        NeuroEvolutionDistributedConfig distributedConfig = NeuroEvolutionDistributedConfig.dht(
+                "test-cluster",
+                "java-test",
+                "worker-a",
+                3,
+                "champions");
+        CountDownLatch acceptedLatch = new CountDownLatch(1);
+        AtomicReference<RustNeuroEvolutionSidecar.RustWorkerEvent> accepted = new AtomicReference<>();
+
+        try (RustNeuroEvolutionSidecar sidecar = new RustNeuroEvolutionSidecar(
+                RustNeuroEvolutionSidecar.defaultCommand(repositoryRoot),
+                distributedConfig,
+                event -> {
+                    if ("accepted".equals(event.type())) {
+                        accepted.set(event);
+                        acceptedLatch.countDown();
+                    }
+                })) {
+            NeuroEvolutionProblem problem = catalog.find("and", 5);
+            XorNeuroEvolution.EvolutionConfig config = new XorNeuroEvolution.EvolutionConfig(
+                    4,
+                    1,
+                    5,
+                    0.05,
+                    1,
+                    0.05,
+                    0.001,
+                    1,
+                    1,
+                    89L);
+
+            sidecar.start();
+            sidecar.submit(new NeuroEvolutionRunRequest(problem, config));
+            assertTrue(acceptedLatch.await(5, TimeUnit.SECONDS));
+            sidecar.stop();
+        }
+
+        assertEquals("test-cluster", accepted.get().clusterId());
+        assertEquals("CONTENT_ADDRESSED_DHT", accepted.get().storageMode());
+        assertTrue(accepted.get().message().contains("CONTENT_ADDRESSED_DHT"));
+    }
+
+    @Test
+    void distributedArtifactRefsAreContentAddressable() {
+        NeuroEvolutionArtifactRef ref = NeuroEvolutionArtifactRef.sha256(
+                "champions",
+                "abc".getBytes(StandardCharsets.UTF_8),
+                "application/octet-stream");
+
+        assertEquals(
+                "neuro-dht://champions/sha-256/"
+                        + "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+                ref.uri());
+        assertEquals(3L, ref.sizeBytes());
+        assertEquals("application/octet-stream", ref.mediaType());
+    }
+
+    @Test
+    void rustWorkerStartsSidecarAndCompletesLocalRunWhenBuilt() throws Exception {
+        Path repositoryRoot = repositoryRoot();
+        Path workerBinary = RustNeuroEvolutionSidecar.defaultBinaryPath(repositoryRoot);
+        Assumptions.assumeTrue(
+                Files.isExecutable(workerBinary),
+                () -> "Build rust-worker first with cargo build --release --manifest-path "
+                        + repositoryRoot.resolve("rust-worker").resolve("Cargo.toml"));
+
+        NeuroEvolutionProblem problem = catalog.find("and", 5);
+        XorNeuroEvolution.EvolutionConfig config = new XorNeuroEvolution.EvolutionConfig(
+                4,
+                2,
+                6,
+                0.05,
+                1,
+                0.06,
+                0.001,
+                1,
+                2,
+                47L);
+        Path checkpoint = Files.createTempFile("rust-neuro-evolution-worker", ".properties");
+        CountDownLatch acceptedLatch = new CountDownLatch(1);
+        CountDownLatch stoppedLatch = new CountDownLatch(1);
+        CountDownLatch progressLatch = new CountDownLatch(1);
+        CountDownLatch completionLatch = new CountDownLatch(1);
+        AtomicReference<NeuroEvolutionRunProgress> progress = new AtomicReference<>();
+        AtomicReference<NeuroEvolutionRunCompletion> completion = new AtomicReference<>();
+        List<RustNeuroEvolutionSidecar.RustWorkerEvent> events = new CopyOnWriteArrayList<>();
+
+        NeuroEvolutionWorker worker = new RustNeuroEvolutionWorker(
+                RustNeuroEvolutionSidecar.defaultCommand(repositoryRoot),
+                event -> {
+                    events.add(event);
+                    if ("accepted".equals(event.type())) {
+                        acceptedLatch.countDown();
+                    } else if ("stopped".equals(event.type())) {
+                        stoppedLatch.countDown();
+                    }
+                });
+        NeuroEvolutionRunHandle handle = worker.start(
+                new NeuroEvolutionRunRequest(problem, config, true, checkpoint, 0L),
+                new NeuroEvolutionRunListener() {
+                    @Override
+                    public void onProgress(final NeuroEvolutionRunProgress update) {
+                        progress.compareAndSet(null, update);
+                        progressLatch.countDown();
+                    }
+
+                    @Override
+                    public void onComplete(final NeuroEvolutionRunCompletion result) {
+                        completion.set(result);
+                        completionLatch.countDown();
+                    }
+                });
+
+        try {
+            assertTrue(acceptedLatch.await(5, TimeUnit.SECONDS));
+            assertTrue(progressLatch.await(20, TimeUnit.SECONDS));
+            assertTrue(completionLatch.await(20, TimeUnit.SECONDS));
+            assertTrue(stoppedLatch.await(5, TimeUnit.SECONDS));
+            assertTrue(handle.isStopped());
+            assertEquals(problem.key(), progress.get().problem().key());
+            assertEquals(problem.key(), completion.get().problem().key());
+            assertTrue(progress.get().generation() >= progress.get().best().generation());
+            assertTrue(completion.get().best().generation() < config.generations());
+            assertTrue(completion.get().best().jitterMeanSquaredError() > 0.0);
+            assertTrue(completion.get().best().smoothnessPenalty() > 0.0);
+            assertTrue(events.stream()
+                    .filter(event -> "progress".equals(event.type()))
+                    .anyMatch(event -> event.intValue("scoreGeneration", -1) >= 0));
+            assertTrue(events.stream()
+                    .filter(event -> "progress".equals(event.type()))
+                    .anyMatch(event -> event.intValue("staleGenerations", -1) >= 0
+                            && event.doubleValue("reseedFraction", -1.0) >= 0.0
+                            && event.intValue("seedLanes", -1) >= 2
+                            && event.intValue("laneDeaths", -1) >= 0
+                            && event.intValue("maxLaneStale", -1) >= 0));
+            assertTrue(progress.get().strategySummary().contains("reseed"));
+        } finally {
+            handle.stop();
+            worker.close();
+            Files.deleteIfExists(checkpoint);
+        }
+    }
+
+    @Test
+    void rustGrpcWorkerCompletesRemoteRunWhenBuilt() throws Exception {
+        Path repositoryRoot = repositoryRoot();
+        Path workerBinary = RustNeuroEvolutionSidecar.defaultBinaryPath(repositoryRoot);
+        Assumptions.assumeTrue(
+                Files.isExecutable(workerBinary),
+                () -> "Build rust-worker first with cargo build --release --manifest-path "
+                        + repositoryRoot.resolve("rust-worker").resolve("Cargo.toml")
+                        + " --features grpc");
+
+        int port;
+        try {
+            port = openLoopbackPort();
+        } catch (IOException exception) {
+            Assumptions.assumeTrue(
+                    false,
+                    () -> "Loopback binding is unavailable in this sandbox: " + exception.getMessage());
+            return;
+        }
+        Process process = new ProcessBuilder(
+                workerBinary.toString(),
+                "--grpc",
+                "127.0.0.1:" + port)
+                .redirectErrorStream(true)
+                .start();
+        try {
+            Assumptions.assumeTrue(
+                    waitForPort(port, process, 5_000L),
+                    "Build rust-worker with --features grpc to run the gRPC transport test.");
+
+            NeuroEvolutionProblem problem = catalog.find("and", 5);
+            XorNeuroEvolution.EvolutionConfig config = new XorNeuroEvolution.EvolutionConfig(
+                    4,
+                    2,
+                    6,
+                    0.05,
+                    1,
+                    0.06,
+                    0.001,
+                    1,
+                    1,
+                    97L);
+            CountDownLatch acceptedLatch = new CountDownLatch(1);
+            CountDownLatch completionLatch = new CountDownLatch(1);
+            AtomicReference<NeuroEvolutionRunCompletion> completion = new AtomicReference<>();
+
+            try (NeuroEvolutionWorker worker = new RemoteRustNeuroEvolutionWorker(
+                    "127.0.0.1",
+                    port,
+                    NeuroEvolutionDistributedConfig.local(),
+                    event -> {
+                        if ("accepted".equals(event.type())) {
+                            acceptedLatch.countDown();
+                        }
+                    })) {
+                NeuroEvolutionRunHandle handle = worker.start(
+                        new NeuroEvolutionRunRequest(problem, config),
+                        new NeuroEvolutionRunListener() {
+                            @Override
+                            public void onComplete(final NeuroEvolutionRunCompletion result) {
+                                completion.set(result);
+                                completionLatch.countDown();
+                            }
+                        });
+                try {
+                    assertTrue(acceptedLatch.await(5, TimeUnit.SECONDS));
+                    assertTrue(completionLatch.await(20, TimeUnit.SECONDS));
+                    assertEquals(problem.key(), completion.get().problem().key());
+                } finally {
+                    handle.stop();
+                }
+            }
+        } finally {
+            process.destroy();
+            if (!process.waitFor(2, TimeUnit.SECONDS)) {
+                process.destroyForcibly();
+            }
+        }
     }
 
     @Test
@@ -550,5 +994,41 @@ class XorNeuroEvolutionTest {
             }
         }
         return false;
+    }
+
+    private static int openLoopbackPort() throws IOException {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            return socket.getLocalPort();
+        }
+    }
+
+    private static boolean waitForPort(
+            final int port,
+            final Process process,
+            final long timeoutMillis) throws InterruptedException {
+        long deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(timeoutMillis);
+        while (System.nanoTime() < deadline) {
+            if (!process.isAlive()) {
+                return false;
+            }
+            try (Socket ignored = new Socket("127.0.0.1", port)) {
+                return true;
+            } catch (IOException ignored) {
+                Thread.sleep(50L);
+            }
+        }
+        return false;
+    }
+
+    private static Path repositoryRoot() {
+        Path current = Path.of("").toAbsolutePath().normalize();
+        if (Files.exists(current.resolve("rust-worker").resolve("Cargo.toml"))) {
+            return current;
+        }
+        Path parent = current.getParent();
+        if (parent != null && Files.exists(parent.resolve("rust-worker").resolve("Cargo.toml"))) {
+            return parent;
+        }
+        return current;
     }
 }

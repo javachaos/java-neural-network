@@ -78,6 +78,7 @@ public final class DefaultNeuroEvolutionProblemCatalog implements NeuroEvolution
                 IdentityAutoencoderProblem::new,
                 TransformerAttentionProblem::new,
                 TransformerBlockProblem::new,
+                RealTransformerBlockProblem::new,
                 TextTrainingMettleProblem::new,
                 SpiralBandsProblem::new,
                 MettleTestProblem::new);

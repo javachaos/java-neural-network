@@ -152,6 +152,10 @@ public final class NeuroEvolutionChampionCheckpoint {
         properties.setProperty("score.jitterMeanSquaredError", Double.toString(score.jitterMeanSquaredError()));
         properties.setProperty("score.smoothnessPenalty", Double.toString(score.smoothnessPenalty()));
         properties.setProperty("score.complexity", Double.toString(score.complexity()));
+        properties.setProperty("score.predictiveFreeEnergy", Double.toString(score.predictiveFreeEnergy()));
+        properties.setProperty("score.sensoryPredictionEnergy", Double.toString(score.sensoryPredictionEnergy()));
+        properties.setProperty("score.latentPredictionEnergy", Double.toString(score.latentPredictionEnergy()));
+        properties.setProperty("score.complexityPriorEnergy", Double.toString(score.complexityPriorEnergy()));
     }
 
     private static XorNeuroEvolution.CandidateScore readScore(final Properties properties) {
@@ -166,6 +170,10 @@ public final class NeuroEvolutionChampionCheckpoint {
                 doubleProperty(properties, "score.jitterMeanSquaredError"),
                 doubleProperty(properties, "score.smoothnessPenalty"),
                 doubleProperty(properties, "score.complexity"),
+                doubleProperty(properties, "score.predictiveFreeEnergy", 0.0),
+                doubleProperty(properties, "score.sensoryPredictionEnergy", 0.0),
+                doubleProperty(properties, "score.latentPredictionEnergy", 0.0),
+                doubleProperty(properties, "score.complexityPriorEnergy", 0.0),
                 List.of(),
                 intProperty(properties, "score.generation"));
     }
@@ -251,6 +259,14 @@ public final class NeuroEvolutionChampionCheckpoint {
 
     private static double doubleProperty(final Properties properties, final String key) {
         return Double.parseDouble(required(properties, key));
+    }
+
+    private static double doubleProperty(
+            final Properties properties,
+            final String key,
+            final double fallback) {
+        String value = properties.getProperty(key);
+        return value == null || value.isBlank() ? fallback : Double.parseDouble(value);
     }
 
     private static boolean booleanProperty(final Properties properties, final String key) {

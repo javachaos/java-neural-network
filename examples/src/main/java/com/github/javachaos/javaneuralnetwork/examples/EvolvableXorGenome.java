@@ -38,7 +38,7 @@ public record EvolvableXorGenome(
         double kernelSharpness) {
 
     private static final int MIN_HIDDEN_NEURONS = 1;
-    private static final int MAX_HIDDEN_NEURONS = 8;
+    private static final int MAX_HIDDEN_NEURONS = 12;
     private static final int MIN_HIDDEN_LAYERS = 1;
     private static final int MAX_HIDDEN_LAYERS = 4;
     private static final int MIN_MEMORY_CELLS = 0;
